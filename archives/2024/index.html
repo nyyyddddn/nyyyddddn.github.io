@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/02/11/0xl4ugh-pwn/">
+                
+                <span class="abstract-title-text">0xl4ugh_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnpwn1glibc 2.31 有pie，choice 10能分一个很大的堆块，所以思路是把tcache填满，然后free掉一个大堆块，通过unsortedbin去泄露libc的地址，然后通过tcache bin attack去写free hook为system，再去free掉一块内容为binsh的堆 触发system(&#x2F;bin&#x2F;sh) 
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/02/11">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/11</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/02/07/hgame2024week1-wp/">
                 
                 <span class="abstract-title-text">hgame2024week1_wp</span>
@@ -911,7 +947,22 @@ exp
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1030,7 +1081,7 @@ exp
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 19
+        Total : 20
         </div>
         <!-- search  -->
         
@@ -1044,6 +1095,12 @@ exp
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">02/07</span>
@@ -1110,6 +1167,12 @@ exp
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
             <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
@@ -1117,12 +1180,6 @@ exp
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
             <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
         </li>
     
         
