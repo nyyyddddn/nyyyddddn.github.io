@@ -428,6 +428,43 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
+                
+                <span class="abstract-title-text">nkctf_wp</span>
+            </a>
+            <div class="abstract-content">
+                唉咱好菜，就出了两个题，后几题都没有思路
+Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，用格式化字符串泄露libc的地址和canary的值，然后打ret2libc就好了，打通后catflag发现没有权限，看了一下challenge文件，有suid权限，所以可以用libc中的setuid(0)函数提权，然后cat flag
+123456789101112131415161718192021222324252627282930unsigned __int64 sub_19EA()&#123;  char buf[8]; // [rsp+0h] [rbp-10h] BYREF  ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/03/28">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/27</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">
                 
                 <span class="abstract-title-text">CyberApocalypse_2024_Hacker_Royale_wp</span>
@@ -761,7 +798,20 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -954,7 +1004,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 27
+        Total : 28
         </div>
         <!-- search  -->
         
@@ -968,6 +1018,12 @@
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span>
+            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/15</span>
@@ -1088,13 +1144,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
@@ -1106,13 +1162,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         

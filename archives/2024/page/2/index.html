@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/02/06/beginctf2024-wp/">
+                
+                <span class="abstract-title-text">beginctf2024_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwnone_byte刚刚好能覆盖返回地址一个字节，看了一下返回地址是一个libc的地址，29dxx，把29dxx附件的汇编看了一遍，没有很直接的输出函数，或者是跳转到输出函数的汇编，。那这时候的思路是把一个字节爆破一遍，把有输出的字节全部记录下来，最后发现在 \x89那回到了main函数，把下一位flag输出出来了
+12.text:0000000000029D89 48 8B 44 24 08                mov     rax, [rsp+98h+var_90].text:0000000000029D8E FF D0                         ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/02/06">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/06</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">
                 
                 <span class="abstract-title-text">rw体验赛wp</span>
@@ -883,7 +919,20 @@ exp
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1076,7 +1125,7 @@ exp
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 27
+        Total : 28
         </div>
         <!-- search  -->
         
@@ -1090,6 +1139,12 @@ exp
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span>
+            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/15</span>
@@ -1210,13 +1265,13 @@ exp
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
@@ -1228,13 +1283,13 @@ exp
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         
