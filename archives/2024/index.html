@@ -428,6 +428,36 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+                
+                <span class="abstract-title-text">尝试编译kernel和文件系统</span>
+            </a>
+            <div class="abstract-content">
+                尝试编译kernel和文件系统，使用qemu启动
+step1:make filesystem (compile busybox)https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3
+下载busybox编译
+123456wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2tar -jxf busybox-1.32.1.tar.bz2make menuconfig // 在Setting中把build static binay勾选 静态链接m...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/03/31">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/31</span>
+                </div>
+                <!-- tags -->
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
                 
                 <span class="abstract-title-text">nkctf_wp</span>
@@ -746,42 +776,6 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/07/hgame2024week1-wp/">
-                
-                <span class="abstract-title-text">hgame2024week1_wp</span>
-            </a>
-            <div class="abstract-content">
-                reezASMcheckflag可以看出 cmp的逻辑是 异或0x22
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162section .data    c db 74, 69, 67, 79, 71, 89, 99, 113, 111, 125, 107, 81, 125, 107, 79, 82, 18, 80, 86, 22, 76, 86, 125, 22, 125, 112, 71, 84, 17,...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/07">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/07</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -1022,7 +1016,22 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1225,7 +1234,7 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 28
+        Total : 29
         </div>
         <!-- search  -->
         
@@ -1239,6 +1248,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span>
+            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">03/27</span>
@@ -1383,6 +1398,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
             <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
@@ -1410,12 +1431,6 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
