@@ -441,6 +441,43 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/05/15/hnctf-pwn/">
+                
+                <span class="abstract-title-text">hnctf_pwn</span>
+            </a>
+            <div class="abstract-content">
+                close关闭了标准输出流，直接cat /flag 1&gt;&amp;0就可以了
+ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以read一次后重启main再调用system就好了
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/05/15">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/15</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/05/14/miniL2024-pwn/">
                 
                 <span class="abstract-title-text">miniL2024_pwn</span>
@@ -453,7 +490,7 @@
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/05/14">
+                <div class="abstract-date" title="Last updated: 2024/05/15">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/14</span>
                 </div>
                 <!-- tags -->
@@ -740,41 +777,6 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/03/04">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/04</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/27/hgame2024week3-wp/">
-                
-                <span class="abstract-title-text">hgame2024week3_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwn你满了,那我就漫出来了![补]123456789101112131415161718192021222324252627282930313233343536373839int __cdecl __noreturn main(int argc, const char **argv, const char **envp)&#123;  unsigned int v3; // [rsp+4h] [rbp-Ch] BYREF  unsigned __int64 v4; // [rsp+8h] [rbp-8h]  v4 = __readfsqword(0x28u);  init(argc, ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/27">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/27</span>
                 </div>
                 <!-- tags -->
                 
@@ -1147,7 +1149,28 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1394,7 +1417,7 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 33
+        Total : 34
         </div>
         <!-- search  -->
         
@@ -1408,6 +1431,12 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span>
+            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/14</span>
@@ -1564,13 +1593,13 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
@@ -1582,13 +1611,13 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         

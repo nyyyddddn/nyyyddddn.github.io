@@ -428,6 +428,49 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/01/18/uoftctf-pwn-wp/">
+                
+                <span class="abstract-title-text">uoftctf_pwn_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwnbasic-overflow
+
+有一个shell函数，栈溢出覆盖返回地址为shell
+1234567int __cdecl main(int argc, const char **argv, const char **envp)&#123;  char v4[64]; // [rsp+0h] [rbp-40h] BYREF  gets(v4, argv, envp);  return 0;&#125;
+
+1234int shell()&#123;  return execve(&quot;/bin/sh&quot;, 0LL, 0LL);&#125;
+
+exp
+1234567891...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/01/21">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/01/18</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/01/04/pwnable-kr/">
                 
                 <span class="abstract-title-text">pwnable.kr</span>
@@ -963,7 +1006,28 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1210,7 +1274,7 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 33
+        Total : 34
         </div>
         <!-- search  -->
         
@@ -1224,6 +1288,12 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span>
+            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/14</span>
@@ -1380,13 +1450,13 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
@@ -1398,13 +1468,13 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         
