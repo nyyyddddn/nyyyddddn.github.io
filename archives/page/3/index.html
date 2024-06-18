@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/02/11/0xl4ugh-pwn/">
+                
+                <span class="abstract-title-text">0xl4ugh_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnpwn1glibc 2.31 有pie，choice 10能分一个很大的堆块，所以思路是把tcache填满，然后free掉一个大堆块，通过unsortedbin去泄露libc的地址，然后通过tcache bin attack去写free hook为system，再去free掉一块内容为binsh的堆 触发system(&#x2F;bin&#x2F;sh) 
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/02/11">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/11</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/02/07/hgame2024week1-wp/">
                 
                 <span class="abstract-title-text">hgame2024week1_wp</span>
@@ -757,45 +793,6 @@ exp
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/12/28/GeekChallenge2023/">
-                
-                <span class="abstract-title-text">GeekChallenge2023</span>
-            </a>
-            <div class="abstract-content">
-                re点击就送的逆向题.S的文件 使用as命令来汇编一下，然后ida打开分析逻辑
-1as -o output.o input.S
-
-置反一下逻辑
-1234567891011121314151617int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-54h]  char s1[32]; // [rsp+10h] [rbp-50h] BYREF  char s2[40]; // [rsp+30h] [rbp-30h] BYREF  unsigned __i...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/01/13">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -1091,7 +1088,22 @@ exp
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1406,7 +1418,7 @@ exp
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 39
+        Total : 40
         </div>
         <!-- search  -->
         
@@ -1420,6 +1432,12 @@ exp
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span>
+            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/04</span>
@@ -1634,12 +1652,6 @@ exp
         </li>
     
         
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
             
             
                 
@@ -1666,19 +1678,25 @@ exp
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
             <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
+            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
+            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
         </li>
     
     </div>
