@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/04/28/hznuctf/">
+                
+                <span class="abstract-title-text">hznuctf</span>
+            </a>
+            <div class="abstract-content">
+                easycppstd::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768int __cdecl main(int argc, const char **...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/04/28">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/04/24/geekcon/">
                 
                 <span class="abstract-title-text">geekcon</span>
@@ -740,46 +776,10 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/14/hgame2024week2-pwn-wp/">
-                
-                <span class="abstract-title-text">hgame2024week2_pwn_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwnElden Ring Ⅱ一个heap manager相关的题目，glibc 2.31，没有pie，包括add edit show delete四个功能，在delete这里有一个uaf
-123456789101112131415161718void delete_note()&#123;  unsigned int v0; // [rsp+Ch] [rbp-4h] BYREF  printf(&quot;Index: &quot;);  __isoc99_scanf(&quot;%u&quot;, &amp;v0);  if ( v0 &lt;= 0xF )  &#123;    i...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/27">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/14</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1076,7 +1076,26 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1401,7 +1420,7 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 40
+        Total : 41
         </div>
         <!-- search  -->
         
@@ -1415,6 +1434,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/19</span>
@@ -1618,12 +1643,6 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">09/26</span>
             <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
         </li>
@@ -1658,6 +1677,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>

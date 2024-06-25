@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">xctf_ggbord复现</span>
+            </a>
+            <div class="abstract-content">
+                ggbond可以发现主函数是main_main，同时存在大量grpc字段，可以判断出程序使用了grpc框架。和grpc框架开发的程序进行交互，需要提取protobuf，protobuf谷歌开发的数据序列化格式，它通常用于网络通信和数据存储的应用程序之间的结构化数据交换。这个工具让你能够定义交互时消息的数据结构。
+程序套了grpc，与程序的交互不再直接通过标准输入，而需要通过定义的 gRPC 服务接口来进行，然后grpc 使用一个叫protobuf的结构去描述怎么和程序交互的，首先需要提取出程序中的protobuf，然后python中有一个叫grpc_tools的库可以通过 protobu...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/25">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/25</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/06/19/vsctf-pwn/">
                 
                 <span class="abstract-title-text">vsctf_pwn</span>
@@ -747,43 +783,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
-                
-                <span class="abstract-title-text">nkctf_wp</span>
-            </a>
-            <div class="abstract-content">
-                唉咱好菜，就出了两个题，后几题都没有思路
-Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，用格式化字符串泄露libc的地址和canary的值，然后打ret2libc就好了，打通后catflag发现没有权限，看了一下challenge文件，有suid权限，所以可以用libc中的setuid(0)函数提权，然后cat flag
-123456789101112131415161718192021222324252627282930unsigned __int64 sub_19EA()&#123;  char buf[8]; // [rsp+0h] [rbp-10h] BYREF  ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/27</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -1084,7 +1083,26 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1409,7 +1427,7 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 40
+        Total : 41
         </div>
         <!-- search  -->
         
@@ -1423,6 +1441,12 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/19</span>
@@ -1626,12 +1650,6 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">09/26</span>
             <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
         </li>
@@ -1666,6 +1684,12 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>

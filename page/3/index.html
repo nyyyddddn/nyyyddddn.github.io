@@ -441,6 +441,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/02/14/hgame2024week2-pwn-wp/">
+                
+                <span class="abstract-title-text">hgame2024week2_pwn_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwnElden Ring Ⅱ一个heap manager相关的题目，glibc 2.31，没有pie，包括add edit show delete四个功能，在delete这里有一个uaf
+123456789101112131415161718void delete_note()&#123;  unsigned int v0; // [rsp+Ch] [rbp-4h] BYREF  printf(&quot;Index: &quot;);  __isoc99_scanf(&quot;%u&quot;, &amp;v0);  if ( v0 &lt;= 0xF )  &#123;    i...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/02/27">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/14</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/02/11/0xl4ugh-pwn/">
                 
                 <span class="abstract-title-text">0xl4ugh_pwn</span>
@@ -769,47 +805,10 @@ exp
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/12/28/hackergame2023/">
-                
-                <span class="abstract-title-text">Hackergame2023</span>
-            </a>
-            <div class="abstract-content">
-                Hackergame 启动Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了
-更深更暗在main.js里有一段生成flag的代码，在控制台中调用就好了
-12345async function getFlag(token) &#123;    // Generate the flag based on user&#x27;s token    let hash = CryptoJS.SHA256(`dEEper_@nd_d@rKer_$&#123;token&#125;`).toString();    return `fla...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/01/13">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/page/2/">&lt; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/page/2/">&lt; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1222,7 +1221,26 @@ exp
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1547,7 +1565,7 @@ exp
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 40
+        Total : 41
         </div>
         <!-- search  -->
         
@@ -1561,6 +1579,12 @@ exp
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/19</span>
@@ -1764,12 +1788,6 @@ exp
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">09/26</span>
             <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
         </li>
@@ -1804,6 +1822,12 @@ exp
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>

@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">xctf_ggbord复现</span>
+            </a>
+            <div class="abstract-content">
+                ggbond可以发现主函数是main_main，同时存在大量grpc字段，可以判断出程序使用了grpc框架。和grpc框架开发的程序进行交互，需要提取protobuf，protobuf谷歌开发的数据序列化格式，它通常用于网络通信和数据存储的应用程序之间的结构化数据交换。这个工具让你能够定义交互时消息的数据结构。
+程序套了grpc，与程序的交互不再直接通过标准输入，而需要通过定义的 gRPC 服务接口来进行，然后grpc 使用一个叫protobuf的结构去描述怎么和程序交互的，首先需要提取出程序中的protobuf，然后python中有一个叫grpc_tools的库可以通过 protobu...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/25">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/25</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/06/19/vsctf-pwn/">
                 
                 <span class="abstract-title-text">vsctf_pwn</span>
@@ -713,42 +749,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
                 pwn摩登Pwn第一次做这种gui pwn，搜了一下是rbf协议，https://remoteripple.com/download/ 用这个远程连接软件连接和题目进行交互
 程序的逻辑是，会将输入转成无符号整数，然后判断”符号位”是不是负数，如果是就输出flag，所以只需要输入4字节无符号整数能表达是最大范围4294967295 就能拿到flag
 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/28/hznuctf/">
-                
-                <span class="abstract-title-text">hznuctf</span>
-            </a>
-            <div class="abstract-content">
-                easycppstd::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768int __cdecl main(int argc, const char **...
             </div>
             <!-- read more -->
             
@@ -1071,7 +1071,26 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1396,7 +1415,7 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 40
+        Total : 41
         </div>
         <!-- search  -->
         
@@ -1410,6 +1429,12 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/19</span>
@@ -1613,12 +1638,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">09/26</span>
             <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
         </li>
@@ -1653,6 +1672,12 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
