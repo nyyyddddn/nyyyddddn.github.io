@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/04/28/hznuctf/">
+                
+                <span class="abstract-title-text">hznuctf</span>
+            </a>
+            <div class="abstract-content">
+                easycppstd::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768int __cdecl main(int argc, const char **...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/04/28">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/04/24/geekcon/">
                 
                 <span class="abstract-title-text">geekcon</span>
@@ -731,42 +767,6 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/02/27">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/14</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/11/0xl4ugh-pwn/">
-                
-                <span class="abstract-title-text">0xl4ugh_pwn</span>
-            </a>
-            <div class="abstract-content">
-                pwnpwn1glibc 2.31 有pie，choice 10能分一个很大的堆块，所以思路是把tcache填满，然后free掉一个大堆块，通过unsortedbin去泄露libc的地址，然后通过tcache bin attack去写free hook为system，再去free掉一块内容为binsh的堆 触发system(&#x2F;bin&#x2F;sh) 
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/11">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/11</span>
                 </div>
                 <!-- tags -->
                 
@@ -1092,7 +1092,30 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1443,7 +1466,7 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 42
+        Total : 43
         </div>
         <!-- search  -->
         
@@ -1457,6 +1480,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/30</span>

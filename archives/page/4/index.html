@@ -428,6 +428,49 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/01/18/uoftctf-pwn-wp/">
+                
+                <span class="abstract-title-text">uoftctf_pwn_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwnbasic-overflow
+
+有一个shell函数，栈溢出覆盖返回地址为shell
+1234567int __cdecl main(int argc, const char **argv, const char **envp)&#123;  char v4[64]; // [rsp+0h] [rbp-40h] BYREF  gets(v4, argv, envp);  return 0;&#125;
+
+1234int shell()&#123;  return execve(&quot;/bin/sh&quot;, 0LL, 0LL);&#125;
+
+exp
+1234567891...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/05/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/01/18</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/01/04/pwnable-kr/">
                 
                 <span class="abstract-title-text">pwnable.kr</span>
@@ -760,42 +803,6 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">
-                
-                <span class="abstract-title-text">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</span>
-            </a>
-            <div class="abstract-content">
-                安装1sudo apt install python3-venv
-
-创建虚拟环境1python3 -m venv test_env
-
-会自动在用户目录创建一个test _env的虚拟环境目录
-开启&amp;使用虚拟环境1source ~/test_env/bin/activate
-
-开启虚拟环境后pip install安装的包会自动存放在&#x2F;test_env&#x2F;lib&#x2F;pythonx.x&#x2F;site-packages目录下面
-关闭虚拟环境1deactivate
-
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/09/18">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -1106,7 +1113,30 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1457,7 +1487,7 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 42
+        Total : 43
         </div>
         <!-- search  -->
         
@@ -1471,6 +1501,12 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/30</span>

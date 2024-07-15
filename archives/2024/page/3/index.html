@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/02/25/sictfr3-pwn-wp/">
+                
+                <span class="abstract-title-text">sictfr3_pwn_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwn[签到]stack题目逻辑是这样的，其实就是找一个比 0x58 大很多，低一个字节小于 0x40的数，就能溢出了
+12345678910111213141516char *run()&#123;  char buf[76]; // [rsp+0h] [rbp-50h] BYREF  size_t nbytes; // [rsp+4Ch] [rbp-4h]  printf(&quot;Give me the length: &quot;);  LODWORD(nbytes) = get_int();  if ( (unsigned __int8)nbytes &gt; 0x40u )...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/02/25">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/25</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/02/14/nssr18-wp/">
                 
                 <span class="abstract-title-text">nssr18_wp</span>
@@ -734,49 +770,6 @@ start检查一下保护 和查看每个段的权限发现，栈上有可执行�
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/01/19">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/01/19</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/01/18/uoftctf-pwn-wp/">
-                
-                <span class="abstract-title-text">uoftctf_pwn_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwnbasic-overflow
-
-有一个shell函数，栈溢出覆盖返回地址为shell
-1234567int __cdecl main(int argc, const char **argv, const char **envp)&#123;  char v4[64]; // [rsp+0h] [rbp-40h] BYREF  gets(v4, argv, envp);  return 0;&#125;
-
-1234int shell()&#123;  return execve(&quot;/bin/sh&quot;, 0LL, 0LL);&#125;
-
-exp
-1234567891...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/05/30">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/01/18</span>
                 </div>
                 <!-- tags -->
                 
@@ -1102,7 +1095,30 @@ exp
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1453,7 +1469,7 @@ exp
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 42
+        Total : 43
         </div>
         <!-- search  -->
         
@@ -1467,6 +1483,12 @@ exp
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">06/30</span>
