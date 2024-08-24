@@ -441,6 +441,43 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
+                
+                <span class="abstract-title-text">nkctf_wp</span>
+            </a>
+            <div class="abstract-content">
+                唉咱好菜，就出了两个题，后几题都没有思路
+Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，用格式化字符串泄露libc的地址和canary的值，然后打ret2libc就好了，打通后catflag发现没有权限，看了一下challenge文件，有suid权限，所以可以用libc中的setuid(0)函数提权，然后cat flag
+123456789101112131415161718192021222324252627282930unsigned __int64 sub_19EA()&#123;  char buf[8]; // [rsp+0h] [rbp-10h] BYREF  ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/03/28">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/27</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">
                 
                 <span class="abstract-title-text">CyberApocalypse_2024_Hacker_Royale_wp</span>
@@ -743,42 +780,6 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/02/07">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/07</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/06/beginctf2024-wp/">
-                
-                <span class="abstract-title-text">beginctf2024_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwnone_byte刚刚好能覆盖返回地址一个字节，看了一下返回地址是一个libc的地址，29dxx，把29dxx附件的汇编看了一遍，没有很直接的输出函数，或者是跳转到输出函数的汇编，。那这时候的思路是把一个字节爆破一遍，把有输出的字节全部记录下来，最后发现在 \x89那回到了main函数，把下一位flag输出出来了
-12.text:0000000000029D89 48 8B 44 24 08                mov     rax, [rsp+98h+var_90].text:0000000000029D8E FF D0                         ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/06">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/06</span>
                 </div>
                 <!-- tags -->
                 
@@ -1245,7 +1246,28 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1650,7 +1672,7 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 47
+        Total : 48
         </div>
         <!-- search  -->
         
@@ -1664,6 +1686,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/22</span>
@@ -1904,13 +1932,13 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
