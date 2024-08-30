@@ -21,7 +21,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="nyyyddddn">
-<meta property="og:url" content="https://nyyyddddn.github.io/tags/misc/index.html">
+<meta property="og:url" content="https://nyyyddddn.github.io/page/6/index.html">
 <meta property="og:site_name" content="nyyyddddn">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="nyyyddddn">
@@ -217,8 +217,10 @@
         }
     </script>
     
+        <body class="home-body">
+    
         <!-- header -->
-        <header class="header header-mobile">
+        <header class="header header-mobile index-header">
     <!-- top read progress line -->
     <div class="header-element">
         <div class="read-progress"></div>
@@ -249,7 +251,7 @@
 </header>
 
         <!-- fixed footer -->
-        <footer class="footer-fixed">
+        <footer class="footer-fixed index-footer-fixed">
     <!-- back to top button -->
     <div class="footer-fixed-element">
         
@@ -272,21 +274,32 @@
 
 
 
+    height:50vh;
+
 ">
     
     <!-- 主页  -->
     
+        
+    <!-- 文章页  -->
+    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+                nyyyddddn
+            <!-- 文章页  -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
+            
+                
+            <!-- 文章页  -->
             
         </p>
         <!-- 文章页 meta -->
@@ -428,267 +441,25 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">
+            <a class="abstract-title" href="/2023/09/18/hello-world/">
                 
-                <span class="abstract-title-text">srctf_pwn出题</span>
+                <span class="abstract-title-text">Hello World</span>
             </a>
             <div class="abstract-content">
-                chroot escape啊这，咱没有想到解出来的人很少，因为chroot escape相关的文章网上有很多，这里挑重点说一下，更详细的信息可以看这里
-https://web.archive.org/web/20160127150916/http://www.bpfh.net/simes/computing/chroot-break.html
-chroot本质上是通过chroot系统调用去更改进程的根目录位置，以限制该进程对系统其他部分的访问。然而，在具有root权限的情况下，可以通过chdir和chroot实现二次逃逸。具体做法是，通过chdir系统调用将当前目录更改成跟目录，然后使用...
+                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;
+
+More info: Writing
+Run server1$ hexo ...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/31">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/31/xyctf/">
-                
-                <span class="abstract-title-text">xyctf</span>
-            </a>
-            <div class="abstract-content">
-                前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
-hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接，大多数好用的修改寄存器的gadget(如pop rdi ret，pop rsi ret)都是从csu init中错位字节获取的，在能泄露libc的情况下，可以转换一下思路，从libc中拿gadget
-程序逻辑
-12345678910111213int __cdecl main(int argc, const char **...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/31">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">
-                
-                <span class="abstract-title-text">奇奇怪怪格式化字符串漏洞的利用1</span>
-            </a>
-            <div class="abstract-content">
-                非栈上格式化字符串套orwhznuctf_ezpwn
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&#123;  sand_box(argc, argv, envp);  rand_time();  vuln();  return 0;&#125;void rand_time()&#123;  char buf[8]; // [r...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/22">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/22</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/05/23/xv6-and-unix-utilities/">
-                
-                <span class="abstract-title-text">xv6_and_unix_utilities</span>
-            </a>
-            <div class="abstract-content">
-                Xv6 and Unix utilities好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的
-
-
-
-
-sleep根据题目描述，和 user&#x2F; 中的其他程序的逻辑可以发现 命令行参数传递是通过 main的argc 和argv去传递的，其中argc 中存储着参数的个数，argv存储着参数名，没有参数的时候argc &#x3D; 1，argv[0] &#x3D; program_name。然后在 “user&#x2F;user.h” 中有sleep 函数所以 只需要直接调用sleep函...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/23</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
-                
-                <span class="abstract-title-text">尝试编译kernel和文件系统</span>
-            </a>
-            <div class="abstract-content">
-                learn about kernel pwn
-尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3
-下载busybox编译
-123456wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2tar -jxf busybox-1.32.1.tar.bz2make menuconfig // 在Setting中把buil...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">
-                
-                <span class="abstract-title-text">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</span>
-            </a>
-            <div class="abstract-content">
-                安装1sudo apt install python3-venv
-
-创建虚拟环境1python3 -m venv test_env
-
-会自动在用户目录创建一个test _env的虚拟环境目录
-开启&amp;使用虚拟环境1source ~/test_env/bin/activate
-
-开启虚拟环境后pip install安装的包会自动存放在&#x2F;test_env&#x2F;lib&#x2F;pythonx.x&#x2F;site-packages目录下面
-关闭虚拟环境1deactivate
-
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
+                <div class="abstract-date" title="Last updated: 2023/09/18">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
                 </div>
                 <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">
-                
-                <span class="abstract-title-text">cdn绕过大全tips思路</span>
-            </a>
-            <div class="abstract-content">
-                [toc]
-cdn绕过技巧tipscdn判断方式: 超级ping多地ping1配置不安全 | 超级ping&amp;多地ping&amp;冷门地区国家ping以阿里云cdn为例子，在配置cdn的面板上有这几个选项
-
-在加速区域中，有全部加速区域，仅中国内地，全球（不包括中国内地）
-一般搞运维的人员在配置各种服务的时候，都会根据实际需求来配置，因为额外的可能要钱，可能其他cdn厂商加速的地区越多收的钱越多，比如说公司业务范围只在国内的会配置仅中国内地，业务在国外的可能会配置 全球(不包含中国内地)，当然这个不是非常绝对的，只是大多数情况下。
-这时候只要使用全球ping超级ping之类的，国...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
                 
             </div>
         </article>
@@ -696,9 +467,129 @@ cdn绕过技巧tipscdn判断方式: 超级ping多地ping1配置不安全 | 超�
     
     <!-- paginator  -->
     
+        <nav class="page-nav">
+            <a class="extend prev" rel="prev" href="/page/5/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+        </nav>
+    
 </main>
 
                 <!-- profile -->
+                
+                    <div class="profile">
+    <img class="profile-avatar" alt="avatar" src= /avatar/11.jpg />
+    <div class="profile-name">nyyyddddn</div>
+    
+        <div class="profile-signature">
+            快来和我贴贴qaq
+        </div>
+    
+    
+        <div class="profile-social">
+            
+    
+        
+            
+                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    
+        <div class="friends">
+            <div>
+                
+                FRIENDS
+            </div>
+            
+                
+                    <span>
+                        <a href="//blog.yuro.work/" target="_blank">yuro</a>
+                    </span>
+                
+            
+                
+                    <span>
+                        <a href="//shinichicun.top/" target="_blank">shin</a>
+                    </span>
+                
+            
+                
+                    <span>
+                        <a href="//k0rian.github.io/" target="_blank">k0rain</a>
+                    </span>
+                
+            
+                
+                    <span>
+                        <a href="//tokameine.top/" target="_blank">TokameinE</a>
+                    </span>
+                
+            
+                
+                    <span>
+                        <a href="//blog.xinshi.fun/" target="_blank">LilRan</a>
+                    </span>
+                
+            
+        </div>
+    
+    
+        <div class="profile-link-item">
+            <a href="/about" class="about-me">
+                
+                ABOUT ME
+            </a>
+        </div>
+    
+    
+    
+</div>
+
                 
             </div>
             <footer class="footer footer-unloaded">

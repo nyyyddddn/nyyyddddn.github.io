@@ -428,6 +428,78 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/06/19/vsctf-pwn/">
+                
+                <span class="abstract-title-text">vsctf_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwncosmic-ray-v3程序的逻辑
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950int __cdecl main(int argc, const char **argv, const char **envp)&#123;  signed __int64 v3; // rax  setbuf(stdout, 0LL);  setbuf(stderr, 0LL);  cosmic_ray();  v3 = sys_exit(0);  return ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/19">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/19</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2024/06/04/litctf2024-pwn/">
+                
+                <span class="abstract-title-text">litctf2024_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnheap-2.23程序逻辑
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011021031041051061071081091101111121131141151161171181191201211221231241251261271281291...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/19">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/04</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">xctf_BuggyAllocator复现</span>
@@ -699,80 +771,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
     
         <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/24/geekcon/">
-                
-                <span class="abstract-title-text">geekcon</span>
-            </a>
-            <div class="abstract-content">
-                pwnableMemo0有一个login函数，login success了会调用一个输出flag的函数
-1234567891011121314151617181920212223242526272829unsigned __int64 login()&#123;  unsigned __int64 v0; // rax  size_t v1; // rax  _BYTE *s1; // [rsp+8h] [rbp-38h]  char s[40]; // [rsp+10h] [rbp-30h] BYREF  unsigned __int64 v5; // [rsp+38h] [rbp-8...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/24</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
-                
-                <span class="abstract-title-text">尝试编译kernel和文件系统</span>
-            </a>
-            <div class="abstract-content">
-                learn about kernel pwn
-尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3
-下载busybox编译
-123456wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2tar -jxf busybox-1.32.1.tar.bz2make menuconfig // 在Setting中把buil...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
     
 </div>
 
@@ -1121,7 +1119,62 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1542,7 +1595,7 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 48
+        Total : 51
         </div>
         <!-- search  -->
         
@@ -1556,6 +1609,18 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/25</span>
@@ -1779,6 +1844,12 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         </li>
     
         
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span>
+            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
+        </li>
+    
+        
             
             
                 
@@ -1802,13 +1873,13 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
@@ -1820,13 +1891,13 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         

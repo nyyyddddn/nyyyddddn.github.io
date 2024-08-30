@@ -428,6 +428,81 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">
+                
+                <span class="abstract-title-text">srctf_pwn出题</span>
+            </a>
+            <div class="abstract-content">
+                chroot escape啊这，咱没有想到解出来的人很少，因为chroot escape相关的文章网上有很多，这里挑重点说一下，更详细的信息可以看这里
+https://web.archive.org/web/20160127150916/http://www.bpfh.net/simes/computing/chroot-break.html
+chroot本质上是通过chroot系统调用去更改进程的根目录位置，以限制该进程对系统其他部分的访问。然而，在具有root权限的情况下，可以通过chdir和chroot实现二次逃逸。具体做法是，通过chdir系统调用将当前目录更改成跟目录，然后使用...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/08/31">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2024/08/31/xyctf/">
+                
+                <span class="abstract-title-text">xyctf</span>
+            </a>
+            <div class="abstract-content">
+                前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
+hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接，大多数好用的修改寄存器的gadget(如pop rdi ret，pop rsi ret)都是从csu init中错位字节获取的，在能泄露libc的情况下，可以转换一下思路，从libc中拿gadget
+程序逻辑
+12345678910111213int __cdecl main(int argc, const char **...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/08/31">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">羊城杯2023部分题目复现</span>
@@ -900,7 +975,62 @@
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1321,7 +1451,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 48
+        Total : 51
         </div>
         <!-- search  -->
         
@@ -1335,6 +1465,18 @@
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/25</span>
@@ -1558,6 +1700,12 @@
         </li>
     
         
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span>
+            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
+        </li>
+    
+        
             
             
                 
@@ -1581,13 +1729,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
@@ -1599,13 +1747,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
         </li>
     
         
