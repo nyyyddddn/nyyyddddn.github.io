@@ -21,7 +21,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="nyyyddddn">
-<meta property="og:url" content="https://nyyyddddn.github.io/archives/page/3/index.html">
+<meta property="og:url" content="https://nyyyddddn.github.io/tags/ctf-writeup/page/5/index.html">
 <meta property="og:site_name" content="nyyyddddn">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="nyyyddddn">
@@ -428,348 +428,23 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">
+            <a class="abstract-title" href="/2023/09/18/cnss2023/">
                 
-                <span class="abstract-title-text">中国海洋大学信息安全竞赛pwn方向wp</span>
+                <span class="abstract-title-text">cnss2023</span>
             </a>
             <div class="abstract-content">
-                pwn摩登Pwn第一次做这种gui pwn，搜了一下是rbf协议，https://remoteripple.com/download/ 用这个远程连接软件连接和题目进行交互
-程序的逻辑是，会将输入转成无符号整数，然后判断”符号位”是不是负数，如果是就输出flag，所以只需要输入4字节无符号整数能表达是最大范围4294967295 就能拿到flag
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656...
+                Web[Baby] SignIn查看源代码，script.js文件中有一段document.getElementById(‘flag’).addEventListener(‘click’, function()下面是一段jsfuck混淆
+https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
+[Baby] Backdoorpost传system()执行系统命令，找到flag
+[Baby] Webpackhttps://www.cnblogs.com/guowenrui/p/17023732.html 参考的这个文章
+安装nodejs...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/28/hznuctf/">
-                
-                <span class="abstract-title-text">hznuctf</span>
-            </a>
-            <div class="abstract-content">
-                easycppstd::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768int __cdecl main(int argc, const char **...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/24/geekcon/">
-                
-                <span class="abstract-title-text">geekcon</span>
-            </a>
-            <div class="abstract-content">
-                pwnableMemo0有一个login函数，login success了会调用一个输出flag的函数
-1234567891011121314151617181920212223242526272829unsigned __int64 login()&#123;  unsigned __int64 v0; // rax  size_t v1; // rax  _BYTE *s1; // [rsp+8h] [rbp-38h]  char s[40]; // [rsp+10h] [rbp-30h] BYREF  unsigned __int64 v5; // [rsp+38h] [rbp-8...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/24</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
-                
-                <span class="abstract-title-text">尝试编译kernel和文件系统</span>
-            </a>
-            <div class="abstract-content">
-                learn about kernel pwn
-尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3
-下载busybox编译
-123456wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2tar -jxf busybox-1.32.1.tar.bz2make menuconfig // 在Setting中把buil...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
-                
-                <span class="abstract-title-text">nkctf_wp</span>
-            </a>
-            <div class="abstract-content">
-                唉咱好菜，就出了两个题，后几题都没有思路
-Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，用格式化字符串泄露libc的地址和canary的值，然后打ret2libc就好了，打通后catflag发现没有权限，看了一下challenge文件，有suid权限，所以可以用libc中的setuid(0)函数提权，然后cat flag
-123456789101112131415161718192021222324252627282930unsigned __int64 sub_19EA()&#123;  char buf[8]; // [rsp+0h] [rbp-10h] BYREF  ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/27</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">
-                
-                <span class="abstract-title-text">CyberApocalypse_2024_Hacker_Royale_wp</span>
-            </a>
-            <div class="abstract-content">
-                Delulu格式化字符串改低位两个字节就好了
-123456789101112131415161718int __cdecl main(int argc, const char **argv, const char **envp)&#123;  __int64 v4[2]; // [rsp+0h] [rbp-40h] BYREF  __int64 buf[6]; // [rsp+10h] [rbp-30h] BYREF  buf[5] = __readfsqword(0x28u);  v4[0] = 322419390LL;  v4[1] = (__int64)v4;  memset(bu...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/15</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/10/pearlctf-wp/">
-                
-                <span class="abstract-title-text">pearlctf_wp</span>
-            </a>
-            <div class="abstract-content">
-                Adventure这印度的服务器稀烂，打半天打不通
-有一个子函数里面存在栈溢出，用libcsearcher打ret2libc就好了
-123456789101112void __cdecl hatchEgg()&#123;  char name[20]; // [rsp+0h] [rbp-20h] BYREF  puts(&quot;You wish to hatch the egg!&quot;);  puts(&quot;Give the baby dragon a name&quot;);  getchar();  fflush(stdin);  gets(name);  print...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/10</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/04/osu-gaming-CTF-2024/">
-                
-                <span class="abstract-title-text">osu!gaming_CTF_2024</span>
-            </a>
-            <div class="abstract-content">
-                pwnbetterthanufgets那存在一个溢出，覆盖 v6为727，v5的值小于v6就好了
-1234567891011121314151617181920212223242526272829303132333435363738int __cdecl main(int argc, const char **argv, const char **envp)&#123;  char s[16]; // [rsp+0h] [rbp-20h] BYREF  unsigned __int64 v5; // [rsp+10h] [rbp-10h]  unsigned int v6; // [rs...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/04">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/04</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/27/hgame2024week3-wp/">
-                
-                <span class="abstract-title-text">hgame2024week3_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwn你满了,那我就漫出来了![补]123456789101112131415161718192021222324252627282930313233343536373839int __cdecl __noreturn main(int argc, const char **argv, const char **envp)&#123;  unsigned int v3; // [rsp+4h] [rbp-Ch] BYREF  unsigned __int64 v4; // [rsp+8h] [rbp-8h]  v4 = __readfsqword(0x28u);  init(argc, ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/27">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/27</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/25/sictfr3-pwn-wp/">
-                
-                <span class="abstract-title-text">sictfr3_pwn_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwn[签到]stack题目逻辑是这样的，其实就是找一个比 0x58 大很多，低一个字节小于 0x40的数，就能溢出了
-12345678910111213141516char *run()&#123;  char buf[76]; // [rsp+0h] [rbp-50h] BYREF  size_t nbytes; // [rsp+4Ch] [rbp-4h]  printf(&quot;Give me the length: &quot;);  LODWORD(nbytes) = get_int();  if ( (unsigned __int8)nbytes &gt; 0x40u )...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/25</span>
+                <div class="abstract-date" title="Last updated: 2023/09/18">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
                 </div>
                 <!-- tags -->
                 
@@ -788,7 +463,7 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/page/2/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><a class="page-number" href="/archives/page/6/">6</a><a class="extend next" rel="next" href="/archives/page/4/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/tags/ctf-writeup/page/4/">&lt; PREV</a><a class="page-number" href="/tags/ctf-writeup/">1</a><span class="space">&hellip;</span><a class="page-number" href="/tags/ctf-writeup/page/3/">3</a><a class="page-number" href="/tags/ctf-writeup/page/4/">4</a><span class="page-number current">5</span>
         </nav>
     
 </main>

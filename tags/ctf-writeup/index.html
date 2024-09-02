@@ -428,6 +428,50 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/09/02/gdbjail/">
+                
+                <span class="abstract-title-text">gdbjail</span>
+            </a>
+            <div class="abstract-content">
+                最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。
+没用过没装插件的gdb，不装插件挺难用的
+gdbjail1run.sh
+123#!/bin/bashgdb -x /home/user/gdbinit
+
+gdbinit
+1source /home/user/main.py
+
+main.py
+12345678910111213141516171819202122import gdbdef main():    gdb.execut...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/02">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/02</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">羊城杯2023部分题目复现</span>
@@ -746,46 +790,10 @@
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">
-                
-                <span class="abstract-title-text">xctf_BuggyAllocator复现</span>
-            </a>
-            <div class="abstract-content">
-                xctf_BuggyAllocator复现程序有 alloc 和dealloc两个选项
-123456789101112131415161718192021222324252627282930313233343536373839404142__int64 menu()&#123;  __int64 v0; // rax  __int64 v1; // rax  __int64 v2; // rax  v0 = std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, &quot;*** Buggy  ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/05/30">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/30</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <span class="page-number current">1</span><a class="page-number" href="/tags/ctf-writeup/page/2/">2</a><a class="page-number" href="/tags/ctf-writeup/page/3/">3</a><a class="page-number" href="/tags/ctf-writeup/page/4/">4</a><a class="extend next" rel="next" href="/tags/ctf-writeup/page/2/">NEXT &gt;</a>
+            <span class="page-number current">1</span><a class="page-number" href="/tags/ctf-writeup/page/2/">2</a><a class="page-number" href="/tags/ctf-writeup/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/tags/ctf-writeup/page/5/">5</a><a class="extend next" rel="next" href="/tags/ctf-writeup/page/2/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1142,7 +1150,28 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1607,7 +1636,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 52
+        Total : 53
         </div>
         <!-- search  -->
         
@@ -1621,6 +1650,12 @@
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/02</span>
+            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/31</span>
@@ -1951,13 +1986,13 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
+            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
+            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
         </li>
     
     </div>

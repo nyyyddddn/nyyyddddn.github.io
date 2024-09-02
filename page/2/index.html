@@ -441,6 +441,45 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">d3ctf_pwnshell复现</span>
+            </a>
+            <div class="abstract-content">
+                pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了
+能触发io中断的函数，比如说fgetc
+1234&lt;?php$char = fgetc(STDIN);echo &quot;You entered: $char\n&quot;;?&gt;
+
+在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/30</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">xctf_ggbord复现</span>
@@ -740,43 +779,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/07/15">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/14</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">
-                
-                <span class="abstract-title-text">中国海洋大学信息安全竞赛pwn方向wp</span>
-            </a>
-            <div class="abstract-content">
-                pwn摩登Pwn第一次做这种gui pwn，搜了一下是rbf协议，https://remoteripple.com/download/ 用这个远程连接软件连接和题目进行交互
-程序的逻辑是，会将输入转成无符号整数，然后判断”符号位”是不是负数，如果是就输出flag，所以只需要输入4字节无符号整数能表达是最大范围4294967295 就能拿到flag
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
                 </div>
                 <!-- tags -->
                 
@@ -1268,7 +1270,28 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1733,7 +1756,7 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 52
+        Total : 53
         </div>
         <!-- search  -->
         
@@ -1747,6 +1770,12 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/02</span>
+            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/31</span>
@@ -2077,13 +2106,13 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
+            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
+            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
         </li>
     
     </div>
