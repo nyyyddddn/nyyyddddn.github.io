@@ -441,6 +441,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/05/14/miniL2024-pwn/">
+                
+                <span class="abstract-title-text">miniL2024_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnottoshopida显示有些奇怪，修了一下，程序的逻辑是这样的，程序里还有一个backdoor，通过buy中的下界溢出去写binsh字符串，然后golden中的 scanf去写返回地址为backdoor就好了，scanf 如果输入数据的类型和formatstrings不匹配就不会写入数据，通过这种方式去绕过canary
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/07/15">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/14</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">
                 
                 <span class="abstract-title-text">中国海洋大学信息安全竞赛pwn方向wp</span>
@@ -747,42 +783,6 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/02/27">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/27</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/25/sictfr3-pwn-wp/">
-                
-                <span class="abstract-title-text">sictfr3_pwn_wp</span>
-            </a>
-            <div class="abstract-content">
-                pwn[签到]stack题目逻辑是这样的，其实就是找一个比 0x58 大很多，低一个字节小于 0x40的数，就能溢出了
-12345678910111213141516char *run()&#123;  char buf[76]; // [rsp+0h] [rbp-50h] BYREF  size_t nbytes; // [rsp+4Ch] [rbp-4h]  printf(&quot;Give me the length: &quot;);  LODWORD(nbytes) = get_int();  if ( (unsigned __int8)nbytes &gt; 0x40u )...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/02/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/25</span>
                 </div>
                 <!-- tags -->
                 
@@ -1279,7 +1279,24 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1760,7 +1777,7 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 54
         </div>
         <!-- search  -->
         
@@ -1774,6 +1791,12 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/04</span>
+            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/02</span>

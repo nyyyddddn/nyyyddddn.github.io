@@ -441,6 +441,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/07/15/wkctf-pwn/">
+                
+                <span class="abstract-title-text">wkctf_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
+123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&quot;);  getc(stdin);  printf(&quot;Pick a number: &quot;)...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/07/15">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/15</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">d3ctf_pwnshell复现</span>
@@ -743,42 +779,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/05/15">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/15</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/05/14/miniL2024-pwn/">
-                
-                <span class="abstract-title-text">miniL2024_pwn</span>
-            </a>
-            <div class="abstract-content">
-                pwnottoshopida显示有些奇怪，修了一下，程序的逻辑是这样的，程序里还有一个backdoor，通过buy中的下界溢出去写binsh字符串，然后golden中的 scanf去写返回地址为backdoor就好了，scanf 如果输入数据的类型和formatstrings不匹配就不会写入数据，通过这种方式去绕过canary
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/14</span>
                 </div>
                 <!-- tags -->
                 
@@ -1275,7 +1275,24 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1756,7 +1773,7 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 54
         </div>
         <!-- search  -->
         
@@ -1770,6 +1787,12 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/04</span>
+            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/02</span>

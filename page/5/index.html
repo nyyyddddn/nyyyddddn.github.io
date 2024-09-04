@@ -441,6 +441,49 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/01/18/uoftctf-pwn-wp/">
+                
+                <span class="abstract-title-text">uoftctf_pwn_wp</span>
+            </a>
+            <div class="abstract-content">
+                pwnbasic-overflow
+
+有一个shell函数，栈溢出覆盖返回地址为shell
+1234567int __cdecl main(int argc, const char **argv, const char **envp)&#123;  char v4[64]; // [rsp+0h] [rbp-40h] BYREF  gets(v4, argv, envp);  return 0;&#125;
+
+1234int shell()&#123;  return execve(&quot;/bin/sh&quot;, 0LL, 0LL);&#125;
+
+exp
+1234567891...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/05/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/01/18</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/01/04/pwnable-kr/">
                 
                 <span class="abstract-title-text">pwnable.kr</span>
@@ -780,34 +823,6 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
     
 </div>
 
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">
-                
-                <span class="abstract-title-text">php弱类型</span>
-            </a>
-            <div class="abstract-content">
-                php弱类型:&#x3D;&#x3D;&#x3D; 在进行比较的时候，会先判断两种字符串的类型是否相等，再比较值是否相等&#x3D;&#x3D; 在进行比较的时候，会先将字符串类型转化成相同，再比较值如果比较一个数字和字符串或者比较涉及到数字内容的字符串，则字符串会被转换成数值并且比较按照数值来进行
-$a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&#x3D;&#x3D;’ ‘; TRUE‘1111’&#x3D;&#x3D;TRUE; TRUE‘0’&#x3D;&#x3D;’false’...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/09/18">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
-                </div>
-                <!-- tags -->
                 
             </div>
         </article>
@@ -1294,7 +1309,24 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1775,7 +1807,7 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 53
+        Total : 54
         </div>
         <!-- search  -->
         
@@ -1789,6 +1821,12 @@ $a&#x3D;”123”;@$b&#x3D;123;a&#x3D;&#x3D;b; TRUEa&#x3D;&#x3D;&#x3D;b; FALSE0&
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/04</span>
+            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/02</span>
