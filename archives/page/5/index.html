@@ -710,57 +710,21 @@ elfinputString 先异或然后+16 然后base64encode后和flag cmp，decode后-1
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">
+            <a class="abstract-title" href="/2023/11/29/isctf/">
                 
-                <span class="abstract-title-text">exp本地不通远程通的问题</span>
+                <span class="abstract-title-text">isctf</span>
             </a>
             <div class="abstract-content">
-                今天看一个ret2text的题目的时候，遇到了exp本地不通，远程通的奇怪问题，题目是这样的
-
-
-有个backdoor函数是这样的
-
-
-exp是这样的
-123456789101112131415from pwn import *# p=remote(&quot;1.container.jingsai.apicon.cn&quot;,30509)elf = context.binary = ELF(&#x27;./Intruduce&#x27;)p = process()context.log_level=&#x27;debug&#x27;payload=b&#x27;a&#x27;* (...
+                REcrackme运行就拿到flag了？看了一下是upx3.96
+babyRe反编译了一下，大概是这样一个逻辑，rsa
+123456789101112131415import libnumfrom crypto.Util.number import *flag = &#x27;ISCTF&#123;******************&#125;&#x27;flags = flag.encode()e = 65537p = libnum.generate_prime(1024)q = libnum.generate_prime(1024)n = p * qm = bytes_to_lon...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/09/26">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/26</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/sictf2023r2/">
-                
-                <span class="abstract-title-text">sictf2023</span>
-            </a>
-            <div class="abstract-content">
-                附件 https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202Reverse[签到]PYC电脑上的pycdc出问题了，就找个在线的
-https://www.lddgo.net/string/pyc-compile-decompile
-print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e490616}’)
-Myobjectrc4加解密，写个脚本
-123456789101112131415161718192021222324252627def rc4(key, plaintext)...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/09/18">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
+                <div class="abstract-date" title="Last updated: 2024/09/05">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/29</span>
                 </div>
                 <!-- tags -->
                 
@@ -783,23 +747,59 @@ Myobjectrc4加解密，写个脚本
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2023/09/18/cnss2023/">
+            <a class="abstract-title" href="/2023/11/05/newstar-week2/">
                 
-                <span class="abstract-title-text">cnss2023</span>
+                <span class="abstract-title-text">newstar_week2</span>
             </a>
             <div class="abstract-content">
-                Web[Baby] SignIn查看源代码，script.js文件中有一段document.getElementById(‘flag’).addEventListener(‘click’, function()下面是一段jsfuck混淆
-https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
-[Baby] Backdoorpost传system()执行系统命令，找到flag
-[Baby] Webpackhttps://www.cnblogs.com/guowenrui/p/17023732.html 参考的这个文章
-安装nodejs...
+                REPZthon发现是python写的，先用 pyinstxtractor解包，然后将PZthon.pyc用pycdc反编译得到源码
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172# Source Generated with Decompyle++# File: PZthon.pyc (Python 3.9)def hello():    art = &#x27;\...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/09/18">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
+                <div class="abstract-date" title="Last updated: 2024/09/05">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/05</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/10/21/0xgame/">
+                
+                <span class="abstract-title-text">0xgame</span>
+            </a>
+            <div class="abstract-content">
+                week1Re
+数字筑基​	
+123456789else  &#123;    sub_401020((char *)&amp;byte_402210, Arglist[0]);    v4 = &quot;0xGame&#123;5f4812eb-6dee-46ab-9910-92af643cd911&#125;\n&quot;;  &#125;  sub_401020(v4, Arglist[0]);  system(&quot;pause&quot;);  return 0;&#125;
+
+10xGame&#123;5f4812eb-6dee-46ab-9910-92af643cd...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/05">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/10/21</span>
                 </div>
                 <!-- tags -->
                 
@@ -1185,7 +1185,54 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1678,7 +1725,7 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 54
+        Total : 57
         </div>
         <!-- search  -->
         
@@ -1974,13 +2021,31 @@ https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span>
+            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
         </li>
     
         

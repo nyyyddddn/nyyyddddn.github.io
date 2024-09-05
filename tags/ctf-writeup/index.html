@@ -433,14 +433,15 @@
                 <span class="abstract-title-text">羊城杯2024pwn</span>
             </a>
             <div class="abstract-content">
-                pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455from pwn import *context(os=&#x27;linux&#x27;, arch=&#x27;amd64&#x27;...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn
+pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/04">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/04</span>
                 </div>
                 <!-- tags -->
@@ -469,7 +470,8 @@
                 <span class="abstract-title-text">gdbjail</span>
             </a>
             <div class="abstract-content">
-                最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/gdbjail
+最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。
 没用过没装插件的gdb，不装插件挺难用的
 gdbjail1run.sh
 123#!/bin/bashgdb -x /home/user/gdbinit
@@ -478,13 +480,13 @@ gdbinit
 1source /home/user/main.py
 
 main.py
-12345678910111213141516171819202122import gdbdef main():    gdb.execut...
+123456789101112...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/02">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/02</span>
                 </div>
                 <!-- tags -->
@@ -513,14 +515,15 @@ main.py
                 <span class="abstract-title-text">羊城杯2023部分题目复现</span>
             </a>
             <div class="abstract-content">
-                risky_login一道riscv64 小端序 栈溢出 ret2text的题目，最新的ida 9.0可以反编译riscv架构的程序，就不需要用难用的ghidra去分析了
-1234567891011121314151617181920212223242526272829303132333435363738394041int __cdecl main(int argc, const char **argv, const char **envp)&#123;  _BYTE v4[288]; // [sp+0h] [-120h] BYREF  init_io();  puts(&quot;Ri...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023
+risky_login一道riscv64 小端序 栈溢出 ret2text的题目，最新的ida 9.0可以反编译riscv架构的程序，就不需要用难用的ghidra去分析了
+1234567891011121314151617181920212223242526272829303132333435363738394041int __cdecl main(int argc, const char **argv, const char **...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/25</span>
                 </div>
                 <!-- tags -->
@@ -549,14 +552,15 @@ main.py
                 <span class="abstract-title-text">tfcctf2024</span>
             </a>
             <div class="abstract-content">
-                pwnGUARD-THE-BYPASS程序的逻辑如下 这里GUARD也就是指canary
-1234567891011121314151617181920212223242526272829303132int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v5; // [rsp+Ch] [rbp-14h] BYREF  pthread_t newthread; // [rsp+10h] [rbp-10h] BYREF  unsigned __int64 v7; // [rsp+18h] [rb...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/tfcctf2024
+pwnGUARD-THE-BYPASS程序的逻辑如下 这里GUARD也就是指canary
+1234567891011121314151617181920212223242526272829303132int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v5; // [rsp+Ch] [rbp-14h] BYREF  pthread_t newthread; // [rsp+1...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/08">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/08</span>
                 </div>
                 <!-- tags -->
@@ -620,13 +624,14 @@ main.py
                 <span class="abstract-title-text">dasctf2024_summer_challenge</span>
             </a>
             <div class="abstract-content">
-                pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-4h]  myinit(argc, argv, envp);  puts(&quot;Life is not boring, dreams are not out of reach.&quot;);  puts(&quot;Sometimes you just need a springboa...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/dasctf2024_summer_challenge
+pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-4h]  myinit(argc, argv, envp);  puts(&quot;Life is not boring, dreams ar...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/22">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/22</span>
                 </div>
                 <!-- tags -->
@@ -655,14 +660,15 @@ main.py
                 <span class="abstract-title-text">wkctf_pwn</span>
             </a>
             <div class="abstract-content">
-                pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
-123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&quot;);  getc(stdin);  printf(&quot;Pick a number: &quot;)...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn
+pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
+123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&q...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/15">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/15</span>
                 </div>
                 <!-- tags -->
@@ -766,14 +772,15 @@ main.py
                 <span class="abstract-title-text">vsctf_pwn</span>
             </a>
             <div class="abstract-content">
-                pwncosmic-ray-v3程序的逻辑
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950int __cdecl main(int argc, const char **argv, const char **envp)&#123;  signed __int64 v3; // rax  setbuf(stdout, 0LL);  setbuf(stderr, 0LL);  cosmic_ray();  v3 = sys_exit(0);  return ...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/vsctf_pwn
+pwncosmic-ray-v3程序的逻辑
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950int __cdecl main(int argc, const char **argv, const char **envp)&#123;  signed __int64 v3; // rax  setbuf(stdout, 0LL);  setbuf...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/19">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/19</span>
                 </div>
                 <!-- tags -->
@@ -1160,7 +1167,54 @@ main.py
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1653,7 +1707,7 @@ main.py
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 54
+        Total : 57
         </div>
         <!-- search  -->
         
@@ -1949,13 +2003,31 @@ main.py
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span>
+            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
         </li>
     
         

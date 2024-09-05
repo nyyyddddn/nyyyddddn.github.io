@@ -19,15 +19,15 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta name="description" content="非栈上格式化字符串套orwhznuctf_ezpwn 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  sand_box(arg">
+    <meta name="description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81 非栈上格式化字符串套orwhznuctf_ezpwn 1234567891011121">
 <meta property="og:type" content="article">
 <meta property="og:title" content="奇奇怪怪格式化字符串漏洞的利用1">
 <meta property="og:url" content="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/index.html">
 <meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="非栈上格式化字符串套orwhznuctf_ezpwn 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&amp;#123;  sand_box(arg">
+<meta property="og:description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81 非栈上格式化字符串套orwhznuctf_ezpwn 1234567891011121">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-08-21T17:11:30.000Z">
-<meta property="article:modified_time" content="2024-08-21T17:12:05.824Z">
+<meta property="article:modified_time" content="2024-09-05T13:56:34.565Z">
 <meta property="article:author" content="nyyyddddn">
 <meta property="article:tag" content="misc">
 <meta name="twitter:card" content="summary">
@@ -491,7 +491,8 @@
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
-        <h2 id="非栈上格式化字符串套orw"><a href="#非栈上格式化字符串套orw" class="headerlink" title="非栈上格式化字符串套orw"></a>非栈上格式化字符串套orw</h2><p>hznuctf_ezpwn</p>
+        <p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81">https://github.com/nyyyddddn/ctf/tree/main/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81</a></p>
+<h2 id="非栈上格式化字符串套orw"><a href="#非栈上格式化字符串套orw" class="headerlink" title="非栈上格式化字符串套orw"></a>非栈上格式化字符串套orw</h2><p>hznuctf_ezpwn</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  sand_box(argc, argv, envp);</span><br><span class="line">  rand_time();</span><br><span class="line">  vuln();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rand_time</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">8</span>]; <span class="comment">// [rsp+0h] [rbp-10h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> seed; <span class="comment">// [rsp+8h] [rbp-8h] BYREF</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [rsp+Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  seed = time(<span class="number">0LL</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;welcome to HZNUCTF !&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Please input your name: &quot;</span>);</span><br><span class="line">  read(<span class="number">0</span>, buf, <span class="number">0x10</span>uLL);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello, %s\n&quot;</span>, buf);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;I wonder if you&#x27;re lucky enough&quot;</span>);</span><br><span class="line">  srand(seed);</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">9</span>; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Let&#x27;s guess the number: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp;seed);</span><br><span class="line">    <span class="keyword">if</span> ( rand() != seed )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Wrong.&quot;</span>);</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Guess you weren&#x27;t lucky enough.&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Right.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__int64 <span class="title function_">vuln</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;WOW you really a lucky guy!&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Then I want to know if you are capable enough.&quot;</span>);</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Please tell us something: &quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, s1, <span class="number">0x80</span>uLL);</span><br><span class="line">    <span class="keyword">if</span> ( !<span class="built_in">strcmp</span>(s1, <span class="string">&quot;HZNUCTF&quot;</span>) )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="built_in">printf</span>(s1);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0LL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>非栈上格式化字符串相对栈上格式化字符串 最麻烦的地方是任意地址写需要通过一个指针去调整另一个指针，一个字节或者是两个字节的写数据，需要两个步骤，有orw的情况下(不考虑这个沙箱能escape的情况)如果能正常退出循环，可以配合栈迁移的方式，把栈迁移到输入地址那进行rop，然后还可以通过二次迁移迁移到已知的地址来做更复杂的操作</p>
@@ -530,7 +531,7 @@
             <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
             <p>Link：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/</a>
             <p>Publish date：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">August 22nd 2024, 1:11:30 am</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">August 22nd 2024, 1:12:05 am</a>
+            <p>Update date：<a href="https://nyyyddddn.github.io/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">September 5th 2024, 9:56:34 pm</a>
             <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -965,7 +966,54 @@
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1458,7 +1506,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 54
+        Total : 57
         </div>
         <!-- search  -->
         
@@ -1754,13 +1802,31 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span>
+            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
         </li>
     
         

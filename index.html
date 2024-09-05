@@ -446,14 +446,15 @@
                 <span class="abstract-title-text">羊城杯2024pwn</span>
             </a>
             <div class="abstract-content">
-                pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455from pwn import *context(os=&#x27;linux&#x27;, arch=&#x27;amd64&#x27;...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn
+pstack程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/04">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/04</span>
                 </div>
                 <!-- tags -->
@@ -482,7 +483,8 @@
                 <span class="abstract-title-text">gdbjail</span>
             </a>
             <div class="abstract-content">
-                最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/gdbjail
+最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。
 没用过没装插件的gdb，不装插件挺难用的
 gdbjail1run.sh
 123#!/bin/bashgdb -x /home/user/gdbinit
@@ -491,13 +493,13 @@ gdbinit
 1source /home/user/main.py
 
 main.py
-12345678910111213141516171819202122import gdbdef main():    gdb.execut...
+123456789101112...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/02">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/02</span>
                 </div>
                 <!-- tags -->
@@ -526,15 +528,16 @@ main.py
                 <span class="abstract-title-text">nss3rd出题_Iterator_Trap解题思路</span>
             </a>
             <div class="abstract-content">
-                Iterator_Trap这是一个关于stl迭代器不安全使用导致uaf的漏洞，第一次出和stl相关的题目
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/nssr3d_Iterator_Trap/Iterator_Trap
+Iterator_Trap这是一个关于stl迭代器不安全使用导致uaf的漏洞，第一次出和stl相关的题目
 题目逻辑
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511...
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/31">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
                 </div>
                 <!-- tags -->
@@ -563,15 +566,16 @@ main.py
                 <span class="abstract-title-text">srctf_pwn出题</span>
             </a>
             <div class="abstract-content">
-                chroot escape啊这，咱没有想到解出来的人很少，因为chroot escape相关的文章网上有很多，这里挑重点说一下，更详细的信息可以看这里
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/srcrf_pwn
+chroot escape啊这，咱没有想到解出来的人很少，因为chroot escape相关的文章网上有很多，这里挑重点说一下，更详细的信息可以看这里
 https://web.archive.org/web/20160127150916/http://www.bpfh.net/simes/computing/chroot-break.html
-chroot本质上是通过chroot系统调用去更改进程的根目录位置，以限制该进程对系统其他部分的访问。然而，在具有root权限的情况下，可以通过chdir和chroot实现二次逃逸。具体做法是，通过chdir系统调用将当前目录更改成跟目录，然后使用...
+chroot本质上是通过chroot系统调用去更改进程的根目录位置，以限制该进程对系统其他部分的访问。然而，在具有root权限的情况下...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/31">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
                 </div>
                 <!-- tags -->
@@ -600,16 +604,17 @@ chroot本质上是通过chroot系统调用去更改进程的根目录位置，�
                 <span class="abstract-title-text">xyctf</span>
             </a>
             <div class="abstract-content">
-                前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/xyctf_pwn
+前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
 hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接，大多数好用的修改寄存器的gadget(如pop rdi ret，pop rsi ret)都是从csu init中错位字节获取的，在能泄露libc的情况下，可以转换一下思路，从libc中拿gadget
 程序逻辑
-12345678910111213int __cdecl main(int argc, const char **...
+...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/31">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
                 </div>
                 <!-- tags -->
@@ -638,14 +643,15 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
                 <span class="abstract-title-text">羊城杯2023部分题目复现</span>
             </a>
             <div class="abstract-content">
-                risky_login一道riscv64 小端序 栈溢出 ret2text的题目，最新的ida 9.0可以反编译riscv架构的程序，就不需要用难用的ghidra去分析了
-1234567891011121314151617181920212223242526272829303132333435363738394041int __cdecl main(int argc, const char **argv, const char **envp)&#123;  _BYTE v4[288]; // [sp+0h] [-120h] BYREF  init_io();  puts(&quot;Ri...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023
+risky_login一道riscv64 小端序 栈溢出 ret2text的题目，最新的ida 9.0可以反编译riscv架构的程序，就不需要用难用的ghidra去分析了
+1234567891011121314151617181920212223242526272829303132333435363738394041int __cdecl main(int argc, const char **argv, const char **...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/25">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/25</span>
                 </div>
                 <!-- tags -->
@@ -674,14 +680,15 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
                 <span class="abstract-title-text">奇奇怪怪格式化字符串漏洞的利用1</span>
             </a>
             <div class="abstract-content">
-                非栈上格式化字符串套orwhznuctf_ezpwn
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int argc, const char **argv, const char **envp)&#123;  sand_box(argc, argv, envp);  rand_time();  vuln();  return 0;&#125;void rand_time()&#123;  char buf[8]; // [r...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81
+非栈上格式化字符串套orwhznuctf_ezpwn
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int arg...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/22">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/22</span>
                 </div>
                 <!-- tags -->
@@ -710,14 +717,15 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
                 <span class="abstract-title-text">tfcctf2024</span>
             </a>
             <div class="abstract-content">
-                pwnGUARD-THE-BYPASS程序的逻辑如下 这里GUARD也就是指canary
-1234567891011121314151617181920212223242526272829303132int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v5; // [rsp+Ch] [rbp-14h] BYREF  pthread_t newthread; // [rsp+10h] [rbp-10h] BYREF  unsigned __int64 v7; // [rsp+18h] [rb...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/tfcctf2024
+pwnGUARD-THE-BYPASS程序的逻辑如下 这里GUARD也就是指canary
+1234567891011121314151617181920212223242526272829303132int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v5; // [rsp+Ch] [rbp-14h] BYREF  pthread_t newthread; // [rsp+1...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/08">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/08</span>
                 </div>
                 <!-- tags -->
@@ -781,13 +789,14 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
                 <span class="abstract-title-text">dasctf2024_summer_challenge</span>
             </a>
             <div class="abstract-content">
-                pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-4h]  myinit(argc, argv, envp);  puts(&quot;Life is not boring, dreams are not out of reach.&quot;);  puts(&quot;Sometimes you just need a springboa...
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/dasctf2024_summer_challenge
+pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-4h]  myinit(argc, argv, envp);  puts(&quot;Life is not boring, dreams ar...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/22">
+                <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/22</span>
                 </div>
                 <!-- tags -->
@@ -1290,7 +1299,54 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1783,7 +1839,7 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 54
+        Total : 57
         </div>
         <!-- search  -->
         
@@ -2079,13 +2135,31 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/05</span>
+            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
         </li>
     
         
