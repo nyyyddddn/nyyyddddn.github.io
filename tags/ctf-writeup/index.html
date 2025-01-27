@@ -428,6 +428,80 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2025/01/27/x3ctf/">
+                
+                <span class="abstract-title-text">x3ctf</span>
+            </a>
+            <div class="abstract-content">
+                pwndevnull-as-a-servicedescription
+A few months ago, I came across this website. Inspired by it, I decided to recreate the service in C to self-host it. To avoid any exploitable vulnerabilities, I decided to use a very strict seccomp filter. Even if my code were vulnerable, good luck exploiting  ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/01/27">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/27</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/01/27/KnightCTF/">
+                
+                <span class="abstract-title-text">KnightCTF</span>
+            </a>
+            <div class="abstract-content">
+                pwn嘛，因为学校那边的事情，好久没有打ctf了，找个beginner难度的ctf热身一下
+Knight’s Secretpyjail?? 题目自定义了一个person类，可以访问person类的属性，方法。题目目标只需要获取程序环境中的key，通过内置方法 mro返回的继承链数组来获取object对象，拿到object对象后就可以通过globals内置方法去检索程序中有的属性 方法拿到key
+exp
+123Enter your secret: &#123;person_obj.__class__.__mro__[0].__init__.__globals__&#125;Output: ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/01/27">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/27</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/10/23/geekgame2024/">
                 
                 <span class="abstract-title-text">geekgame2024</span>
@@ -715,82 +789,6 @@ pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc,
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/09/05">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/22</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/07/15/wkctf-pwn/">
-                
-                <span class="abstract-title-text">wkctf_pwn</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn
-pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
-123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&q...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/15</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">
-                
-                <span class="abstract-title-text">d3ctf_pwnshell复现</span>
-            </a>
-            <div class="abstract-content">
-                pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了
-能触发io中断的函数，比如说fgetc
-1234&lt;?php$char = fgetc(STDIN);echo &quot;You entered: $char\n&quot;;?&gt;
-
-在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/30">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/30</span>
                 </div>
                 <!-- tags -->
                 
@@ -1201,7 +1199,43 @@ pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址�
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1742,7 +1776,7 @@ pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 59
+        Total : 61
         </div>
         <!-- search  -->
         
@@ -1752,6 +1786,27 @@ pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址�
     
         
             
+            
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
@@ -2050,13 +2105,13 @@ pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址�
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         

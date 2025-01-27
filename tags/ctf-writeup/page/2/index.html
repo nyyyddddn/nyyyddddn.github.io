@@ -428,6 +428,82 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/07/15/wkctf-pwn/">
+                
+                <span class="abstract-title-text">wkctf_pwn</span>
+            </a>
+            <div class="abstract-content">
+                题目附件https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn
+pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
+123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&q...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/05">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/15</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">d3ctf_pwnshell复现</span>
+            </a>
+            <div class="abstract-content">
+                pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了
+能触发io中断的函数，比如说fgetc
+1234&lt;?php$char = fgetc(STDIN);echo &quot;You entered: $char\n&quot;;?&gt;
+
+在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/06/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/30</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">
                 
                 <span class="abstract-title-text">xctf_ggbord复现</span>
@@ -698,79 +774,6 @@ ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/04/28">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/28/hznuctf/">
-                
-                <span class="abstract-title-text">hznuctf</span>
-            </a>
-            <div class="abstract-content">
-                easycppstd::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768int __cdecl main(int argc, const char **...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/04/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/28</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/04/24/geekcon/">
-                
-                <span class="abstract-title-text">geekcon</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/geekcon
-pwnableMemo0有一个login函数，login success了会调用一个输出flag的函数
-1234567891011121314151617181920212223242526272829unsigned __int64 login()&#123;  unsigned __int64 v0; // rax  size_t v1; // rax  _BYTE *s1; // [rsp+8h] [rbp-38h]  char s[40]; // [rsp+10h] [r...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/04/24</span>
                 </div>
                 <!-- tags -->
                 
@@ -1181,7 +1184,43 @@ pwnableMemo0有一个login函数，login success了会调用一个输出flag的�
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1722,7 +1761,7 @@ pwnableMemo0有一个login函数，login success了会调用一个输出flag的�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 59
+        Total : 61
         </div>
         <!-- search  -->
         
@@ -1732,6 +1771,27 @@ pwnableMemo0有一个login函数，login success了会调用一个输出flag的�
     
         
             
+            
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
@@ -2030,13 +2090,13 @@ pwnableMemo0有一个login函数，login success了会调用一个输出flag的�
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
