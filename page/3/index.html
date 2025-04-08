@@ -441,6 +441,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">xctf_BuggyAllocator复现</span>
+            </a>
+            <div class="abstract-content">
+                xctf_BuggyAllocator复现程序有 alloc 和dealloc两个选项
+123456789101112131415161718192021222324252627282930313233343536373839404142__int64 menu()&#123;  __int64 v0; // rax  __int64 v1; // rax  __int64 v2; // rax  v0 = std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, &quot;*** Buggy  ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/05/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/30</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/05/27/DragonKnightCTF-pwn/">
                 
                 <span class="abstract-title-text">DragonKnightCTF_pwn</span>
@@ -752,43 +788,6 @@ pwnableMemo0有一个login函数，login success了会调用一个输出flag的�
     
     
         <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/03/27/nkctf-wp/">
-                
-                <span class="abstract-title-text">nkctf_wp</span>
-            </a>
-            <div class="abstract-content">
-                唉咱好菜，就出了两个题，后几题都没有思路
-Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，用格式化字符串泄露libc的地址和canary的值，然后打ret2libc就好了，打通后catflag发现没有权限，看了一下challenge文件，有suid权限，所以可以用libc中的setuid(0)函数提权，然后cat flag
-123456789101112131415161718192021222324252627282930unsigned __int64 sub_19EA()&#123;  char buf[8]; // [rsp+0h] [rbp-10h] BYREF  ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/03/27</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
     
 </div>
 
@@ -1318,7 +1317,24 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1885,7 +1901,7 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 61
+        Total : 62
         </div>
         <!-- search  -->
         
@@ -1899,6 +1915,12 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
             <div class="archive-year"> 2025 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/09</span>
+            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">01/27</span>
@@ -2214,13 +2236,13 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
+            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
+            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
         </li>
     
         
