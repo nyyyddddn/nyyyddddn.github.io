@@ -441,6 +441,47 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">
+                
+                <span class="abstract-title-text">hackergame2024复现</span>
+            </a>
+            <div class="abstract-content">
+                不宽的宽字符(general)description
+A 同学决定让他设计的 Windows 程序更加「国际化」一些，首先要做的就是读写各种语言写下的文件名。于是他放弃 C 语言中的 char，转而使用宽字符 wchar_t，显然这是一个国际化的好主意。
+经过一番思考，他写出了下面这样的代码，用来读入文件名：
+123// Read the filenamestd::wstring filename;std::getline(std::wcin, filename);
+
+转换后要怎么打开文件呢？小 A 使用了 C++ 最常见的写法：
+12// Create the file object ...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/04/29">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/29</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2025/04/09/Squ1rrelCTF/">
                 
                 <span class="abstract-title-text">Squ1rrelCTF</span>
@@ -761,45 +802,6 @@ Iterator_Trap这是一个关于stl迭代器不安全使用导致uaf的漏洞，�
 chroot escape啊这，咱没有想到解出来的人很少，因为chroot escape相关的文章网上有很多，这里挑重点说一下，更详细的信息可以看这里
 https://web.archive.org/web/20160127150916/http://www.bpfh.net/simes/computing/chroot-break.html
 chroot本质上是通过chroot系统调用去更改进程的根目录位置，以限制该进程对系统其他部分的访问。然而，在具有root权限的情况下...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/31/xyctf/">
-                
-                <span class="abstract-title-text">xyctf</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/xyctf_pwn
-前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
-hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接，大多数好用的修改寄存器的gadget(如pop rdi ret，pop rsi ret)都是从csu init中错位字节获取的，在能泄露libc的情况下，可以转换一下思路，从libc中拿gadget
-程序逻辑
-...
             </div>
             <!-- read more -->
             
@@ -1348,7 +1350,22 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1927,7 +1944,7 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 62
+        Total : 63
         </div>
         <!-- search  -->
         
@@ -1941,6 +1958,12 @@ hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接
             <div class="archive-year"> 2025 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span>
+            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">04/09</span>

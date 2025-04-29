@@ -428,6 +428,42 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2024/05/14/miniL2024-pwn/">
+                
+                <span class="abstract-title-text">miniL2024_pwn</span>
+            </a>
+            <div class="abstract-content">
+                pwnottoshopida显示有些奇怪，修了一下，程序的逻辑是这样的，程序里还有一个backdoor，通过buy中的下界溢出去写binsh字符串，然后golden中的 scanf去写返回地址为backdoor就好了，scanf 如果输入数据的类型和formatstrings不匹配就不会写入数据，通过这种方式去绕过canary
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/07/15">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/05/14</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">
                 
                 <span class="abstract-title-text">中国海洋大学信息安全竞赛pwn方向wp</span>
@@ -748,46 +784,10 @@ Maimai查分器子函数这里有一个格式化字符串和栈溢出漏洞，�
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/02/14/nssr18-wp/">
-                
-                <span class="abstract-title-text">nssr18_wp</span>
-            </a>
-            <div class="abstract-content">
-                唉咱好菜，就出了一题
-HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc nearbuf= byte ptr -110hvar_8= qword ptr -8; __unwind &#123;endbr64push    rbpmov     rbp, rspsub     rsp, 110hlea     rax, aNowPlzYouInput ; &quot;Now,plz you input:&quot;mov     rdi, rax        ; scall    ...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/03/04">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/02/14</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/tags/ctf-writeup/page/2/">&lt; PREV</a><a class="page-number" href="/tags/ctf-writeup/">1</a><a class="page-number" href="/tags/ctf-writeup/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/tags/ctf-writeup/page/4/">4</a><a class="page-number" href="/tags/ctf-writeup/page/5/">5</a><a class="extend next" rel="next" href="/tags/ctf-writeup/page/4/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/tags/ctf-writeup/page/2/">&lt; PREV</a><a class="page-number" href="/tags/ctf-writeup/">1</a><a class="page-number" href="/tags/ctf-writeup/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/tags/ctf-writeup/page/4/">4</a><a class="page-number" href="/tags/ctf-writeup/page/5/">5</a><a class="page-number" href="/tags/ctf-writeup/page/6/">6</a><a class="extend next" rel="next" href="/tags/ctf-writeup/page/4/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1194,7 +1194,22 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1773,7 +1788,7 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 62
+        Total : 63
         </div>
         <!-- search  -->
         
@@ -1787,6 +1802,12 @@ HappyCTF123456789101112131415161718192021222324252627282930public vulnvuln proc 
             <div class="archive-year"> 2025 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span>
+            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">04/09</span>

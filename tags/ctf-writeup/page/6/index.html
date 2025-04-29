@@ -21,7 +21,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="nyyyddddn">
-<meta property="og:url" content="https://nyyyddddn.github.io/page/2/index.html">
+<meta property="og:url" content="https://nyyyddddn.github.io/tags/ctf-writeup/page/6/index.html">
 <meta property="og:site_name" content="nyyyddddn">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="nyyyddddn">
@@ -217,10 +217,8 @@
         }
     </script>
     
-        <body class="home-body">
-    
         <!-- header -->
-        <header class="header header-mobile index-header">
+        <header class="header header-mobile">
     <!-- top read progress line -->
     <div class="header-element">
         <div class="read-progress"></div>
@@ -251,7 +249,7 @@
 </header>
 
         <!-- fixed footer -->
-        <footer class="footer-fixed index-footer-fixed">
+        <footer class="footer-fixed">
     <!-- back to top button -->
     <div class="footer-fixed-element">
         
@@ -274,32 +272,21 @@
 
 
 
-    height:50vh;
-
 ">
     
     <!-- 主页  -->
     
-        
-    <!-- 文章页  -->
-    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-                nyyyddddn
-            <!-- 文章页  -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-                
-            <!-- 文章页  -->
             
         </p>
         <!-- 文章页 meta -->
@@ -441,354 +428,23 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2024/08/31/xyctf/">
+            <a class="abstract-title" href="/2023/09/18/cnss2023/">
                 
-                <span class="abstract-title-text">xyctf</span>
+                <span class="abstract-title-text">cnss2023</span>
             </a>
             <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/xyctf_pwn
-前段时间好忙，最近这几天才抽出时间整理下东西，xyctf是今年四月份开的，当时是第一次出题，想给入门pwn一段时间的师傅分享些简单又可以开阔一下思路的pwn题
-hello_world(签到)在glibc 2.31以后 csu fini csu init都变成了动态链接，大多数好用的修改寄存器的gadget(如pop rdi ret，pop rsi ret)都是从csu init中错位字节获取的，在能泄露libc的情况下，可以转换一下思路，从libc中拿gadget
-程序逻辑
-...
+                Web[Baby] SignIn查看源代码，script.js文件中有一段document.getElementById(‘flag’).addEventListener(‘click’, function()下面是一段jsfuck混淆
+https://enkhee-osiris.github.io/Decoder-JSFuck/  得到flag
+[Baby] Backdoorpost传system()执行系统命令，找到flag
+[Baby] Webpackhttps://www.cnblogs.com/guowenrui/p/17023732.html 参考的这个文章
+安装nodejs...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/31</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">
-                
-                <span class="abstract-title-text">羊城杯2023部分题目复现</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023
-risky_login一道riscv64 小端序 栈溢出 ret2text的题目，最新的ida 9.0可以反编译riscv架构的程序，就不需要用难用的ghidra去分析了
-1234567891011121314151617181920212223242526272829303132333435363738394041int __cdecl main(int argc, const char **argv, const char **...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/25</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">
-                
-                <span class="abstract-title-text">奇奇怪怪格式化字符串漏洞的利用1</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%A9%E7%94%A81
-非栈上格式化字符串套orwhznuctf_ezpwn
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849int __cdecl main(int arg...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/22</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/08/tfcctf2024/">
-                
-                <span class="abstract-title-text">tfcctf2024</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/tfcctf2024
-pwnGUARD-THE-BYPASS程序的逻辑如下 这里GUARD也就是指canary
-1234567891011121314151617181920212223242526272829303132int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int v5; // [rsp+Ch] [rbp-14h] BYREF  pthread_t newthread; // [rsp+1...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/08</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/08/01/ImaginaryCTF/">
-                
-                <span class="abstract-title-text">ImaginaryCTF</span>
-            </a>
-            <div class="abstract-content">
-                pwnimgstore123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657unsigned __int64 sell_book()&#123;  char v1; // [rsp+7h] [rbp-59h] BYREF  int buf; // [rsp+8h] [rbp-58h] BYREF  int fd; // [rsp+Ch] [rbp-54h]  char s[72]; // [rsp+10h] [rbp-50h] BYR...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/01">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/08/01</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/07/22/dasctf2024-summer-challenge/">
-                
-                <span class="abstract-title-text">dasctf2024_summer_challenge</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/dasctf2024_summer_challenge
-pwnspring_board123456789101112131415161718192021222324int __cdecl main(int argc, const char **argv, const char **envp)&#123;  int i; // [rsp+Ch] [rbp-4h]  myinit(argc, argv, envp);  puts(&quot;Life is not boring, dreams ar...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/22</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/07/15/wkctf-pwn/">
-                
-                <span class="abstract-title-text">wkctf_pwn</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn
-pwnbaby_stack在guess number逻辑这里用格式化字符串泄露 libc地址后
-123456789101112131415__int64 wait()&#123;  unsigned int v0; // eax  char s[5]; // [rsp+Bh] [rbp-85h] BYREF  char format[120]; // [rsp+10h] [rbp-80h] BYREF  puts(&quot;Press enter to continue&q...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/07/15</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">
-                
-                <span class="abstract-title-text">d3ctf_pwnshell复现</span>
-            </a>
-            <div class="abstract-content">
-                pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了
-能触发io中断的函数，比如说fgetc
-1234&lt;?php$char = fgetc(STDIN);echo &quot;You entered: $char\n&quot;;?&gt;
-
-在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/30">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/30</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">
-                
-                <span class="abstract-title-text">xctf_ggbord复现</span>
-            </a>
-            <div class="abstract-content">
-                ggbond可以发现主函数是main_main，同时存在大量grpc字段，可以判断出程序使用了grpc框架。和grpc框架开发的程序进行交互，需要提取protobuf，protobuf谷歌开发的数据序列化格式，它通常用于网络通信和数据存储的应用程序之间的结构化数据交换。这个工具让你能够定义交互时消息的数据结构。
-程序套了grpc，与程序的交互不再直接通过标准输入，而需要通过定义的 gRPC 服务接口来进行，然后grpc 使用一个叫protobuf的结构去描述怎么和程序交互的，首先需要提取出程序中的protobuf，然后python中有一个叫grpc_tools的库可以通过 protobu...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/06/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/25</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/06/19/vsctf-pwn/">
-                
-                <span class="abstract-title-text">vsctf_pwn</span>
-            </a>
-            <div class="abstract-content">
-                题目附件https://github.com/nyyyddddn/ctf/tree/main/vsctf_pwn
-pwncosmic-ray-v3程序的逻辑
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950int __cdecl main(int argc, const char **argv, const char **envp)&#123;  signed __int64 v3; // rax  setbuf(stdout, 0LL);  setbuf...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/09/05">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/06/19</span>
+                <div class="abstract-date" title="Last updated: 2023/09/18">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/18</span>
                 </div>
                 <!-- tags -->
                 
@@ -807,128 +463,12 @@ pwncosmic-ray-v3程序的逻辑
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/tags/ctf-writeup/page/5/">&lt; PREV</a><a class="page-number" href="/tags/ctf-writeup/">1</a><span class="space">&hellip;</span><a class="page-number" href="/tags/ctf-writeup/page/4/">4</a><a class="page-number" href="/tags/ctf-writeup/page/5/">5</a><span class="page-number current">6</span>
         </nav>
     
 </main>
 
                 <!-- profile -->
-                
-                    <div class="profile">
-    <img class="profile-avatar" alt="avatar" src= /avatar/11.jpg />
-    <div class="profile-name">nyyyddddn</div>
-    
-        <div class="profile-signature">
-            快来和我贴贴qaq
-        </div>
-    
-    
-        <div class="profile-social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    
-        <div class="friends">
-            <div>
-                
-                FRIENDS
-            </div>
-            
-                
-                    <span>
-                        <a href="//blog.yuro.work/" target="_blank">yuro</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href="//shinichicun.top/" target="_blank">shin</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href="//k0rian.github.io/" target="_blank">k0rain</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href="//tokameine.top/" target="_blank">TokameinE</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href="//blog.xinshi.fun/" target="_blank">LilRan</a>
-                    </span>
-                
-            
-        </div>
-    
-    
-        <div class="profile-link-item">
-            <a href="/about" class="about-me">
-                
-                ABOUT ME
-            </a>
-        </div>
-    
-    
-    
-</div>
-
                 
             </div>
             <footer class="footer footer-unloaded">
