@@ -94,8 +94,8 @@ RUN chmod -R 777 &amp;#x2F;var&amp;#x2F;www&amp;#x2F;html">
 		  </li>
 		  
 		  <li>
-			<a href="/catergories" title="All the catergories.">
-			  <i class=""></i>Catergories
+			<a href="/catergories" title="All the categories.">
+			  <i class=""></i>Categories
 			</a>
 		  </li>
 		  
@@ -649,6 +649,17 @@ LABEL_9<span class="token operator">:</span>
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/ctf/">ctf<span>52</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -656,13 +667,19 @@ LABEL_9<span class="token operator">:</span>
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>52</span></a></li>
     </ul>
 	</div>
 		
 
 	<!-- toc -->
 	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#pwnshell-%E5%A4%8D%E7%8E%B0-php-pwn"><span class="toc-article-text">pwnshell 复现 (php pwn)</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95%EF%BC%9F"><span class="toc-article-text">如何调试？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%B0%83%E8%AF%95%E7%9B%B8%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-article-text">调试相关的命令</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85gdbserver"><span class="toc-article-text">安装gdbserver</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="toc-article-text">构建镜像</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%BC%80%E5%90%AF%E5%AE%B9%E5%99%A8"><span class="toc-article-text">开启容器</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#gdbserver%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-article-text">gdbserver的使用</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%A6%82%E4%BD%95%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F%E9%80%BB%E8%BE%91"><span class="toc-article-text">如何分析程序逻辑</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#zif-addHacker"><span class="toc-article-text">zif_addHacker</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#php%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-article-text">php变量类型的表示方法</span></a></li></ol></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#zif-removeHacker"><span class="toc-article-text">zif_removeHacker</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#zif-editHacker"><span class="toc-article-text">zif_editHacker</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#zif-displayHacker"><span class="toc-article-text">zif_displayHacker</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#exp"><span class="toc-article-text">exp</span></a></li></ol></li></ol>
+		</div>
 	
 	</div>
 	
