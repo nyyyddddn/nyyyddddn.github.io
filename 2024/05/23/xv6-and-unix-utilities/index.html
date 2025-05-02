@@ -1,517 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>xv6_and_unix_utilities | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="Xv6 and Unix utilities好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的
+
+
+
+
+sleep根据题目描述，和 user&amp;#x2F; 中的其他程序的逻辑可以发现 命令行参数传递是通过 main的argc 和argv去传递的，其中argc 中存储着参数的个数，argv存储着参数名，没有参数的时候argc &amp;#x3D; 1，argv[0] &amp;#x3D; program_name。然后在 “user&amp;#x2F;user.h” 中有sleep 函数所以 只需要直接调用sleep函数就好了, 把time上限也做一个设置（防止睡死过去了
+#include &#34;kernel/types.h&#34;
+#include &#34;kernel/stat.h&#34;
+#include &#34;user/user.h&#34;
+
+int main(int argc, char *argv[])&amp;#123;
     
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="Xv6 and Unix utilities好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的     sleep根据题目描述，和 user&#x2F; 中的其他程序的逻辑可以发现 命令行参数传递是通过 main的argc 和argv去传递的，其中argc 中存储着参数的个数，argv存储着参数名，没">
-<meta property="og:type" content="article">
-<meta property="og:title" content="xv6_and_unix_utilities">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="Xv6 and Unix utilities好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的     sleep根据题目描述，和 user&#x2F; 中的其他程序的逻辑可以发现 命令行参数传递是通过 main的argc 和argv去传递的，其中argc 中存储着参数的个数，argv存储着参数名，没">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716402421841.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715699579305.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715700159167.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715714044375.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715714301054.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715714018107.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1715881378618.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716379415648.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716375891676.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716380831643.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716402642043.png">
-<meta property="article:published_time" content="2024-05-22T18:47:51.000Z">
-<meta property="article:modified_time" content="2024-08-24T17:07:01.882Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="misc">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/1716402421841.png">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>xv6_and_unix_utilities · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+    int time = 0;
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+    if (argc == 1 || argc &gt; 2)&amp;#123;
+        printf(&#34;Error: Please provide the number of seconds to sleep\n e.g. sleep 5\n&#34;);
+        exit(1);
+    &amp;#125;
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+    time = atoi(argv[1]);
+    if (time &gt; 0 &amp;amp;&amp;amp; time &amp;lt; 0x1000)&amp;#123;
+        printf(&#34;Zzzzzzzzz.....\n&#34;);
+        sleep(time);
+    &amp;#125;
+    exit(0);
+&amp;#125;
+然后在Makefile中 添加 sleep这个文件 就好了
+UPROGS=\
+	$U/_cat\
+	$U/_echo\
+	$U/_forktest\
+	$U/_grep\
+	$U/_init\
+	$U/_kill\
+	$U/_ln\
+	$U/_ls\
+	$U/_mkdir\
+	$U/_rm\
+	$U/_sh\
+	$U/_stressfs\
+	$U/_usertests\
+	$U/_grind\
+	$U/_wc\
+	$U/_zombie\
+	$U/_sleep\
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+pingpong"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+  <meta property="og:title" content="xv6_and_unix_utilities"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+  
+    <meta property="og:image" content=""/>
+  
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+  <script src="/js/jquery-2.0.3.min.js"></script>
 
-    body {
-        margin: 0;
-    }
+  <!-- analytics -->
+  
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
 
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
 
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
-
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">xv6_and_unix_utilities</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> xv6_and_unix_utilities</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-
-    height:50vh;
-
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                xv6_and_unix_utilities
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/05/23</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h1 id="Xv6-and-Unix-utilities"><a href="#Xv6-and-Unix-utilities" class="headerlink" title="Xv6 and Unix utilities"></a>Xv6 and Unix utilities</h1><p>好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的</p>
+	  <h1 id="Xv6-and-Unix-utilities"><a href="#Xv6-and-Unix-utilities" class="headerlink" title="Xv6 and Unix utilities"></a>Xv6 and Unix utilities</h1><p>好哦，完成 mit 6.1810 2023 中 lab :Xv6 and Unix utilities了，准备开始下一章的学习了，xv6还是挺好玩的</p>
 <img src="/2024/05/23/xv6-and-unix-utilities/1716402421841.png" class="" title="1716402421841.png">
 
 
 
 <h2 id="sleep"><a href="#sleep" class="headerlink" title="sleep"></a>sleep<img src="/2024/05/23/xv6-and-unix-utilities/1715699579305.png" class="" title="1715699579305.png"></h2><p>根据题目描述，和 user&#x2F; 中的其他程序的逻辑可以发现 命令行参数传递是通过 main的argc 和argv去传递的，其中argc 中存储着参数的个数，argv存储着参数名，没有参数的时候argc &#x3D; 1，argv[0] &#x3D; program_name。<br>然后在 “user&#x2F;user.h” 中有sleep 函数<br>所以 只需要直接调用sleep函数就好了, 把time上限也做一个设置（防止睡死过去了</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> time = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">1</span> || argc &gt; <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: Please provide the number of seconds to sleep\n e.g. sleep 5\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    time = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span> (time &gt; <span class="number">0</span> &amp;&amp; time &lt; <span class="number">0x1000</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Zzzzzzzzz.....\n&quot;</span>);</span><br><span class="line">        sleep(time);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/types.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/stat.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"user/user.h"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    
+    <span class="token keyword">int</span> time <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">||</span> argc <span class="token operator">></span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Error: Please provide the number of seconds to sleep\n e.g. sleep 5\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    time <span class="token operator">=</span> <span class="token function">atoi</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>time <span class="token operator">></span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> time <span class="token operator">&lt;</span> <span class="token number">0x1000</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Zzzzzzzzz.....\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">sleep</span><span class="token punctuation">(</span>time<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后在Makefile中 添加 sleep这个文件 就好了</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">UPROGS=\</span><br><span class="line">	$U/_cat\</span><br><span class="line">	$U/_echo\</span><br><span class="line">	$U/_forktest\</span><br><span class="line">	$U/_grep\</span><br><span class="line">	$U/_init\</span><br><span class="line">	$U/_kill\</span><br><span class="line">	$U/_ln\</span><br><span class="line">	$U/_ls\</span><br><span class="line">	$U/_mkdir\</span><br><span class="line">	$U/_rm\</span><br><span class="line">	$U/_sh\</span><br><span class="line">	$U/_stressfs\</span><br><span class="line">	$U/_usertests\</span><br><span class="line">	$U/_grind\</span><br><span class="line">	$U/_wc\</span><br><span class="line">	$U/_zombie\</span><br><span class="line">	$U/_sleep\</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">UPROGS<span class="token operator">=</span>\
+	$U<span class="token operator">/</span>_cat\
+	$U<span class="token operator">/</span>_echo\
+	$U<span class="token operator">/</span>_forktest\
+	$U<span class="token operator">/</span>_grep\
+	$U<span class="token operator">/</span>_init\
+	$U<span class="token operator">/</span>_kill\
+	$U<span class="token operator">/</span>_ln\
+	$U<span class="token operator">/</span>_ls\
+	$U<span class="token operator">/</span>_mkdir\
+	$U<span class="token operator">/</span>_rm\
+	$U<span class="token operator">/</span>_sh\
+	$U<span class="token operator">/</span>_stressfs\
+	$U<span class="token operator">/</span>_usertests\
+	$U<span class="token operator">/</span>_grind\
+	$U<span class="token operator">/</span>_wc\
+	$U<span class="token operator">/</span>_zombie\
+	$U<span class="token operator">/</span>_sleep\<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <img src="/2024/05/23/xv6-and-unix-utilities/1715700159167.png" class="" title="1715700159167.png">
 
@@ -519,1551 +220,538 @@
 <img src="/2024/05/23/xv6-and-unix-utilities/1715714301054.png" class="" title="1715714301054.png">
 <p>通过阅读资料可以发现，pingpong 可以分解为两个问题，分别是 如何创建子进程，父子进程之间如何通信<br>创建子进程可以使用 fork() 函数创建，进程之间通信可以使用pipe 这个函数去创建一个管道，管道的本质就是内存共享，不同进程可以共享同一块内存<br>管道是单向的，其中 int pN[2] &#x3D; pipe() 这段代码中，pN[0] 是 读端，pN[1] 是写端，所以 两个进程互相通信 需要两个管道</p>
 <p>那 如何判断父子进程呢？ 可以通过 fork的返回值来判断，为了保证执行顺序按照 ping - &gt; pong 这个顺序去执行，在 ping 后 父进程应该等待子进程 senddata过来 才输出pong，这时候可以使用wait函数来解决这个问题</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// pN[0] read pN[1] write</span></span><br><span class="line">    <span class="type">int</span> p1[<span class="number">2</span>]; <span class="comment">// pipe from parent to child </span></span><br><span class="line">    <span class="type">int</span> p2[<span class="number">2</span>]; <span class="comment">// pipe from child to parent</span></span><br><span class="line">    </span><br><span class="line">    pipe(p1);</span><br><span class="line">    pipe(p2);</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="type">char</span> byte = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">        write(p1[<span class="number">1</span>],&amp;byte,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        wait(<span class="number">0</span>); <span class="comment">// wait child process exit</span></span><br><span class="line">        read(p2[<span class="number">0</span>],&amp;byte,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(byte == <span class="string">&#x27;B&#x27;</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d: received pong\n&quot;</span>, getpid());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        close(p1[<span class="number">1</span>]);</span><br><span class="line">        close(p2[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="type">char</span> buf;</span><br><span class="line">        read(p1[<span class="number">0</span>],&amp;buf,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(buf == <span class="string">&#x27;A&#x27;</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d: received ping\n&quot;</span>, getpid());</span><br><span class="line">            buf = <span class="string">&#x27;B&#x27;</span>;</span><br><span class="line">            write(p2[<span class="number">1</span>],&amp;buf,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        close(p1[<span class="number">0</span>]);</span><br><span class="line">        close(p2[<span class="number">1</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: fork error!\n&quot;</span>);</span><br><span class="line">        close(p1[<span class="number">0</span>]);</span><br><span class="line">        close(p1[<span class="number">1</span>]);</span><br><span class="line">        close(p2[<span class="number">0</span>]);</span><br><span class="line">        close(p2[<span class="number">1</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/types.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/stat.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"user/user.h"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token comment">// pN[0] read pN[1] write</span>
+    <span class="token keyword">int</span> p1<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// pipe from parent to child </span>
+    <span class="token keyword">int</span> p2<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// pipe from child to parent</span>
+    
+    <span class="token function">pipe</span><span class="token punctuation">(</span>p1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">pipe</span><span class="token punctuation">(</span>p2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    
+    <span class="token keyword">int</span> pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">char</span> byte <span class="token operator">=</span> <span class="token char">'A'</span><span class="token punctuation">;</span>
+        <span class="token function">write</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>byte<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">wait</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// wait child process exit</span>
+        <span class="token function">read</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>byte<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span>byte <span class="token operator">==</span> <span class="token char">'B'</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d: received pong\n"</span><span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token function">close</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">char</span> buf<span class="token punctuation">;</span>
+        <span class="token function">read</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>buf<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span>buf <span class="token operator">==</span> <span class="token char">'A'</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d: received ping\n"</span><span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            buf <span class="token operator">=</span> <span class="token char">'B'</span><span class="token punctuation">;</span>
+            <span class="token function">write</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token operator">&amp;</span>buf<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span><span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Error: fork error!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>p2<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <img src="/2024/05/23/xv6-and-unix-utilities/1715714018107.png" class="" title="1715714018107.png">
 
 
 <h2 id="primes"><a href="#primes" class="headerlink" title="primes"></a>primes</h2><h3 id=""><a href="#" class="headerlink" title=""></a><img src="/2024/05/23/xv6-and-unix-utilities/1715881378618.png" class="" title="1715881378618.png"></h3><p>这个题挺有意思的，素数筛，不过想到一种更简单的方法，筛的逻辑在子进程里面实现就好了</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">sieve</span><span class="params">(<span class="type">int</span> read_fd)</span> &#123;</span><br><span class="line">    <span class="type">int</span> p;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (read(read_fd, &amp;p, <span class="keyword">sizeof</span>(<span class="type">int</span>)) == <span class="number">0</span>) &#123;</span><br><span class="line">        close(read_fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, p);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> next_read_fd[<span class="number">2</span>];</span><br><span class="line">    pipe(next_read_fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        close(next_read_fd[<span class="number">1</span>]);</span><br><span class="line">        sieve(next_read_fd[<span class="number">0</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        close(next_read_fd[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span> num;</span><br><span class="line">        <span class="keyword">while</span> (read(read_fd, &amp;num, <span class="keyword">sizeof</span>(<span class="type">int</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (num % p != <span class="number">0</span>) &#123;</span><br><span class="line">                write(next_read_fd[<span class="number">1</span>], &amp;num, <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        close(next_read_fd[<span class="number">1</span>]);</span><br><span class="line">        close(read_fd);</span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> nums[<span class="number">34</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">34</span>; i++) &#123;</span><br><span class="line">        nums[i] = i + <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> initial_fd[<span class="number">2</span>];</span><br><span class="line">    pipe(initial_fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        close(initial_fd[<span class="number">1</span>]);</span><br><span class="line">        sieve(initial_fd[<span class="number">0</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        close(initial_fd[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">34</span>; i++) &#123;</span><br><span class="line">            write(initial_fd[<span class="number">1</span>], &amp;nums[i], <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        close(initial_fd[<span class="number">1</span>]);</span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/types.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"kernel/stat.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"user/user.h"</span></span>
+
+<span class="token keyword">void</span> <span class="token function">sieve</span><span class="token punctuation">(</span><span class="token keyword">int</span> read_fd<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> p<span class="token punctuation">;</span>
+    
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span>read_fd<span class="token punctuation">,</span> <span class="token operator">&amp;</span>p<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>read_fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"prime %d\n"</span><span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> next_read_fd<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">pipe</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">sieve</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> num<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span>read_fd<span class="token punctuation">,</span> <span class="token operator">&amp;</span>num<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>num <span class="token operator">%</span> p <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">write</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>num<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>next_read_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>read_fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">wait</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">int</span> nums<span class="token punctuation">[</span><span class="token number">34</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">34</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">int</span> initial_fd<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">pipe</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">sieve</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">34</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">write</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>initial_fd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">wait</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><img src="/2024/05/23/xv6-and-unix-utilities/1716379415648.png" class="" title="1716379415648.png">
 <p>find，想到的搜索策略是bfs？从传过来的path判断 path里每个项的类型，如果是dir就递归下去，如果是file就判断file name是不是要find的目标，如果是. ..就跳过，所以能得到几个新的问题，怎么样获取path里的条目有什么，这些条目的类型是什么</p>
 <p>ls.c source code</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;kernel/types.h&quot;</span><br><span class="line">#include &quot;kernel/stat.h&quot;</span><br><span class="line">#include &quot;user/user.h&quot;</span><br><span class="line">#include &quot;kernel/fs.h&quot;</span><br><span class="line">#include &quot;kernel/fcntl.h&quot;</span><br><span class="line"></span><br><span class="line">char*</span><br><span class="line">fmtname(char *path)</span><br><span class="line">&#123;</span><br><span class="line">  static char buf[DIRSIZ+1];</span><br><span class="line">  char *p;</span><br><span class="line"></span><br><span class="line">  // Find first character after last slash.</span><br><span class="line">  for(p=path+strlen(path); p &gt;= path &amp;&amp; *p != &#x27;/&#x27;; p--)</span><br><span class="line">    ;</span><br><span class="line">  p++;</span><br><span class="line"></span><br><span class="line">  // Return blank-padded name.</span><br><span class="line">  if(strlen(p) &gt;= DIRSIZ)</span><br><span class="line">    return p;</span><br><span class="line">  memmove(buf, p, strlen(p));</span><br><span class="line">  memset(buf+strlen(p), &#x27; &#x27;, DIRSIZ-strlen(p));</span><br><span class="line">  return buf;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void</span><br><span class="line">ls(char *path)</span><br><span class="line">&#123;</span><br><span class="line">  char buf[512], *p;</span><br><span class="line">  int fd;</span><br><span class="line">  struct dirent de;</span><br><span class="line">  struct stat st;</span><br><span class="line"></span><br><span class="line">  if((fd = open(path, O_RDONLY)) &lt; 0)&#123;</span><br><span class="line">    fprintf(2, &quot;ls: cannot open %s\n&quot;, path);</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if(fstat(fd, &amp;st) &lt; 0)&#123;</span><br><span class="line">    fprintf(2, &quot;ls: cannot stat %s\n&quot;, path);</span><br><span class="line">    close(fd);</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  switch(st.type)&#123;</span><br><span class="line">  case T_DEVICE:</span><br><span class="line">  case T_FILE:</span><br><span class="line">    printf(&quot;%s %d %d %l\n&quot;, fmtname(path), st.type, st.ino, st.size);</span><br><span class="line">    break;</span><br><span class="line"></span><br><span class="line">  case T_DIR:</span><br><span class="line">    if(strlen(path) + 1 + DIRSIZ + 1 &gt; sizeof buf)&#123;</span><br><span class="line">      printf(&quot;ls: path too long\n&quot;);</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">    strcpy(buf, path);</span><br><span class="line">    p = buf+strlen(buf);</span><br><span class="line">    *p++ = &#x27;/&#x27;;</span><br><span class="line">    while(read(fd, &amp;de, sizeof(de)) == sizeof(de))&#123;</span><br><span class="line">      if(de.inum == 0)</span><br><span class="line">        continue;</span><br><span class="line">      memmove(p, de.name, DIRSIZ);</span><br><span class="line">      p[DIRSIZ] = 0;</span><br><span class="line">      if(stat(buf, &amp;st) &lt; 0)&#123;</span><br><span class="line">        printf(&quot;ls: cannot stat %s\n&quot;, buf);</span><br><span class="line">        continue;</span><br><span class="line">      &#125;</span><br><span class="line">      printf(&quot;%s %d %d %d\n&quot;, fmtname(buf), st.type, st.ino, st.size);</span><br><span class="line">    &#125;</span><br><span class="line">    break;</span><br><span class="line">  &#125;</span><br><span class="line">  close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int</span><br><span class="line">main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line"></span><br><span class="line">  if(argc &lt; 2)&#123;</span><br><span class="line">    ls(&quot;.&quot;);</span><br><span class="line">    exit(0);</span><br><span class="line">  &#125;</span><br><span class="line">  for(i=1; i&lt;argc; i++)</span><br><span class="line">    ls(argv[i]);</span><br><span class="line">  exit(0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#include &quot;kernel&#x2F;types.h&quot;
+#include &quot;kernel&#x2F;stat.h&quot;
+#include &quot;user&#x2F;user.h&quot;
+#include &quot;kernel&#x2F;fs.h&quot;
+#include &quot;kernel&#x2F;fcntl.h&quot;
+
+char*
+fmtname(char *path)
+&#123;
+  static char buf[DIRSIZ+1];
+  char *p;
+
+  &#x2F;&#x2F; Find first character after last slash.
+  for(p&#x3D;path+strlen(path); p &gt;&#x3D; path &amp;&amp; *p !&#x3D; &#39;&#x2F;&#39;; p--)
+    ;
+  p++;
+
+  &#x2F;&#x2F; Return blank-padded name.
+  if(strlen(p) &gt;&#x3D; DIRSIZ)
+    return p;
+  memmove(buf, p, strlen(p));
+  memset(buf+strlen(p), &#39; &#39;, DIRSIZ-strlen(p));
+  return buf;
+&#125;
+
+void
+ls(char *path)
+&#123;
+  char buf[512], *p;
+  int fd;
+  struct dirent de;
+  struct stat st;
+
+  if((fd &#x3D; open(path, O_RDONLY)) &lt; 0)&#123;
+    fprintf(2, &quot;ls: cannot open %s\n&quot;, path);
+    return;
+  &#125;
+
+  if(fstat(fd, &amp;st) &lt; 0)&#123;
+    fprintf(2, &quot;ls: cannot stat %s\n&quot;, path);
+    close(fd);
+    return;
+  &#125;
+
+  switch(st.type)&#123;
+  case T_DEVICE:
+  case T_FILE:
+    printf(&quot;%s %d %d %l\n&quot;, fmtname(path), st.type, st.ino, st.size);
+    break;
+
+  case T_DIR:
+    if(strlen(path) + 1 + DIRSIZ + 1 &gt; sizeof buf)&#123;
+      printf(&quot;ls: path too long\n&quot;);
+      break;
+    &#125;
+    strcpy(buf, path);
+    p &#x3D; buf+strlen(buf);
+    *p++ &#x3D; &#39;&#x2F;&#39;;
+    while(read(fd, &amp;de, sizeof(de)) &#x3D;&#x3D; sizeof(de))&#123;
+      if(de.inum &#x3D;&#x3D; 0)
+        continue;
+      memmove(p, de.name, DIRSIZ);
+      p[DIRSIZ] &#x3D; 0;
+      if(stat(buf, &amp;st) &lt; 0)&#123;
+        printf(&quot;ls: cannot stat %s\n&quot;, buf);
+        continue;
+      &#125;
+      printf(&quot;%s %d %d %d\n&quot;, fmtname(buf), st.type, st.ino, st.size);
+    &#125;
+    break;
+  &#125;
+  close(fd);
+&#125;
+
+int
+main(int argc, char *argv[])
+&#123;
+  int i;
+
+  if(argc &lt; 2)&#123;
+    ls(&quot;.&quot;);
+    exit(0);
+  &#125;
+  for(i&#x3D;1; i&lt;argc; i++)
+    ls(argv[i]);
+  exit(0);
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>有两个 比较关键的函数和结构体<br>stat 和 fstat 这两个函数</p>
 <img src="/2024/05/23/xv6-and-unix-utilities/1716375891676.png" class="" title="1716375891676.png">
 
 <p>嗯，通过阅读ls.c可以发现想要获得一个条目是目录 还是文件，可以通过 int fd &#x3D; open(“current_dir”,0);struct stat st;  fstat(fd,&amp;st); 来获得<br>这是struct stat的定义</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define T_DIR     1   // Directory</span><br><span class="line">#define T_FILE    2   // File</span><br><span class="line">#define T_DEVICE  3   // Device</span><br><span class="line"></span><br><span class="line">struct stat &#123;</span><br><span class="line">  int dev;     // File system&#x27;s disk device</span><br><span class="line">  uint ino;    // Inode number</span><br><span class="line">  short type;  // Type of file</span><br><span class="line">  short nlink; // Number of links to file</span><br><span class="line">  uint64 size; // Size of file in bytes</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#define T_DIR     1   &#x2F;&#x2F; Directory
+#define T_FILE    2   &#x2F;&#x2F; File
+#define T_DEVICE  3   &#x2F;&#x2F; Device
+
+struct stat &#123;
+  int dev;     &#x2F;&#x2F; File system&#39;s disk device
+  uint ino;    &#x2F;&#x2F; Inode number
+  short type;  &#x2F;&#x2F; Type of file
+  short nlink; &#x2F;&#x2F; Number of links to file
+  uint64 size; &#x2F;&#x2F; Size of file in bytes
+&#125;;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>只需要判断 stat.type就能知道条目的类型是 directory 还是file 还是 Device<br>可以通过读fd的方式来获得条目的信息，用struct dirent 去存储条目的信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">while(read(fd, &amp;de, sizeof(de)) == sizeof(de)) &#123;</span><br><span class="line">        if(de.inum == 0)</span><br><span class="line">            continue;</span><br><span class="line">        memmove(p, de.name, DIRSIZ);</span><br><span class="line">        p[DIRSIZ] = 0;</span><br><span class="line">        if(stat(buf, &amp;st) &lt; 0) &#123;</span><br><span class="line">            fprintf(2, &quot;Error: findcannot stat %s\n&quot;, buf);</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">while(read(fd, &amp;de, sizeof(de)) &#x3D;&#x3D; sizeof(de)) &#123;
+        if(de.inum &#x3D;&#x3D; 0)
+            continue;
+        memmove(p, de.name, DIRSIZ);
+        p[DIRSIZ] &#x3D; 0;
+        if(stat(buf, &amp;st) &lt; 0) &#123;
+            fprintf(2, &quot;Error: findcannot stat %s\n&quot;, buf);
+            continue;
+        &#125;
+  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>struct dirent的定义</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Directory is a file containing a sequence of dirent structures.</span><br><span class="line">#define DIRSIZ 14</span><br><span class="line"></span><br><span class="line">struct dirent &#123;</span><br><span class="line">  ushort inum;</span><br><span class="line">  char name[DIRSIZ];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; Directory is a file containing a sequence of dirent structures.
+#define DIRSIZ 14
+
+struct dirent &#123;
+  ushort inum;
+  char name[DIRSIZ];
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过 dirent.name 可以获得条目的名字</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;kernel/types.h&quot;</span><br><span class="line">#include &quot;kernel/stat.h&quot;</span><br><span class="line">#include &quot;user/user.h&quot;</span><br><span class="line">#include &quot;kernel/fs.h&quot;</span><br><span class="line">#include &quot;kernel/fcntl.h&quot;</span><br><span class="line"></span><br><span class="line">void find(char *path, char *filename) &#123;</span><br><span class="line">    char buf[512], *p;</span><br><span class="line">    int fd;</span><br><span class="line">    struct dirent de;</span><br><span class="line">    struct stat st;</span><br><span class="line"></span><br><span class="line">    // open path</span><br><span class="line">    if((fd = open(path, 0)) &lt; 0) &#123;</span><br><span class="line">        fprintf(2, &quot;Error: find cannot open %s\n&quot;, path);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // get directory statistics</span><br><span class="line">    if(fstat(fd, &amp;st) &lt; 0) &#123;</span><br><span class="line">        fprintf(2, &quot;Error: find cannot stat %s\n&quot;, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // ensure it is a directory</span><br><span class="line">    if(st.type != T_DIR) &#123;</span><br><span class="line">        fprintf(2, &quot;Error: find %s is not a directory\n&quot;, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // read the directory entries</span><br><span class="line">    strcpy(buf, path);</span><br><span class="line">    p = buf + strlen(buf);</span><br><span class="line">    *p++ = &#x27;/&#x27;;</span><br><span class="line">    </span><br><span class="line">    // get each item</span><br><span class="line">    while(read(fd, &amp;de, sizeof(de)) == sizeof(de)) &#123;</span><br><span class="line">        if(de.inum == 0)</span><br><span class="line">            continue;</span><br><span class="line">        memmove(p, de.name, DIRSIZ);</span><br><span class="line">        p[DIRSIZ] = 0;</span><br><span class="line">        if(stat(buf, &amp;st) &lt; 0) &#123;</span><br><span class="line">            fprintf(2, &quot;Error: findcannot stat %s\n&quot;, buf);</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        // Skip &quot;.&quot; and &quot;..&quot;</span><br><span class="line">        if(strcmp(de.name, &quot;.&quot;) == 0 || strcmp(de.name, &quot;..&quot;) == 0)</span><br><span class="line">            continue;</span><br><span class="line">        if(st.type == T_DIR) &#123;</span><br><span class="line">            // find sub directory</span><br><span class="line">            find(buf, filename);</span><br><span class="line">        &#125; else if(st.type == T_FILE) &#123;</span><br><span class="line">            // find the file</span><br><span class="line">            if(strcmp(de.name, filename) == 0) &#123;</span><br><span class="line">                printf(&quot;%s\n&quot;, buf);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    if(argc &lt; 3) &#123;</span><br><span class="line">        fprintf(2, &quot;e.g. find &lt;path&gt; &lt;filename&gt;\n&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    find(argv[1], argv[2]);</span><br><span class="line"></span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#include &quot;kernel&#x2F;types.h&quot;
+#include &quot;kernel&#x2F;stat.h&quot;
+#include &quot;user&#x2F;user.h&quot;
+#include &quot;kernel&#x2F;fs.h&quot;
+#include &quot;kernel&#x2F;fcntl.h&quot;
+
+void find(char *path, char *filename) &#123;
+    char buf[512], *p;
+    int fd;
+    struct dirent de;
+    struct stat st;
+
+    &#x2F;&#x2F; open path
+    if((fd &#x3D; open(path, 0)) &lt; 0) &#123;
+        fprintf(2, &quot;Error: find cannot open %s\n&quot;, path);
+        return;
+    &#125;
+
+    &#x2F;&#x2F; get directory statistics
+    if(fstat(fd, &amp;st) &lt; 0) &#123;
+        fprintf(2, &quot;Error: find cannot stat %s\n&quot;, path);
+        close(fd);
+        return;
+    &#125;
+
+    &#x2F;&#x2F; ensure it is a directory
+    if(st.type !&#x3D; T_DIR) &#123;
+        fprintf(2, &quot;Error: find %s is not a directory\n&quot;, path);
+        close(fd);
+        return;
+    &#125;
+
+    &#x2F;&#x2F; read the directory entries
+    strcpy(buf, path);
+    p &#x3D; buf + strlen(buf);
+    *p++ &#x3D; &#39;&#x2F;&#39;;
+    
+    &#x2F;&#x2F; get each item
+    while(read(fd, &amp;de, sizeof(de)) &#x3D;&#x3D; sizeof(de)) &#123;
+        if(de.inum &#x3D;&#x3D; 0)
+            continue;
+        memmove(p, de.name, DIRSIZ);
+        p[DIRSIZ] &#x3D; 0;
+        if(stat(buf, &amp;st) &lt; 0) &#123;
+            fprintf(2, &quot;Error: findcannot stat %s\n&quot;, buf);
+            continue;
+        &#125;
+        &#x2F;&#x2F; Skip &quot;.&quot; and &quot;..&quot;
+        if(strcmp(de.name, &quot;.&quot;) &#x3D;&#x3D; 0 || strcmp(de.name, &quot;..&quot;) &#x3D;&#x3D; 0)
+            continue;
+        if(st.type &#x3D;&#x3D; T_DIR) &#123;
+            &#x2F;&#x2F; find sub directory
+            find(buf, filename);
+        &#125; else if(st.type &#x3D;&#x3D; T_FILE) &#123;
+            &#x2F;&#x2F; find the file
+            if(strcmp(de.name, filename) &#x3D;&#x3D; 0) &#123;
+                printf(&quot;%s\n&quot;, buf);
+            &#125;
+        &#125;
+    &#125;
+    close(fd);
+&#125;
+
+int main(int argc, char *argv[]) &#123;
+
+    if(argc &lt; 3) &#123;
+        fprintf(2, &quot;e.g. find &lt;path&gt; &lt;filename&gt;\n&quot;);
+        exit(1);
+    &#125;
+    find(argv[1], argv[2]);
+
+    exit(0);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <img src="/2024/05/23/xv6-and-unix-utilities/1716380831643.png" class="" title="1716380831643.png">
 
 <h2 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h2><img src="/2024/05/23/xv6-and-unix-utilities/1716402642043.png" class="" title="1716402642043.png">
 <p>通过分析他给的样例加搜索可以发现 xargs是一个批处理 args的命令，其作用是从 前一个进程的输出中args，每个arg以 ‘ ‘ ‘\n’分割，批量的处理这些arg<br>| 符号在shell中可以做到将前一个进程的 fd 1 重定向到后一个进程的fd 0中，本质上是通过dup 通过交换进程的文件描述符实现的</p>
 <p>所以处理的策略是，从标准输入中读取数据，读到\n或者 ‘ ‘表示读完一个arg了，用fork去创建一个子进程，将args传递过去执行</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &quot;kernel/types.h&quot;</span></span><br><span class="line"><span class="comment">#include &quot;kernel/stat.h&quot;</span></span><br><span class="line"><span class="comment">#include &quot;user/user.h&quot;</span></span><br><span class="line"><span class="comment">#include &quot;kernel/fs.h&quot;</span></span><br><span class="line"><span class="comment">#include &quot;kernel/fcntl.h&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#define MAXARGS 0x20</span></span><br><span class="line"><span class="comment">#define BUFSIZE 0x500</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> main(<span class="built_in">int</span> argc, char *argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    char buf[BUFSIZE];</span><br><span class="line">    <span class="built_in">int</span> input_data_len = <span class="number">0</span>;</span><br><span class="line">    char *args[MAXARGS];</span><br><span class="line">    <span class="built_in">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">1</span>) &#123;</span><br><span class="line">        fprintf(<span class="number">2</span>, <span class="string">&quot;e.g. find . | xargs file\n&quot;</span>);</span><br><span class="line">        exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &gt; MAXARGS - <span class="number">5</span>) &#123;</span><br><span class="line">        fprintf(<span class="number">2</span>, <span class="string">&quot;Error: too many arguments\n&quot;</span>);</span><br><span class="line">        exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc; i++) &#123;</span><br><span class="line">        args[i] = argv[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (read(<span class="number">0</span>, buf + input_data_len, <span class="number">1</span>) == <span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (buf[input_data_len] == <span class="string">&#x27;\n&#x27;</span> || buf[input_data_len] == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">            buf[input_data_len] = <span class="number">0</span>;</span><br><span class="line">            args[argc] = buf;</span><br><span class="line">            args[argc + <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">exec</span>(argv[<span class="number">1</span>], args + <span class="number">1</span>);</span><br><span class="line">                fprintf(<span class="number">2</span>, <span class="string">&quot;exec failed\n&quot;</span>);</span><br><span class="line">                exit(<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                wait(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            input_data_len = <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            input_data_len++;</span><br><span class="line">            <span class="keyword">if</span> (input_data_len &gt;= BUFSIZE - <span class="number">1</span>) &#123;</span><br><span class="line">                fprintf(<span class="number">2</span>, <span class="string">&quot;Error: input too long\n&quot;</span>);</span><br><span class="line">                exit(<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (input_data_len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        buf[input_data_len] = <span class="number">0</span>;</span><br><span class="line">        args[argc] = buf;</span><br><span class="line">        args[argc + <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">exec</span>(argv[<span class="number">1</span>], args);</span><br><span class="line">            fprintf(<span class="number">2</span>, <span class="string">&quot;exec failed\n&quot;</span>);</span><br><span class="line">            exit(<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            wait(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#include "kernel/types.h"</span>
+<span class="token comment">#include "kernel/stat.h"</span>
+<span class="token comment">#include "user/user.h"</span>
+<span class="token comment">#include "kernel/fs.h"</span>
+<span class="token comment">#include "kernel/fcntl.h"</span>
 
-    </article>
-    <!-- license -->
+<span class="token comment">#define MAXARGS 0x20</span>
+<span class="token comment">#define BUFSIZE 0x500</span>
+
+<span class="token builtin">int</span> main<span class="token punctuation">(</span><span class="token builtin">int</span> argc<span class="token punctuation">,</span> char <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    char buf<span class="token punctuation">[</span>BUFSIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token builtin">int</span> input_data_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    char <span class="token operator">*</span>args<span class="token punctuation">[</span>MAXARGS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token builtin">int</span> i<span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        fprintf<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"e.g. find . | xargs file\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">></span> MAXARGS <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        fprintf<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"Error: too many arguments\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> argc<span class="token punctuation">;</span> i<span class="token operator">+</span><span class="token operator">+</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        args<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> argv<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>read<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> buf <span class="token operator">+</span> input_data_len<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>buf<span class="token punctuation">[</span>input_data_len<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'\n'</span> <span class="token operator">|</span><span class="token operator">|</span> buf<span class="token punctuation">[</span>input_data_len<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">' '</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            buf<span class="token punctuation">[</span>input_data_len<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            args<span class="token punctuation">[</span>argc<span class="token punctuation">]</span> <span class="token operator">=</span> buf<span class="token punctuation">;</span>
+            args<span class="token punctuation">[</span>argc <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>fork<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">exec</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                fprintf<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"exec failed\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                wait<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            input_data_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            input_data_len<span class="token operator">+</span><span class="token operator">+</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>input_data_len <span class="token operator">>=</span> BUFSIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                fprintf<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"Error: input too long\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>input_data_len <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        buf<span class="token punctuation">[</span>input_data_len<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        args<span class="token punctuation">[</span>argc<span class="token punctuation">]</span> <span class="token operator">=</span> buf<span class="token punctuation">;</span>
+        args<span class="token punctuation">[</span>argc <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>fork<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">exec</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            fprintf<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"exec failed\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            wait<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/">https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/">May 23rd 2024, 2:47:51 am</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/05/23/xv6-and-unix-utilities/">August 25th 2024, 1:07:01 am</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/05/27/DragonKnightCTF-pwn/" title="DragonKnightCTF_pwn">
-                    <div class="nextTitle">DragonKnightCTF_pwn</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/05/22/ciscn-pwn/" title="ciscn_pwn">
-                    <div class="prevTitle">ciscn_pwn</div>
-                </a>
-            
-        </li>
+    <a href="/2024/05/27/DragonKnightCTF-pwn/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/05/22/ciscn-pwn/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-05-23 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/misc/">misc<span>8</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Xv6-and-Unix-utilities"><span class="toc-number">1.</span> <span class="toc-text">Xv6 and Unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">1.1.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pingpong"><span class="toc-number">1.2.</span> <span class="toc-text">pingpong</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#primes"><span class="toc-number">1.3.</span> <span class="toc-text">primes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#find"><span class="toc-number">1.4.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xargs"><span class="toc-number">1.5.</span> <span class="toc-text">xargs</span></a></li></ol></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

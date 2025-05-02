@@ -1,504 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="附件 https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;Sictf2023%20%23Round%202Reverse[签到]PYC电脑上的pycdc出问题了，就找个在线的 https:&#x2F;&#x2F;www.lddgo.net&#x2F;string&#x2F;pyc-compile-decompile print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e4">
-<meta property="og:type" content="article">
-<meta property="og:title" content="sictf2023">
-<meta property="og:url" content="https://nyyyddddn.github.io/2023/09/18/sictf2023r2/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="附件 https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;Sictf2023%20%23Round%202Reverse[签到]PYC电脑上的pycdc出问题了，就找个在线的 https:&#x2F;&#x2F;www.lddgo.net&#x2F;string&#x2F;pyc-compile-decompile print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e4">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-18T08:16:25.000Z">
-<meta property="article:modified_time" content="2023-09-18T08:17:13.801Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
-<meta name="twitter:card" content="summary">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>sictf2023 · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>sictf2023 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="附件 https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202Reverse[签到]PYC电脑上的pycdc出问题了，就找个在线的
+https://www.lddgo.net/string/pyc-compile-decompile
+print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e490616}’)
+Myobjectrc4加解密，写个脚本
+def rc4(key, plaintext):
+    S = list(range(256))
+    j = 0
+    for i in range(256):
+        j = (j + S[i] + key[i % len(key)]) % 256
+        S[i], S[j] = S[j], S[i]  # Swap values
+    i = 0
+    j = 0
+    output = []
+    for byte in plaintext:
+        i = (i + 1) % 256
+        j = (j + S[i]) % 256
+        S[i], S[j] = S[j], S[i]  
+        K = S[(S[i] + S[j]) % 256]
+        output.append(byte ^ K)
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+    return output
+key = [ord(char) for char in &#34;SIFLAG&#34;]
+v18_bytes = (0x47CF225A0ED32730).to_bytes(8, byteorder=&#39;little&#39;)
+ciphertext_v19 = [71, 107, 11, 229, 141, 83, 186, 153, 195, 133, 7]
+v20_bytes = (0x9F88FE10771C0107).to_bytes(8, byteorder=&#39;little&#39;)
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
+full_ciphertext_27 = list(v18_bytes) + ciphertext_v19 + list(v20_bytes)
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
+decrypted_full_combined = rc4(key, full_ciphertext_27)
+decrypted_full_combined_string = &#39;&#39;.join([chr(byte) for byte in decrypted_full_combined])
+print(decrypted_full_combined_string)
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+SICTF{wow_you_get_the_flag}"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+  <meta property="og:title" content="sictf2023"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+  
+    <meta property="og:image" content=""/>
+  
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+  <script src="/js/jquery-2.0.3.min.js"></script>
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+  <!-- analytics -->
+  
 
-    body {
-        margin: 0;
-    }
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
 
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
-
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
-
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">sictf2023</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> sictf2023</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-
-    height:50vh;
-
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                sictf2023
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2023/09/18</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h3 id="附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202"><a href="#附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202" class="headerlink" title="附件 https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202"></a>附件 <a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202">https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202</a></h3><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="签到-PYC"><a href="#签到-PYC" class="headerlink" title="[签到]PYC"></a>[签到]PYC</h2><p>电脑上的pycdc出问题了，就找个在线的</p>
+	  <h3 id="附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202"><a href="#附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202" class="headerlink" title="附件 https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202"></a>附件 <a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202">https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202</a></h3><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="签到-PYC"><a href="#签到-PYC" class="headerlink" title="[签到]PYC"></a>[签到]PYC</h2><p>电脑上的pycdc出问题了，就找个在线的</p>
 <p><a target="_blank" rel="noopener" href="https://www.lddgo.net/string/pyc-compile-decompile">https://www.lddgo.net/string/pyc-compile-decompile</a></p>
 <p>print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e490616}’)</p>
 <h2 id="Myobject"><a href="#Myobject" class="headerlink" title="Myobject"></a>Myobject</h2><p>rc4加解密，写个脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rc4</span>(<span class="params">key, plaintext</span>):</span><br><span class="line">    S = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))</span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + S[i] + key[i % <span class="built_in">len</span>(key)]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]  <span class="comment"># Swap values</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    output = []</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> plaintext:</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span></span><br><span class="line">        j = (j + S[i]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]  </span><br><span class="line">        K = S[(S[i] + S[j]) % <span class="number">256</span>]</span><br><span class="line">        output.append(byte ^ K)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line">key = [<span class="built_in">ord</span>(char) <span class="keyword">for</span> char <span class="keyword">in</span> <span class="string">&quot;SIFLAG&quot;</span>]</span><br><span class="line">v18_bytes = (<span class="number">0x47CF225A0ED32730</span>).to_bytes(<span class="number">8</span>, byteorder=<span class="string">&#x27;little&#x27;</span>)</span><br><span class="line">ciphertext_v19 = [<span class="number">71</span>, <span class="number">107</span>, <span class="number">11</span>, <span class="number">229</span>, <span class="number">141</span>, <span class="number">83</span>, <span class="number">186</span>, <span class="number">153</span>, <span class="number">195</span>, <span class="number">133</span>, <span class="number">7</span>]</span><br><span class="line">v20_bytes = (<span class="number">0x9F88FE10771C0107</span>).to_bytes(<span class="number">8</span>, byteorder=<span class="string">&#x27;little&#x27;</span>)</span><br><span class="line"></span><br><span class="line">full_ciphertext_27 = <span class="built_in">list</span>(v18_bytes) + ciphertext_v19 + <span class="built_in">list</span>(v20_bytes)</span><br><span class="line"></span><br><span class="line">decrypted_full_combined = rc4(key, full_ciphertext_27)</span><br><span class="line">decrypted_full_combined_string = <span class="string">&#x27;&#x27;</span>.join([<span class="built_in">chr</span>(byte) <span class="keyword">for</span> byte <span class="keyword">in</span> decrypted_full_combined])</span><br><span class="line"><span class="built_in">print</span>(decrypted_full_combined_string)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">rc4</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> plaintext<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    S <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    j <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
+        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span>  <span class="token comment"># Swap values</span>
+    i <span class="token operator">=</span> <span class="token number">0</span>
+    j <span class="token operator">=</span> <span class="token number">0</span>
+    output <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> byte <span class="token keyword">in</span> plaintext<span class="token punctuation">:</span>
+        i <span class="token operator">=</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
+        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
+        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span>  
+        K <span class="token operator">=</span> S<span class="token punctuation">[</span><span class="token punctuation">(</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">]</span>
+        output<span class="token punctuation">.</span>append<span class="token punctuation">(</span>byte <span class="token operator">^</span> K<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> output
+key <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">ord</span><span class="token punctuation">(</span>char<span class="token punctuation">)</span> <span class="token keyword">for</span> char <span class="token keyword">in</span> <span class="token string">"SIFLAG"</span><span class="token punctuation">]</span>
+v18_bytes <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0x47CF225A0ED32730</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'little'</span><span class="token punctuation">)</span>
+ciphertext_v19 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">71</span><span class="token punctuation">,</span> <span class="token number">107</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">229</span><span class="token punctuation">,</span> <span class="token number">141</span><span class="token punctuation">,</span> <span class="token number">83</span><span class="token punctuation">,</span> <span class="token number">186</span><span class="token punctuation">,</span> <span class="token number">153</span><span class="token punctuation">,</span> <span class="token number">195</span><span class="token punctuation">,</span> <span class="token number">133</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span>
+v20_bytes <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0x9F88FE10771C0107</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'little'</span><span class="token punctuation">)</span>
+
+full_ciphertext_27 <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>v18_bytes<span class="token punctuation">)</span> <span class="token operator">+</span> ciphertext_v19 <span class="token operator">+</span> <span class="token builtin">list</span><span class="token punctuation">(</span>v20_bytes<span class="token punctuation">)</span>
+
+decrypted_full_combined <span class="token operator">=</span> rc4<span class="token punctuation">(</span>key<span class="token punctuation">,</span> full_ciphertext_27<span class="token punctuation">)</span>
+decrypted_full_combined_string <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token builtin">chr</span><span class="token punctuation">(</span>byte<span class="token punctuation">)</span> <span class="token keyword">for</span> byte <span class="token keyword">in</span> decrypted_full_combined<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>decrypted_full_combined_string<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>SICTF{wow_you_get_the_flag}</p>
-<h2 id="chbase"><a href="#chbase" class="headerlink" title="chbase"></a>chbase</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">strcpy(Str2, <span class="string">&quot;F0lWEVA7BmUzAGB0C2UuAU9hbnIpATEidDdnACQ9&quot;</span>);</span><br><span class="line"></span><br><span class="line">char *sub_411B30()</span><br><span class="line">&#123;</span><br><span class="line">  char *result; // eax</span><br><span class="line"></span><br><span class="line">  __CheckForDebuggerJustMyCode(&amp;unk_41C0F5);</span><br><span class="line">  j_strcpy(&amp;Destination, <span class="string">&quot;ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span>);</span><br><span class="line">  result = (char *)IsDebuggerPresent();</span><br><span class="line">  <span class="keyword">if</span> ( result )</span><br><span class="line">    <span class="keyword">return</span> j_strcpy(&amp;Destination, <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="chbase"><a href="#chbase" class="headerlink" title="chbase"></a>chbase</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">strcpy<span class="token punctuation">(</span>Str2<span class="token punctuation">,</span> <span class="token string">"F0lWEVA7BmUzAGB0C2UuAU9hbnIpATEidDdnACQ9"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+char <span class="token operator">*</span>sub_411B30<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  char <span class="token operator">*</span>result<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+
+  __CheckForDebuggerJustMyCode<span class="token punctuation">(</span><span class="token operator">&amp;</span>unk_41C0F5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  j_strcpy<span class="token punctuation">(</span><span class="token operator">&amp;</span>Destination<span class="token punctuation">,</span> <span class="token string">"ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz0123456789+/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  result <span class="token operator">=</span> <span class="token punctuation">(</span>char <span class="token operator">*</span><span class="token punctuation">)</span>IsDebuggerPresent<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> result <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> j_strcpy<span class="token punctuation">(</span><span class="token operator">&amp;</span>Destination<span class="token punctuation">,</span> <span class="token string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>base64换一下上面的索引表就解出来了</p>
 <p><a target="_blank" rel="noopener" href="http://web.chacuo.net/netbasex">http://web.chacuo.net/netbasex</a></p>
@@ -508,7 +207,32 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/pyinstxtractor/pyinstxtractor-ng/releases/tag/2023.08.20">https://github.com/pyinstxtractor/pyinstxtractor-ng/releases/tag/2023.08.20</a></p>
 <p>然后把111.pyc 反编译一下</p>
 <p><a target="_blank" rel="noopener" href="https://www.lddgo.net/string/pyc-compile-decompile">https://www.lddgo.net/string/pyc-compile-decompile</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Visit https://www.lddgo.net/string/pyc-compile-decompile for more information</span></span><br><span class="line"><span class="comment"># Version : Python 3.8</span></span><br><span class="line"></span><br><span class="line">BASE64_CHARS = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">base64_encode</span>(<span class="params">data</span>):</span><br><span class="line">    binary_str = <span class="string">&#x27;&#x27;</span>.join((<span class="keyword">lambda</span> <span class="number">.0</span>: <span class="keyword">for</span> x <span class="keyword">in</span> <span class="number">.0</span>:</span><br><span class="line"><span class="built_in">format</span>(x, <span class="string">&#x27;08b&#x27;</span>))(data))</span><br><span class="line">    padding = <span class="built_in">len</span>(binary_str) % <span class="number">24</span></span><br><span class="line">    <span class="keyword">if</span> padding != <span class="number">0</span>:</span><br><span class="line">        binary_str += <span class="string">&#x27;0&#x27;</span> * (<span class="number">24</span> - padding)</span><br><span class="line">    result = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(binary_str), <span class="number">6</span>):</span><br><span class="line">        group = binary_str[i:i + <span class="number">6</span>]</span><br><span class="line">        decimal_val = <span class="built_in">int</span>(group, <span class="number">2</span>)</span><br><span class="line">        result += BASE64_CHARS[decimal_val]</span><br><span class="line">    padding_count = (<span class="number">4</span> - <span class="built_in">len</span>(result) % <span class="number">4</span>) % <span class="number">4</span></span><br><span class="line">    result += <span class="string">&#x27;=&#x27;</span> * padding_count</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">data = <span class="built_in">input</span>(<span class="string">&#x27;&#x27;</span>).encode()</span><br><span class="line">encoded_data = base64_encode(data)</span><br><span class="line"><span class="built_in">print</span>(encoded_data)</span><br><span class="line"><span class="keyword">if</span> encoded_data == <span class="string">&#x27;U0lDVEZ7OGUwZDM1OGQtOGI5ZC00ODY2LTliMDItNjc0OWIwN2FkMDlhfQAA&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;True!&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Visit https://www.lddgo.net/string/pyc-compile-decompile for more information</span>
+<span class="token comment"># Version : Python 3.8</span>
+
+BASE64_CHARS <span class="token operator">=</span> <span class="token string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'</span>
+
+<span class="token keyword">def</span> <span class="token function">base64_encode</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    binary_str <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token number">.0</span><span class="token punctuation">:</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token number">.0</span><span class="token punctuation">:</span>
+<span class="token builtin">format</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token string">'08b'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    padding <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>binary_str<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">24</span>
+    <span class="token keyword">if</span> padding <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        binary_str <span class="token operator">+=</span> <span class="token string">'0'</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">24</span> <span class="token operator">-</span> padding<span class="token punctuation">)</span>
+    result <span class="token operator">=</span> <span class="token string">''</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>binary_str<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        group <span class="token operator">=</span> binary_str<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">]</span>
+        decimal_val <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>group<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+        result <span class="token operator">+=</span> BASE64_CHARS<span class="token punctuation">[</span>decimal_val<span class="token punctuation">]</span>
+    padding_count <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">4</span> <span class="token operator">-</span> <span class="token builtin">len</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">4</span>
+    result <span class="token operator">+=</span> <span class="token string">'='</span> <span class="token operator">*</span> padding_count
+    <span class="token keyword">return</span> result
+
+data <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+encoded_data <span class="token operator">=</span> base64_encode<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>encoded_data<span class="token punctuation">)</span>
+<span class="token keyword">if</span> encoded_data <span class="token operator">==</span> <span class="token string">'U0lDVEZ7OGUwZDM1OGQtOGI5ZC00ODY2LTliMDItNjc0OWIwN2FkMDlhfQAA'</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'True!'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这个是base64换表，用这个解密</p>
 <p><a target="_blank" rel="noopener" href="http://web.chacuo.net/netbasex">http://web.chacuo.net/netbasex</a></p>
@@ -518,1549 +242,253 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/Ciphey/Ciphey">https://github.com/Ciphey/Ciphey</a> 用这个项目解出了flag，这是docker版本的使用<a target="_blank" rel="noopener" href="https://docs.remnux.org/run-tools-in-containers/remnux-containers#ciphey">https://docs.remnux.org/run-tools-in-containers/remnux-containers#ciphey</a></p>
 <p>SICTF{fe853b49-8730-462e-86f5-fc8e9789f077}</p>
 <h2 id="Radio"><a href="#Radio" class="headerlink" title="Radio"></a>Radio</h2><p>有三组n c，然后e比较小，用中国剩余定理求</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 利用中国剩余定理求解同余方程，aList：余数，mList：模数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CRT</span>(<span class="params">aList, mList</span>):</span><br><span class="line">    M = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> mList:</span><br><span class="line">        M = M * i  <span class="comment"># 计算M = ∏ mi</span></span><br><span class="line">    x = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(mList)):</span><br><span class="line">        Mi = M // mList[i]  <span class="comment"># 计算Mi</span></span><br><span class="line">        Mi_inverse = gmpy2.invert(Mi, mList[i])  <span class="comment"># 计算Mi的逆元</span></span><br><span class="line">        x += aList[i] * Mi * Mi_inverse  <span class="comment"># 构造x各项</span></span><br><span class="line">    x = x % M</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    n1 = <span class="string">&quot;14628911682936716611458501697007036859460044243525290515096052103585430459755335375005202100114469571371360084664887335211277585652711111523095037589648375630146039444071400098427638768750755153219974194380355807078158427824557754939604018020265955042573660474772006646525311705184431094905718137297923127124517126579859336516891364853724635334011666814712424599592662398013241607855160919361308195967978220182785816761656927836373944699635667244275310680450562446433724968942835275279255823144471582249379035668825437133182865600026935116686574740844588839352146024513673500770611055698030333734066230166111140083923&quot;</span></span><br><span class="line">    n2 = <span class="string">&quot;16756694748293603983474688536179571665757862433174984877308316444468003022266277794769268134195205510197588585566270416339902269736376811449830775290335951504698137924773942880807921752691668522662285163130340474205633998154849689387759453003838730282756734975490180702422176361373516245372635401939755527017589503572550811648345570775428936487145892225736625411540461653083957762795820510109891180906709827194217045059033312564525916136573856999724346161896146703174418039344166251503310869772735585554127509732135494936119159784702673291794381095696332128950979288440758815310482211285712819274848744478643590996499&quot;</span></span><br><span class="line">    n3 = <span class="string">&quot;12023158079717019193506148537498877243668782424904061914991928068483879707115315968983829360560644394409575645736275352836086080024994045582242629571839276759393418303915955798990522990081795218822313146157773272844272865701134880180795342597049645358985187689813369428579614193015028249821853347208001645148169449968882591709833452960545988520048722323580338213590245476892223967673180144525106292453573842357322398199104132677638909964034937501684668442732786408572501007756270725934445316827054687741612177409932320532825182104820899546084015733164816993674100635828218335112393003462442685677115798304835391938681&quot;</span></span><br><span class="line">    c1 = <span class="string">&quot;786426913645332991929803636719878643130489430090701482974255190570111407517277263761161970232982615374753982050075781017755721714929721429185828101898786972242994012456972241276851428750970754773002966788642795040933520662931514953660571657013642671173456750800960592586345219252277575624120271330470724245201080094330964145796872211627254805407394764183615099525852600855622089361965086460279057625205099471122036599934609091062009161119885692567925924978687256063116915630947838112126347748759078024890458539541208153526564434483654508834147071166870006117573542198238493913144419569943131642262575848786399020602&quot;</span></span><br><span class="line">    c2 = <span class="string">&quot;14269311999815379511888097227418748728398011595172649708273598243317106830139061994801598925448165045032084910971094414749744701731066555194159863759072739031915833091715422787808666326235589236328864675164322734119047182014621724868200908222400504845559290620275973427127376594365043386362821355037781568524903149101953873768462097165128186788759111090267131443645126715520994688945363059795513931799317608292977574376954729552861360597103229877031117089231816770880909815561950691603994439997197261395452797893557057320175747162837857668062550646101714062365530246698404923128445182100334335447738834779014705114350&quot;</span></span><br><span class="line">    c3 = <span class="string">&quot;3204718091370324153305164801961074660508922478706979436653573192321723216725523523538914956544950802616295043619768261075799875855502834749045520466140056621489305006966280527055668378303630674311102581232313032585389907028715671091914904062961720585667564982641321454541632782484415075257140508738041786400512095949826279576159569786734978545737717138115729502475357594151593143140355121154223614868465202149338507796306863351134218879326031985027900678671697876083351974546516576983143592764763925335805465720148057651958521255276602933604064541840892578409973858867533575728482926007556060584654853884046046420855&quot;</span></span><br><span class="line"></span><br><span class="line">    cList = [<span class="built_in">int</span>(c1), <span class="built_in">int</span>(c2), <span class="built_in">int</span>(c3)]</span><br><span class="line">    nList = [<span class="built_in">int</span>(n1), <span class="built_in">int</span>(n2), <span class="built_in">int</span>(n3)]</span><br><span class="line">    m_e = CRT(cList, nList)</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">17</span>,<span class="number">18</span>):</span><br><span class="line">        m, f = gmpy2.iroot(m_e, e)</span><br><span class="line">        m = <span class="built_in">hex</span>(m)[<span class="number">2</span>:]</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(m) % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">            m = m + <span class="string">&#x27;0&#x27;</span></span><br><span class="line">        flag = binascii.unhexlify(m)</span><br><span class="line">        <span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> gmpy2
+<span class="token keyword">import</span> binascii
+
+
+<span class="token comment"># 利用中国剩余定理求解同余方程，aList：余数，mList：模数</span>
+<span class="token keyword">def</span> <span class="token function">CRT</span><span class="token punctuation">(</span>aList<span class="token punctuation">,</span> mList<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    M <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> mList<span class="token punctuation">:</span>
+        M <span class="token operator">=</span> M <span class="token operator">*</span> i  <span class="token comment"># 计算M = ∏ mi</span>
+    x <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>mList<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        Mi <span class="token operator">=</span> M <span class="token operator">//</span> mList<span class="token punctuation">[</span>i<span class="token punctuation">]</span>  <span class="token comment"># 计算Mi</span>
+        Mi_inverse <span class="token operator">=</span> gmpy2<span class="token punctuation">.</span>invert<span class="token punctuation">(</span>Mi<span class="token punctuation">,</span> mList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 计算Mi的逆元</span>
+        x <span class="token operator">+=</span> aList<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">*</span> Mi <span class="token operator">*</span> Mi_inverse  <span class="token comment"># 构造x各项</span>
+    x <span class="token operator">=</span> x <span class="token operator">%</span> M
+    <span class="token keyword">return</span> x
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    n1 <span class="token operator">=</span> <span class="token string">"14628911682936716611458501697007036859460044243525290515096052103585430459755335375005202100114469571371360084664887335211277585652711111523095037589648375630146039444071400098427638768750755153219974194380355807078158427824557754939604018020265955042573660474772006646525311705184431094905718137297923127124517126579859336516891364853724635334011666814712424599592662398013241607855160919361308195967978220182785816761656927836373944699635667244275310680450562446433724968942835275279255823144471582249379035668825437133182865600026935116686574740844588839352146024513673500770611055698030333734066230166111140083923"</span>
+    n2 <span class="token operator">=</span> <span class="token string">"16756694748293603983474688536179571665757862433174984877308316444468003022266277794769268134195205510197588585566270416339902269736376811449830775290335951504698137924773942880807921752691668522662285163130340474205633998154849689387759453003838730282756734975490180702422176361373516245372635401939755527017589503572550811648345570775428936487145892225736625411540461653083957762795820510109891180906709827194217045059033312564525916136573856999724346161896146703174418039344166251503310869772735585554127509732135494936119159784702673291794381095696332128950979288440758815310482211285712819274848744478643590996499"</span>
+    n3 <span class="token operator">=</span> <span class="token string">"12023158079717019193506148537498877243668782424904061914991928068483879707115315968983829360560644394409575645736275352836086080024994045582242629571839276759393418303915955798990522990081795218822313146157773272844272865701134880180795342597049645358985187689813369428579614193015028249821853347208001645148169449968882591709833452960545988520048722323580338213590245476892223967673180144525106292453573842357322398199104132677638909964034937501684668442732786408572501007756270725934445316827054687741612177409932320532825182104820899546084015733164816993674100635828218335112393003462442685677115798304835391938681"</span>
+    c1 <span class="token operator">=</span> <span class="token string">"786426913645332991929803636719878643130489430090701482974255190570111407517277263761161970232982615374753982050075781017755721714929721429185828101898786972242994012456972241276851428750970754773002966788642795040933520662931514953660571657013642671173456750800960592586345219252277575624120271330470724245201080094330964145796872211627254805407394764183615099525852600855622089361965086460279057625205099471122036599934609091062009161119885692567925924978687256063116915630947838112126347748759078024890458539541208153526564434483654508834147071166870006117573542198238493913144419569943131642262575848786399020602"</span>
+    c2 <span class="token operator">=</span> <span class="token string">"14269311999815379511888097227418748728398011595172649708273598243317106830139061994801598925448165045032084910971094414749744701731066555194159863759072739031915833091715422787808666326235589236328864675164322734119047182014621724868200908222400504845559290620275973427127376594365043386362821355037781568524903149101953873768462097165128186788759111090267131443645126715520994688945363059795513931799317608292977574376954729552861360597103229877031117089231816770880909815561950691603994439997197261395452797893557057320175747162837857668062550646101714062365530246698404923128445182100334335447738834779014705114350"</span>
+    c3 <span class="token operator">=</span> <span class="token string">"3204718091370324153305164801961074660508922478706979436653573192321723216725523523538914956544950802616295043619768261075799875855502834749045520466140056621489305006966280527055668378303630674311102581232313032585389907028715671091914904062961720585667564982641321454541632782484415075257140508738041786400512095949826279576159569786734978545737717138115729502475357594151593143140355121154223614868465202149338507796306863351134218879326031985027900678671697876083351974546516576983143592764763925335805465720148057651958521255276602933604064541840892578409973858867533575728482926007556060584654853884046046420855"</span>
+
+    cList <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>c1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>c2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>c3<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    nList <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>n1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>n2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>n3<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    m_e <span class="token operator">=</span> CRT<span class="token punctuation">(</span>cList<span class="token punctuation">,</span> nList<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> e <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">17</span><span class="token punctuation">,</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        m<span class="token punctuation">,</span> f <span class="token operator">=</span> gmpy2<span class="token punctuation">.</span>iroot<span class="token punctuation">(</span>m_e<span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+        m <span class="token operator">=</span> <span class="token builtin">hex</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+            m <span class="token operator">=</span> m <span class="token operator">+</span> <span class="token string">'0'</span>
+        flag <span class="token operator">=</span> binascii<span class="token punctuation">.</span>unhexlify<span class="token punctuation">(</span>m<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>SICTF{fdc0afb5-1c81-46b9-a28a-241f5f64419d}</p>
-<h2 id="small-e"><a href="#small-e" class="headerlink" title="small_e"></a>small_e</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> symbols, Eq, solve</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n = <span class="number">23407088262641313744603678186127228163189328033499381357614318160776774708961658114505773173784501557046914457908828086210961235530240151825359345210845219656000760996670856300710703016947799649686427460688236465568188205550456293373157997725204643414082796492333552579250010906010553831060540937802882205118399938918764313169385349293602085310111289583058965780887097301702677087443291977479125263301000328313103296364864396361278863921717374909215078711198899810620522933994481419395021233240234478331179727351050575360886334237633420906629984625441302945112631166021776379103081857393866576659121443879590011160797</span></span><br><span class="line"></span><br><span class="line">e = <span class="number">3</span></span><br><span class="line">c = <span class="number">1584727211980974717747362694412040878682966138197627512650829607105625096823456063149392973232737929737200028676411430124019573130595696272668927725536797627059576270068695792221537212669276826952363636924278717182163166234322320044764324434683614360641636360301452618063418349310497430566465329766916213742181</span></span><br><span class="line">m1 = <span class="number">11658736990073967239197168945911788935424691658202162501032766529463315401599017877851823976178979438592</span></span><br><span class="line"></span><br><span class="line">c1 = <span class="built_in">pow</span>(m1, e, n)</span><br><span class="line"></span><br><span class="line">delta_m_symbol = symbols(<span class="string">&#x27;delta_m&#x27;</span>)</span><br><span class="line">polynomial_equation = Eq(c, (m1 + delta_m_symbol)**<span class="number">3</span>)</span><br><span class="line">solutions = solve(polynomial_equation, delta_m_symbol)</span><br><span class="line">m_recovered = m1 + solutions[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>.fromhex(<span class="built_in">hex</span>(m_recovered)[<span class="number">2</span>:]).decode())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="small-e"><a href="#small-e" class="headerlink" title="small_e"></a>small_e</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sympy <span class="token keyword">import</span> symbols<span class="token punctuation">,</span> Eq<span class="token punctuation">,</span> solve
+
+
+n <span class="token operator">=</span> <span class="token number">23407088262641313744603678186127228163189328033499381357614318160776774708961658114505773173784501557046914457908828086210961235530240151825359345210845219656000760996670856300710703016947799649686427460688236465568188205550456293373157997725204643414082796492333552579250010906010553831060540937802882205118399938918764313169385349293602085310111289583058965780887097301702677087443291977479125263301000328313103296364864396361278863921717374909215078711198899810620522933994481419395021233240234478331179727351050575360886334237633420906629984625441302945112631166021776379103081857393866576659121443879590011160797</span>
+
+e <span class="token operator">=</span> <span class="token number">3</span>
+c <span class="token operator">=</span> <span class="token number">1584727211980974717747362694412040878682966138197627512650829607105625096823456063149392973232737929737200028676411430124019573130595696272668927725536797627059576270068695792221537212669276826952363636924278717182163166234322320044764324434683614360641636360301452618063418349310497430566465329766916213742181</span>
+m1 <span class="token operator">=</span> <span class="token number">11658736990073967239197168945911788935424691658202162501032766529463315401599017877851823976178979438592</span>
+
+c1 <span class="token operator">=</span> <span class="token builtin">pow</span><span class="token punctuation">(</span>m1<span class="token punctuation">,</span> e<span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+
+delta_m_symbol <span class="token operator">=</span> symbols<span class="token punctuation">(</span><span class="token string">'delta_m'</span><span class="token punctuation">)</span>
+polynomial_equation <span class="token operator">=</span> Eq<span class="token punctuation">(</span>c<span class="token punctuation">,</span> <span class="token punctuation">(</span>m1 <span class="token operator">+</span> delta_m_symbol<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">3</span><span class="token punctuation">)</span>
+solutions <span class="token operator">=</span> solve<span class="token punctuation">(</span>polynomial_equation<span class="token punctuation">,</span> delta_m_symbol<span class="token punctuation">)</span>
+m_recovered <span class="token operator">=</span> m1 <span class="token operator">+</span> solutions<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>m_recovered<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>SICTF{2ca8e589-4a31-4909-80f0-9ecfc8f8cb37}</p>
 <h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="签到-Include"><a href="#签到-Include" class="headerlink" title="[签到]Include"></a>[签到]Include</h2><p><a target="_blank" rel="noopener" href="http://210.44.151.51:10120/?SICTF=php://filter/read=convert.base64-encode/resource=flag.php">http://210.44.151.51:10120/?SICTF=php://filter/read=convert.base64-encode/resource=flag.php</a> 读到下面内容</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$file_path = &quot;/flag&quot;;</span><br><span class="line">if (file_exists($file_path)) &#123;</span><br><span class="line">    $flag = file_get_contents($file_path);</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">    echo &quot;error&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+$file_path &#x3D; &quot;&#x2F;flag&quot;;
+if (file_exists($file_path)) &#123;
+    $flag &#x3D; file_get_contents($file_path);
+&#125;
+else&#123;
+    echo &quot;error&quot;;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>访问flag.php没有error，所以用伪协议读&#x2F;flag 拿到flag</p>
 <p><a target="_blank" rel="noopener" href="http://210.44.151.51:10120/?SICTF=php://filter/read=convert.base64-encode/resource=/flag">http://210.44.151.51:10120/?SICTF=php://filter/read=convert.base64-encode/resource=/flag</a></p>
 <p>base64解码SICTF{f9bcd5bf-2e28-404c-936c-92d7f0ba2158}</p>
-<h2 id="Baby-PHP"><a href="#Baby-PHP" class="headerlink" title="Baby_PHP"></a>Baby_PHP</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$query</span> = <span class="variable">$_SERVER</span>[<span class="string">&#x27;QUERY_STRING&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/_|%5f|\.|%2E/i&#x27;</span>, <span class="variable">$query</span>)) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;You are Hacker!&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;k_e_y&#x27;</span>] !==<span class="string">&#x27;123&#x27;</span> &amp;&amp; <span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/^123$/&#x27;</span>,<span class="variable">$_GET</span>[<span class="string">&#x27;k_e_y&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">&quot;You are will Win!&lt;br&gt;&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;command&#x27;</span>]))&#123;</span><br><span class="line">        <span class="variable">$command</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;command&#x27;</span>];</span><br><span class="line">        <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\~|\`|\@|\#|\\$|\%|\&amp;|\*|\（|\）|\-|\+|\=|\&#123;|\&#125;|\[|\]|\:|\&#x27;|\&quot;|\,|\&lt;|\.|\&gt;|\/|\?|\\\\/i&quot;</span>,<span class="variable">$command</span>))&#123;</span><br><span class="line">            <span class="keyword">eval</span>(<span class="variable">$command</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">echo</span>(<span class="string">&quot;You are Hacker!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">&quot;K_e_y is Errors!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Baby-PHP"><a href="#Baby-PHP" class="headerlink" title="Baby_PHP"></a>Baby_PHP</h2><pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token function">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$query</span> <span class="token operator">=</span> <span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'QUERY_STRING'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/_|%5f|\.|%2E/i'</span><span class="token punctuation">,</span> <span class="token variable">$query</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'You are Hacker!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'k_e_y'</span><span class="token punctuation">]</span> <span class="token operator">!==</span><span class="token string single-quoted-string">'123'</span> <span class="token operator">&amp;&amp;</span> <span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/^123$/'</span><span class="token punctuation">,</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'k_e_y'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"You are will Win!&lt;br>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'command'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token variable">$command</span> <span class="token operator">=</span> <span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'command'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/\~|\`|\@|\#|\\$|\%|\&amp;|\*|\（|\）|\-|\+|\=|\&#123;|\&#125;|\[|\]|\:|\'|\"|\,|\&lt;|\.|\>|\/|\?|\\\\/i"</span><span class="token punctuation">,</span><span class="token variable">$command</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">eval</span><span class="token punctuation">(</span><span class="token variable">$command</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">echo</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"You are Hacker!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"K_e_y is Errors!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这里第一个preg是可以用url编码代替下划线，然后第二个preg</p>
 <p>$_GET[key]是强比较加后面的preg_match，搜了好久发现可以用换行符%0A绕过这个k%20e%20y&#x3D;123%0A</p>
 <p>command中preg那个这个圆括号是中文的圆括号，也就是说可以用函数，我一开始想着是system()然后去网上找些shell中的一些奇怪的技巧去绕过，然后发现关键的字符基本上都给过滤了，后面想了一下能用函数，那是不是可以用函数来替代原本该用shell操作的动作</p>
 <p>在这篇文章里面找到了结果<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/107171940?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161461040516780255236081%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=161461040516780255236081&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-1-107171940.pc_search_result_no_baidu_js&utm_term=%E6%97%A0%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96">https://blog.csdn.net/qq_38154820/article/details/107171940?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161461040516780255236081%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=161461040516780255236081&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-1-107171940.pc_search_result_no_baidu_js&amp;utm_term=%E6%97%A0%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96</a></p>
 <p>最后的payload是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?k%20e%20y=123%0A</span><br><span class="line">command=highlight_file(next(array_reverse(scandir(current(localeconv())))));</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">?k%20e%20y&#x3D;123%0A
+command&#x3D;highlight_file(next(array_reverse(scandir(current(localeconv())))));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h1 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h1><h2 id="fast-morse"><a href="#fast-morse" class="headerlink" title="fast_morse"></a>fast_morse</h2><p>摩斯密码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..-. ..--- .- ----- ----. -... ..-. -....- --... ..-. ....- .- -....- ....- ..--- -.... ----. -....- ----. ...-- .- ..... -....- -.-. ---.. .- ....- ---.. ...-- -.... ----- -... ----- ...-- -.-.</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">..-. ..--- .- ----- ----. -... ..-. -....- --... ..-. ....- .- -....- ....- ..--- -.... ----. -....- ----. ...-- .- ..... -....- -.-. ---.. .- ....- ---.. ...-- -.... ----- -... ----- ...-- -.-.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SICTF&#123;f2a09bf-7f4a-4269-93a5-c8a48360b03c&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">SICTF&#123;f2a09bf-7f4a-4269-93a5-c8a48360b03c&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-    </article>
-    <!-- license -->
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2023/09/18/sictf2023r2/">https://nyyyddddn.github.io/2023/09/18/sictf2023r2/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2023/09/18/sictf2023r2/">September 18th 2023, 4:16:25 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2023/09/18/sictf2023r2/">September 18th 2023, 4:17:13 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/" title="exp本地不通远程通的问题">
-                    <div class="nextTitle">exp本地不通远程通的问题</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2023/09/18/cnss2023/" title="cnss2023">
-                    <div class="prevTitle">cnss2023</div>
-                </a>
-            
-        </li>
+    <a href="/2023/09/26/exp本地不通远程通的问题/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/09/18/cnss2023/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-09-18 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E4%BB%B6-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202"><span class="toc-number">1.</span> <span class="toc-text">附件 https:&#x2F;&#x2F;github.com&#x2F;nyyyddddn&#x2F;ctf&#x2F;tree&#x2F;main&#x2F;Sictf2023%20%23Round%202</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reverse"><span class="toc-number"></span> <span class="toc-text">Reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%BE%E5%88%B0-PYC"><span class="toc-number"></span> <span class="toc-text">[签到]PYC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Myobject"><span class="toc-number"></span> <span class="toc-text">Myobject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#chbase"><span class="toc-number"></span> <span class="toc-text">chbase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84base64"><span class="toc-number"></span> <span class="toc-text">不一样的base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#javacode"><span class="toc-number"></span> <span class="toc-text">javacode</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Crypto"><span class="toc-number"></span> <span class="toc-text">Crypto</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%BE%E5%88%B0-%E5%8F%A4%E5%85%B8%E5%A4%A7%E6%9D%82%E7%83%A9"><span class="toc-number"></span> <span class="toc-text">[签到]古典大杂烩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Radio"><span class="toc-number"></span> <span class="toc-text">Radio</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#small-e"><span class="toc-number"></span> <span class="toc-text">small_e</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number"></span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%BE%E5%88%B0-Include"><span class="toc-number"></span> <span class="toc-text">[签到]Include</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Baby-PHP"><span class="toc-number"></span> <span class="toc-text">Baby_PHP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MISC"><span class="toc-number"></span> <span class="toc-text">MISC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#fast-morse"><span class="toc-number"></span> <span class="toc-text">fast_morse</span></a>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

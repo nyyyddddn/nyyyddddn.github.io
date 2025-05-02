@@ -1,514 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- title -->
-
-
-    
-
-<!-- keywords -->
-
-
-
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="author" content="nyyyddddn">
-    <meta name="renderer" content="webkit">
-    <meta name="copyright" content="nyyyddddn">
-    
-        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
-    
-    <meta name="description" content="">
-    <meta name="description" content="Hackergame 启动Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了 更深更暗在main.js里有一段生成flag的代码，在控制台中调用就好了 12345async function getFlag(token) &amp;#123;    &#x2F;&#x2F; Generate the flag based on user&amp;#x27;s token">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hackergame2023">
-<meta property="og:url" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/index.html">
-<meta property="og:site_name" content="nyyyddddn">
-<meta property="og:description" content="Hackergame 启动Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了 更深更暗在main.js里有一段生成flag的代码，在控制台中调用就好了 12345async function getFlag(token) &amp;#123;    &#x2F;&#x2F; Generate the flag based on user&amp;#x27;s token">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698678184780.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698678163552.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698666436520.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698661030342.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1699069440559.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698743242612.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698743440800.png">
-<meta property="og:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1699000096270.png">
-<meta property="article:published_time" content="2023-12-28T12:26:02.000Z">
-<meta property="article:modified_time" content="2024-01-13T15:12:35.592Z">
-<meta property="article:author" content="nyyyddddn">
-<meta property="article:tag" content="ctf writeup">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://nyyyddddn.github.io/2023/12/28/hackergame2023/1698678184780.png">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/null">
-    
-    <title>Hackergame2023 · nyyyddddn&#39;s blog</title>
-    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
-/* This file is meant as a standalone workflow for
-- testing support for link[rel=preload]
-- enabling async CSS loading in browsers that do not support rel=preload
-- applying rel preload css once loaded, whether supported or not.
-*/ -->
-<script>
-    (function (w) {
-        'use strict'
-        // rel=preload support test
-        if (!w.loadCSS) {
-            w.loadCSS = function () {}
-        }
-        // define on the loadCSS obj
-        var rp = (loadCSS.relpreload = {})
-        // rel=preload feature support test
-        // runs once and returns a function for compat purposes
-        rp.support = (function () {
-            var ret
-            try {
-                ret = w.document.createElement('link').relList.supports('preload')
-            } catch (e) {
-                ret = false
-            }
-            return function () {
-                return ret
-            }
-        })()
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Hackergame2023 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="Hackergame 启动Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了
+更深更暗在main.js里有一段生成flag的代码，在控制台中调用就好了
+async function getFlag(token) &amp;#123;
+    // Generate the flag based on user&#39;s token
+    let hash = CryptoJS.SHA256(`dEEper_@nd_d@rKer_$&amp;#123;token&amp;#125;`).toString();
+    return `flag&amp;#123;T1t@n_$&amp;#123;hash.slice(0, 32)&amp;#125;&amp;#125;`;
+&amp;#125;
 
-        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-        // then change that media back to its intended value on load
-        rp.bindMediaToggle = function (link) {
-            // remember existing media attr for ultimate state, or default to 'all'
-            var finalMedia = link.media || 'all'
+async function getFlag(token) &amp;#123;
+        // Generate the flag based on user&#39;s token
+        let hash = CryptoJS.SHA256(`dEEper_@nd_d@rKer_$&amp;#123;token&amp;#125;`).toString();
+        return `flag&amp;#123;T1t@n_$&amp;#123;hash.slice(0, 32)&amp;#125;&amp;#125;`;
+    &amp;#125;
+getFlag(localStorage.token)
 
-            function enableStylesheet() {
-                link.media = finalMedia
-            }
 
-            // bind load handlers to enable media
-            if (link.addEventListener) {
-                link.addEventListener('load', enableStylesheet)
-            } else if (link.attachEvent) {
-                link.attachEvent('onload', enableStylesheet)
-            }
 
-            // Set rel and non-applicable media type to start an async request
-            // note: timeout allows this to happen async to let rendering continue in IE
-            setTimeout(function () {
-                link.rel = 'stylesheet'
-                link.media = 'only x'
-            })
-            // also enable media after 3 seconds,
-            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-            setTimeout(enableStylesheet, 3000)
-        }
+猫咪小测
+1. 想要借阅世界图书出版公司出版的《A Classical Introduction To Modern Number Theory 2nd ed.》，应当前往中国科学技术大学西区图书馆的哪一层？（30 分）
+12
+暴力破解
 
-        // loop through link elements in DOM
-        rp.poly = function () {
-            // double check this to prevent external calls from running
-            if (rp.support()) {
-                return
-            }
-            var links = w.document.getElementsByTagName('link')
-            for (var i = 0; i < links.length; i++) {
-                var link = links[i]
-                // qualify links to those with rel=preload and as=style attrs
-                if (
-                    link.rel === 'preload' &&
-                    link.getAttribute('as') === 'style' &&
-                    !link.getAttribute('data-loadcss')
-                ) {
-                    // prevent rerunning on link
-                    link.setAttribute('data-loadcss', true)
-                    // bind listeners to toggle media back
-                    rp.bindMediaToggle(link)
-                }
-            }
-        }
+2. 今年 arXiv 网站的天体物理版块上有人发表了一篇关于「可观测宇宙中的鸡的密度上限」的论文，请问论文中作者计算出的鸡密度函数的上限为 10 的多少次方每立方秒差距？（30 分）
+23
 
-        // if unsupported, run the polyfill
-        if (!rp.support()) {
-            // run once at least
-            rp.poly()
+https:&amp;#x2F;&amp;#x2F;arxiv.org&amp;#x2F;abs&amp;#x2F;2303.17626
 
-            // rerun poly on an interval until onload
-            var run = w.setInterval(rp.poly, 500)
-            if (w.addEventListener) {
-                w.addEventListener('load', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            } else if (w.attachEvent) {
-                w.attachEvent('onload', function () {
-                    rp.poly()
-                    w.clearInterval(run)
-                })
-            }
-        }
 
-        // commonjs
-        if (typeof exports !== 'undefined') {
-            exports.loadCSS = loadCSS
-        } else {
-            w.loadCSS = loadCSS
-        }
-    })(typeof global !== 'undefined' ? global : this)
-</script>
+3. 为了支持 TCP BBR 拥塞控制算法，在编译 Linux 内核时应该配置好哪一条内核选项？
+CONFIG_TCP_CONG_BBR
 
-    <style type="text/css">
-    @font-face {
-        font-family: 'Oswald-Regular';
-        src: url("/font/Oswald-Regular.ttf");
-    }
+https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;google&amp;#x2F;bbr&amp;#x2F;blob&amp;#x2F;master&amp;#x2F;Documentation&amp;#x2F;bbr-quick-start.md
 
-    body {
-        margin: 0;
-    }
 
-    header,
-    footer,
-    .back-top,
-    .sidebar,
-    .container,
-    .site-intro-meta,
-    .toc-wrapper {
-        display: none;
-    }
+4. 🥒🥒🥒：「我……从没觉得写类型标注有意思过」。在一篇论文中，作者给出了能够让 Python 的类型检查器 MyPY mypy 陷入死循环的代码，并证明 Python 的类型检查和停机问题一样困难。请问这篇论文发表在今年的哪个学术会议上？（20 分）
+提示：会议的大写英文简称，比如 ISCA、CCS、ICML。
 
-    .site-intro {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        /* height: 50vh; */
-        overflow: hidden;
-    }
+ECOOP
+https:&amp;#x2F;&amp;#x2F;drops.dagstuhl.de&amp;#x2F;opus&amp;#x2F;volltexte&amp;#x2F;2023&amp;#x2F;18237&amp;#x2F;pdf&amp;#x2F;LIPIcs-ECOOP-2023-44.pdf
 
-    .site-intro-placeholder {
-        position: absolute;
-        z-index: -2;
-        top: 0;
-        left: 0;
-        width: calc(100% + 300px);
-        height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-        background-position: center center;
-        transform: translate3d(-226px, 0, 0);
-        animation: gradient-move 2.5s ease-out 0s infinite;
-    }
 
-    @keyframes gradient-move {
-        0% {
-            transform: translate3d(-226px, 0, 0);
-        }
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-</style>
+好耶学会怎么搜索论文了,Google hacker语法，萃取关键词，然后按时间筛选缩小范围"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
-    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
-    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
-    <!-- algolia -->
-    
-    <!-- 百度统计  -->
-    
-    <!-- 谷歌统计  -->
-    
+  <meta property="og:title" content="Hackergame2023"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-        if (typeof window.$ == undefined) {
-            console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
-        }
-    </script>
-    
-        <body class="post-body">
-    
-        <!-- header -->
-        <header class="header header-mobile">
-    <!-- top read progress line -->
-    <div class="header-element">
-        <div class="read-progress"></div>
-    </div>
-    <!-- sidebar menu button -->
-    <div class="header-element">
-        
-            <div class="header-sidebar-menu">
-        
-            
-                <div style="padding-left: 1px;">&#xe775;</div>
-            
-        </div>
-    </div>
-    <!-- header actions -->
-    <div class="header-actions">
-        <!-- theme mode switch button -->
-        <span class="header-theme-btn header-element">
-            <i class="fas fa-adjust"></i>
-        </span>
-        <!-- back to home page text -->
-        <span class="home-link header-element">
-            <a href=/>nyyyddddn</a>
-        </span>
-    </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">nyyyddddn</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">Hackergame2023</a>
-            </div>
-        </div>
-    
-</header>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the catergories.">
+			  <i class=""></i>Catergories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-        <!-- fixed footer -->
-        <footer class="footer-fixed">
-    <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden">
-        
-        
-            <div>&#xe639;</div>
-        
-        </div>
-    </div>
-</footer>
+  <div class="container">
+  	<div class="content">
+    	 
 
-        <!-- wrapper -->
-        <div class="wrapper">
-            <div class="site-intro" style="
+
+	
+		<div class="page-header">
+			<h1> Hackergame2023</h1>
+		</div>
+	
 
 
 
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-
-    height:50vh;
-
-">
-    
-    <!-- 主页  -->
-    
-        
-    <!-- 404页  -->
-    
-    <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
-    <div class="site-intro-meta">
-        <!-- 标题  -->
-        <h1 class="intro-title">
-            <!-- 主页  -->
-            
-                Hackergame2023
-            <!-- 404 -->
-            
-        </h1>
-        <!-- 副标题 -->
-        <p class="intro-subtitle">
-            <!-- 主页副标题  -->
-            
-                
-            <!-- 404 -->
-            
-        </p>
-        <!-- 文章页 meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf writeup">ctf writeup</a>
-    
-</div>
-
-                
-                <!-- 文章字数统计 -->
-                
-                <div class="post-intro-meta">
-                    <!-- 撰写日期 -->
-                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2023/12/28</span>
-                    <!-- busuanzi -->
-                    
-                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    
-                    <!-- 文章分享 -->
-                    <span class="share-wrapper">
-                        <span class="iconfont-archer share-icon">&#xe71d;</span>
-                        <span class="share-text">Share</span>
-                        <ul class="share-list">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
-        
-    </div>
-</div>
-
-            <script>
-  // get user agent
-  function getBrowserVersions() {
-    var u = window.navigator.userAgent
-    return {
-      userAgent: u,
-      trident: u.indexOf('Trident') > -1, //IE内核
-      presto: u.indexOf('Presto') > -1, //opera内核
-      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-      iPad: u.indexOf('iPad') > -1, //是否为iPad
-      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
-    }
-  }
-  var browser = {
-    versions: getBrowserVersions(),
-  }
-  console.log('userAgent: ' + browser.versions.userAgent)
-
-  // callback
-  function fontLoaded() {
-    console.log('font loaded')
-    if (document.getElementsByClassName('site-intro-meta')) {
-      document
-        .getElementsByClassName('intro-title')[0]
-        .classList.add('intro-fade-in')
-      document
-        .getElementsByClassName('intro-subtitle')[0]
-        .classList.add('intro-fade-in')
-      var postIntros = document.getElementsByClassName('post-intros')[0]
-      if (postIntros) {
-        postIntros.classList.add('post-fade-in')
-      }
-    }
-  }
-
-  // UC不支持跨域，所以直接显示
-  function asyncCb() {
-    if (browser.versions.uc) {
-      console.log('UCBrowser')
-      fontLoaded()
-    } else {
-      WebFont.load({
-        custom: {
-          families: ['Oswald-Regular'],
-        },
-        loading: function () {
-          // 所有字体开始加载
-          // console.log('font loading');
-        },
-        active: function () {
-          // 所有字体已渲染
-          fontLoaded()
-        },
-        inactive: function () {
-          // 字体预加载失败，无效字体或浏览器不支持加载
-          console.log('inactive: timeout')
-          fontLoaded()
-        },
-        timeout: 5000, // Set the timeout to two seconds
-      })
-    }
-  }
-
-  function asyncErr() {
-    console.warn('script load from CDN failed, will load local script')
-  }
-
-  // load webfont-loader async, and add callback function
-  function async(u, cb, err) {
-    var d = document,
-      t = 'script',
-      o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0]
-    o.src = u
-    if (cb) {
-      o.addEventListener(
-        'load',
-        function (e) {
-          cb(null, e)
-        },
-        false
-      )
-    }
-    if (err) {
-      o.addEventListener(
-        'error',
-        function (e) {
-          err(null, e)
-        },
-        false
-      )
-    }
-    s.parentNode.insertBefore(o, s)
-  }
-
-  var asyncLoadWithFallBack = function (arr, success, reject) {
-    var currReject = function () {
-      reject()
-      arr.shift()
-      if (arr.length) async(arr[0], success, currReject)
-    }
-
-    async(arr[0], success, currReject)
-  }
-
-  asyncLoadWithFallBack(
-    [
-      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
-      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
-      "/lib/webfontloader.min.js",
-    ],
-    asyncCb,
-    asyncErr
-  )
-</script>
-
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
-            <div class="container container-unloaded">
-                <main class="main post-page">
-    <article class="article-entry">
-        <h2 id="Hackergame-启动"><a href="#Hackergame-启动" class="headerlink" title="Hackergame 启动"></a>Hackergame 启动</h2><p>Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了</p>
+	  <h2 id="Hackergame-启动"><a href="#Hackergame-启动" class="headerlink" title="Hackergame 启动"></a>Hackergame 启动</h2><p>Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了</p>
 <h2 id="更深更暗"><a href="#更深更暗" class="headerlink" title="更深更暗"></a>更深更暗</h2><p>在main.js里有一段生成flag的代码，在控制台中调用就好了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getFlag</span>(<span class="params">token</span>) &#123;</span><br><span class="line">    <span class="comment">// Generate the flag based on user&#x27;s token</span></span><br><span class="line">    <span class="keyword">let</span> hash = <span class="title class_">CryptoJS</span>.<span class="title class_">SHA256</span>(<span class="string">`dEEper_@nd_d@rKer_<span class="subst">$&#123;token&#125;</span>`</span>).<span class="title function_">toString</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`flag&#123;T1t@n_<span class="subst">$&#123;hash.slice(<span class="number">0</span>, <span class="number">32</span>)&#125;</span>&#125;`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getFlag</span><span class="token punctuation">(</span><span class="token parameter">token</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// Generate the flag based on user's token</span>
+    <span class="token keyword">let</span> hash <span class="token operator">=</span> CryptoJS<span class="token punctuation">.</span><span class="token constant">SHA256</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">dEEper_@nd_d@rKer_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">flag&#123;T1t@n_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>hash<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&#125;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getFlag</span>(<span class="params">token</span>) &#123;</span><br><span class="line">        <span class="comment">// Generate the flag based on user&#x27;s token</span></span><br><span class="line">        <span class="keyword">let</span> hash = <span class="title class_">CryptoJS</span>.<span class="title class_">SHA256</span>(<span class="string">`dEEper_@nd_d@rKer_<span class="subst">$&#123;token&#125;</span>`</span>).<span class="title function_">toString</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">`flag&#123;T1t@n_<span class="subst">$&#123;hash.slice(<span class="number">0</span>, <span class="number">32</span>)&#125;</span>&#125;`</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="title function_">getFlag</span>(<span class="variable language_">localStorage</span>.<span class="property">token</span>)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getFlag</span><span class="token punctuation">(</span><span class="token parameter">token</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Generate the flag based on user's token</span>
+        <span class="token keyword">let</span> hash <span class="token operator">=</span> CryptoJS<span class="token punctuation">.</span><span class="token constant">SHA256</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">dEEper_@nd_d@rKer_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">flag&#123;T1t@n_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>hash<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&#125;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token function">getFlag</span><span class="token punctuation">(</span>localStorage<span class="token punctuation">.</span>token<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
-<h2 id="猫咪小测"><a href="#猫咪小测" class="headerlink" title="猫咪小测"></a>猫咪小测</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. 想要借阅世界图书出版公司出版的《A Classical Introduction To Modern Number Theory 2nd ed.》，应当前往中国科学技术大学西区图书馆的哪一层？（30 分）</span><br><span class="line">12</span><br><span class="line">暴力破解</span><br><span class="line"></span><br><span class="line">2. 今年 arXiv 网站的天体物理版块上有人发表了一篇关于「可观测宇宙中的鸡的密度上限」的论文，请问论文中作者计算出的鸡密度函数的上限为 10 的多少次方每立方秒差距？（30 分）</span><br><span class="line">23</span><br><span class="line"></span><br><span class="line">https://arxiv.org/abs/2303.17626</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 为了支持 TCP BBR 拥塞控制算法，在编译 Linux 内核时应该配置好哪一条内核选项？</span><br><span class="line">CONFIG_TCP_CONG_BBR</span><br><span class="line"></span><br><span class="line">https://github.com/google/bbr/blob/master/Documentation/bbr-quick-start.md</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4. 🥒🥒🥒：「我……从没觉得写类型标注有意思过」。在一篇论文中，作者给出了能够让 Python 的类型检查器 MyPY mypy 陷入死循环的代码，并证明 Python 的类型检查和停机问题一样困难。请问这篇论文发表在今年的哪个学术会议上？（20 分）</span><br><span class="line">提示：会议的大写英文简称，比如 ISCA、CCS、ICML。</span><br><span class="line"></span><br><span class="line">ECOOP</span><br><span class="line">https://drops.dagstuhl.de/opus/volltexte/2023/18237/pdf/LIPIcs-ECOOP-2023-44.pdf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">好耶学会怎么搜索论文了,Google hacker语法，萃取关键词，然后按时间筛选缩小范围</span><br></pre></td></tr></table></figure>
+<h2 id="猫咪小测"><a href="#猫咪小测" class="headerlink" title="猫咪小测"></a>猫咪小测</h2><pre class="line-numbers language-none"><code class="language-none">
+1. 想要借阅世界图书出版公司出版的《A Classical Introduction To Modern Number Theory 2nd ed.》，应当前往中国科学技术大学西区图书馆的哪一层？（30 分）
+12
+暴力破解
+
+2. 今年 arXiv 网站的天体物理版块上有人发表了一篇关于「可观测宇宙中的鸡的密度上限」的论文，请问论文中作者计算出的鸡密度函数的上限为 10 的多少次方每立方秒差距？（30 分）
+23
+
+https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2303.17626
+
+
+3. 为了支持 TCP BBR 拥塞控制算法，在编译 Linux 内核时应该配置好哪一条内核选项？
+CONFIG_TCP_CONG_BBR
+
+https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;bbr&#x2F;blob&#x2F;master&#x2F;Documentation&#x2F;bbr-quick-start.md
+
+
+4. 🥒🥒🥒：「我……从没觉得写类型标注有意思过」。在一篇论文中，作者给出了能够让 Python 的类型检查器 MyPY mypy 陷入死循环的代码，并证明 Python 的类型检查和停机问题一样困难。请问这篇论文发表在今年的哪个学术会议上？（20 分）
+提示：会议的大写英文简称，比如 ISCA、CCS、ICML。
+
+ECOOP
+https:&#x2F;&#x2F;drops.dagstuhl.de&#x2F;opus&#x2F;volltexte&#x2F;2023&#x2F;18237&#x2F;pdf&#x2F;LIPIcs-ECOOP-2023-44.pdf
+
+
+好耶学会怎么搜索论文了,Google hacker语法，萃取关键词，然后按时间筛选缩小范围<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <img src="/2023/12/28/hackergame2023/1698678184780.png" class="">
 
@@ -517,14 +211,28 @@
 <h2 id="赛博井字棋"><a href="#赛博井字棋" class="headerlink" title="赛博井字棋"></a>赛博井字棋</h2><p>简单玩了一下，发现怎么打都是平局，后面在想能不能在敌方棋子位置下棋，用burp suite发送了一下，发现可以，后端没有判断格子上面是否有棋子，覆盖敌方棋子后就拿到flag了，也可以用两个浏览器来操作</p>
 <img src="/2023/12/28/hackergame2023/1698666436520.png" class="">
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;I_can_eat_your_pieces_41065ba433&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;I_can_eat_your_pieces_41065ba433&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="组委会模拟器"><a href="#组委会模拟器" class="headerlink" title="组委会模拟器"></a>组委会模拟器</h2><p>这道题消息都是在span标签中的，只需要把span枚举一次，用正则匹配，然后再模拟点击就好了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function findAndClickSpan() &#123;</span><br><span class="line"></span><br><span class="line">  const regex = /hack\[[^\]]*\]/;</span><br><span class="line"></span><br><span class="line">  const spans = document.getElementsByTagName(&#x27;span&#x27;);</span><br><span class="line"></span><br><span class="line">  Array.from(spans).forEach((span) =&gt; &#123;</span><br><span class="line">    if (regex.test(span.textContent)) &#123;</span><br><span class="line">      console.log(&#x27;匹配的span元素:&#x27;, span);</span><br><span class="line"></span><br><span class="line">      span.click();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">setInterval(findAndClickSpan, 1000);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">function findAndClickSpan() &#123;
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;Web_pr0gra_mm1ng_5a17e089a1_15fun&#125;</span><br></pre></td></tr></table></figure>
+  const regex &#x3D; &#x2F;hack\[[^\]]*\]&#x2F;;
+
+  const spans &#x3D; document.getElementsByTagName(&#39;span&#39;);
+
+  Array.from(spans).forEach((span) &#x3D;&gt; &#123;
+    if (regex.test(span.textContent)) &#123;
+      console.log(&#39;匹配的span元素:&#39;, span);
+
+      span.click();
+    &#125;
+  &#125;);
+&#125;
+setInterval(findAndClickSpan, 1000);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;Web_pr0gra_mm1ng_5a17e089a1_15fun&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
@@ -533,7 +241,7 @@
 <p>可以用rx sstv这个软件还原图片，需要先装个虚拟声卡然后用rx sstv监听，还原就好了</p>
 <img src="/2023/12/28/hackergame2023/1698661030342.png" class="">
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;SSssTV_y0u_W4NNa_HaV3_4_trY&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;SSssTV_y0u_W4NNa_HaV3_4_trY&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
@@ -542,55 +250,61 @@
 <p>2 400 请求格式错误 随便乱输入一些东西</p>
 <p>3 404 请求一个不存在的目录 </p>
 <p>4  405 Bad Request 服务器那边不支持post，直接post</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1\r\n</span><br><span class="line">Host: example.com\r\n\r\n</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">POST &#x2F; HTTP&#x2F;1.1\r\n
+Host: example.com\r\n\r\n<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>5 505 http版本不受支持</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/10.1\r\n</span><br><span class="line">Host: example.com\r\n\r\n</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">GET &#x2F; HTTP&#x2F;10.1\r\n
+Host: example.com\r\n\r\n<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>2  nginx 返回首行无状态码的响应（不计入收集的状态码中）；</p>
 <p>只要不带上http的版本号，服务器那边就不会相应状态相关的信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET / \r\n</span><br><span class="line">Host: example.com\r\n\r\n</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">GET &#x2F; \r\n
+Host: example.com\r\n\r\n<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;d1d you hear the HTTP packet from 1991?&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;d1d you hear the HTTP packet from 1991?&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>草，这个flag</p>
 <h2 id="Git-Git"><a href="#Git-Git" class="headerlink" title="Git? Git!"></a>Git? Git!</h2><p>不太熟悉git，在搜索后发现，撤销这个操作本身也算是一个提交，也会记录到日志当中，然后我去翻了下项目文件，发现log文件下有一个reset的操作，这里应该是指”撤销”吧，查询了一会资料后发现有一个git show hash的命令，可以查看这个操作具体做了什么事情</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000000000000000000000000000000000000000 15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 PRO-2684 &lt;54608551+PRO-2684@users.noreply.github.com&gt; 1698306875 +0800	clone: from https://github.com/dair-ai/ML-Course-Notes.git</span><br><span class="line">15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 505e1a3f446c23f31807a117e860f57cb5b5bb79 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307060 +0800	commit: Trim trailing spaces</span><br><span class="line">505e1a3f446c23f31807a117e860f57cb5b5bb79 15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307092 +0800	reset: moving to HEAD~</span><br><span class="line">15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 ea49f0cd3d36edb2965f89581b11151959d20991 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307103 +0800	commit: Trim trailing spaces</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">0000000000000000000000000000000000000000 15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 PRO-2684 &lt;54608551+PRO-2684@users.noreply.github.com&gt; 1698306875 +0800	clone: from https:&#x2F;&#x2F;github.com&#x2F;dair-ai&#x2F;ML-Course-Notes.git
+15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 505e1a3f446c23f31807a117e860f57cb5b5bb79 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307060 +0800	commit: Trim trailing spaces
+505e1a3f446c23f31807a117e860f57cb5b5bb79 15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307092 +0800	reset: moving to HEAD~
+15fd0a13eb46c39f34cfc0dfb4757ad23a23d026 ea49f0cd3d36edb2965f89581b11151959d20991 some_english_postgraduate &lt;some_english_postgraduate@none-exist.com&gt; 1698307103 +0800	commit: Trim trailing spaces<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 505e1a3f446c23f31807a117e860f57cb5b5bb79</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git show 505e1a3f446c23f31807a117e860f57cb5b5bb79<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>后找到撤销的flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;TheRe5_@lwAy5_a_R3GreT_pi1l_1n_G1t&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;TheRe5_@lwAy5_a_R3GreT_pi1l_1n_G1t&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="Docker-for-Everyone"><a href="#Docker-for-Everyone" class="headerlink" title="Docker for Everyone"></a>Docker for Everyone</h2><p>X 是实验室机器的管理员，为了在保证安全的同时让同学们都用上 docker，他把同学的账号加入了 docker 用户组，这样就不需要给同学 sudo 权限了！</p>
 <p>但果真如此吗？</p>
 <p>去查询了一下后发现，Docker守护程序的访问权限是没有限制的，在docker容器中，可以具有和宿主机相同的权限，那能不能把flag给搬到容器里面，查询了一下后发现有一条挂载数据卷的命令可以实现这个操作</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /:/tmp/ -it alpine /bin/sh</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">docker run -v &#x2F;:&#x2F;tmp&#x2F; -it alpine &#x2F;bin&#x2F;sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>cat flag发现有些问题，ls -al看了下是一个软链接，进到这个链接的目录下cat flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/tmp/dev/shm # cat flag</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;tmp&#x2F;dev&#x2F;shm # cat flag<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>得到flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;u5e_r00t1ess_conta1ner_1d94c2e3ce_plz!&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;u5e_r00t1ess_conta1ner_1d94c2e3ce_plz!&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="JSON-⊂-YAML"><a href="#JSON-⊂-YAML" class="headerlink" title="JSON ⊂ YAML?"></a>JSON ⊂ YAML?</h2><p>第一问</p>
 <p>根据这段话，可以分析出第一问的本质是在问yaml1.1和yaml1.2有什么区别，去学习了一下yaml，和json有些相似，由键值对，列表，还有块三种结构组合成的一种组织数据的语言。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">小 Z 听闻这番言论后当场表示怀疑，立刻说出了一个字符串，JSON 和 YAML 解析出的含义存在差异。小 W 研究了一番才发现，这是因为很多主流的 YAML 库仍然是 YAML 1.1 的，它没有这个性质。他不得不承认：「好吧，这个性质只适用于 YAML 1.2。」</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">小 Z 听闻这番言论后当场表示怀疑，立刻说出了一个字符串，JSON 和 YAML 解析出的含义存在差异。小 W 研究了一番才发现，这是因为很多主流的 YAML 库仍然是 YAML 1.1 的，它没有这个性质。他不得不承认：「好吧，这个性质只适用于 YAML 1.2。」<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/21584985/what-valid-json-files-are-not-valid-yaml-1-1-files">https://stackoverflow.com/questions/21584985/what-valid-json-files-are-not-valid-yaml-1-1-files</a></p>
 <p>可以参考这篇文章，咱的payload是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">123e100000</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">123e100000<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>在yaml1.1中，这个表达式会被解析成科学计数法，json中会被解析成字符串</p>
 <p>第二问</p>
 <p>搜了半天，终于搜到解决方法了</p>
 <img src="/2023/12/28/hackergame2023/1699069440559.png" class="">
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;name&quot;: &quot;John Doe&quot;, &quot;age&quot;: 25, &quot;name&quot;: &quot;Jonathan Doe&quot;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;name&quot;: &quot;John Doe&quot;, &quot;age&quot;: 25, &quot;name&quot;: &quot;Jonathan Doe&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
@@ -607,29 +321,59 @@
 
 <h2 id="🪐-高频率星球"><a href="#🪐-高频率星球" class="headerlink" title="🪐 高频率星球"></a>🪐 高频率星球</h2><p><a target="_blank" rel="noopener" href="https://asciinema.org/">asciinema</a></p>
 <p>这个软件录制的文件，把录制的文件导出来，发现是一个js的文件，尾部显示运行这个文件能得到flag，但是录制出来的文件有太多终端颜色的符号还有切页符号</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">asciienma cat xxxx &gt; output.txt</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">asciienma cat xxxx &gt; output.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\033\[[\x30-\x3f]*[\x40-\x7e]</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">\033\[[\x30-\x3f]*[\x40-\x7e]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>用这个正则清理掉大多数符号后，手工清理了一下，然后拿到flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node output.js</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">node output.js<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;y0u_cAn_ReSTorE_C0de_fr0m_asc11nema_3db2da1063300e5dabf826e40ffd016101458df23a371&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;y0u_cAn_ReSTorE_C0de_fr0m_asc11nema_3db2da1063300e5dabf826e40ffd016101458df23a371&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="🪐-低带宽星球-差一个"><a href="#🪐-低带宽星球-差一个" class="headerlink" title="🪐 低带宽星球[差一个]"></a>🪐 低带宽星球[差一个]</h2><p>压缩至 2KiB (2048 字节) 及以下、</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/meowtec/Imagine">https://github.com/meowtec/Imagine</a> 这个项目能压缩图片到2kb以下，提交图片后获得flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;A1ot0f_t0015_is_available_to_compre55_PNG&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;A1ot0f_t0015_is_available_to_compre55_PNG&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 
 
 <h2 id="🪐-流式星球"><a href="#🪐-流式星球" class="headerlink" title="🪐 流式星球"></a>🪐 流式星球</h2><p>这道题的难点有两个，一个是不知道宽高，原始宽高不是10的倍数，以及有个随机数切片，很容易想到质因数分解，然后爆破一百次，把所有可能都试一遍，但是结果都不太行，手工试了一下，找出三个能看出规整图形的尺寸，640 * 620 1280 * 768 2560 * 1440，能看到规整图形了，发现是bang dream it’s mygo的视频，flag在字幕的位置，第二个难点是flag每帧都有随机一行被混淆，然后字体的原因flag看不太清楚，最后把相似的数字枚举了了一遍，才拿到flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def restore_video(input_file, output_folder, frame_width, frame_height):</span><br><span class="line"></span><br><span class="line">    with open(input_file, &quot;rb&quot;) as f:</span><br><span class="line">        buffer = np.fromfile(f, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    if len(buffer) % 3 != 0:</span><br><span class="line">        buffer = buffer[:-(len(buffer) % 3)]</span><br><span class="line"></span><br><span class="line">    missing_pixels = (frame_width * frame_height * 3) - (len(buffer) % (frame_width * frame_height * 3))</span><br><span class="line">    buffer = np.concatenate([buffer, np.zeros(missing_pixels, dtype=np.uint8)])</span><br><span class="line"></span><br><span class="line">    frame_count = len(buffer) // (frame_width * frame_height * 3)</span><br><span class="line">    buffer = buffer.reshape((frame_count, frame_height, frame_width, 3))</span><br><span class="line"></span><br><span class="line">    if not os.path.exists(output_folder):</span><br><span class="line">        os.makedirs(output_folder)</span><br><span class="line"></span><br><span class="line">    for i in range(frame_count):</span><br><span class="line">        frame = buffer[i].astype(np.uint8)</span><br><span class="line">        filename = os.path.join(output_folder, f&quot;frame_&#123;i:04d&#125;.png&quot;)</span><br><span class="line">        cv2.imwrite(filename, frame)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    restore_video(&quot;video.bin&quot;, &quot;output_frames&quot;, 640, 620)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import cv2
+import numpy as np
+import os
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;it-could-be-easy-to-restore-video-with-haruhikage-even-without-metadata-0F7968CC&#125;</span><br></pre></td></tr></table></figure>
+
+def restore_video(input_file, output_folder, frame_width, frame_height):
+
+    with open(input_file, &quot;rb&quot;) as f:
+        buffer &#x3D; np.fromfile(f, dtype&#x3D;np.uint8)
+
+    if len(buffer) % 3 !&#x3D; 0:
+        buffer &#x3D; buffer[:-(len(buffer) % 3)]
+
+    missing_pixels &#x3D; (frame_width * frame_height * 3) - (len(buffer) % (frame_width * frame_height * 3))
+    buffer &#x3D; np.concatenate([buffer, np.zeros(missing_pixels, dtype&#x3D;np.uint8)])
+
+    frame_count &#x3D; len(buffer) &#x2F;&#x2F; (frame_width * frame_height * 3)
+    buffer &#x3D; buffer.reshape((frame_count, frame_height, frame_width, 3))
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    for i in range(frame_count):
+        frame &#x3D; buffer[i].astype(np.uint8)
+        filename &#x3D; os.path.join(output_folder, f&quot;frame_&#123;i:04d&#125;.png&quot;)
+        cv2.imwrite(filename, frame)
+
+
+if __name__ &#x3D;&#x3D; &quot;__main__&quot;:
+    restore_video(&quot;video.bin&quot;, &quot;output_frames&quot;, 640, 620)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;it-could-be-easy-to-restore-video-with-haruhikage-even-without-metadata-0F7968CC&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
@@ -644,1537 +388,273 @@
 <h2 id="为什么要打开-flag-😡-差一个"><a href="#为什么要打开-flag-😡-差一个" class="headerlink" title="为什么要打开 &#x2F;flag 😡[差一个]"></a>为什么要打开 &#x2F;flag 😡[差一个]</h2><p>好耶，在hackergame上第一个binary题</p>
 <h3 id="LD-PRELOAD"><a href="#LD-PRELOAD" class="headerlink" title="LD_PRELOAD"></a>LD_PRELOAD</h3><p>去搜索了一下什么是ld_preload，ld_preload是linux上的一个环境变量，程序运行的时候根据ld_preload选择使用什么动态链接库</p>
 <p>这里使用了&#x2F;stage1.so 这个动态链接库</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">STAGE = os.environ[<span class="string">&quot;STAGE&quot;</span>]</span><br><span class="line"><span class="keyword">assert</span> STAGE <span class="keyword">in</span> (<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    binary = <span class="built_in">input</span>(<span class="string">&quot;Base64 of binary: &quot;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;/dev/shm/executable&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(base64.b64decode(binary))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;/dev/shm/executable&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">if</span> f.read(<span class="number">4</span>) != <span class="string">b&quot;\x7fELF&quot;</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;不是 ELF 文件&quot;</span>)</span><br><span class="line">            exit(<span class="number">1</span>)</span><br><span class="line">    os.chmod(<span class="string">&quot;/dev/shm/executable&quot;</span>, <span class="number">0o555</span>)</span><br><span class="line">    <span class="keyword">if</span> STAGE == <span class="string">&quot;1&quot;</span>:</span><br><span class="line">        output = subprocess.run(</span><br><span class="line">            [<span class="string">&quot;/dev/shm/executable&quot;</span>],</span><br><span class="line">            stdin=subprocess.DEVNULL,</span><br><span class="line">            stdout=subprocess.PIPE,</span><br><span class="line">            stderr=subprocess.PIPE,</span><br><span class="line">            user=<span class="string">&quot;nobody&quot;</span>,</span><br><span class="line">            group=<span class="string">&quot;nogroup&quot;</span>,</span><br><span class="line">            env=&#123;</span><br><span class="line">                <span class="string">&quot;LD_PRELOAD&quot;</span>: <span class="string">&quot;/stage1.so&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> subprocess
+<span class="token keyword">import</span> base64
+<span class="token keyword">import</span> os
+
+STAGE <span class="token operator">=</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">"STAGE"</span><span class="token punctuation">]</span>
+<span class="token keyword">assert</span> STAGE <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"2"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    binary <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"Base64 of binary: "</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"/dev/shm/executable"</span><span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>binary<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"/dev/shm/executable"</span><span class="token punctuation">,</span> <span class="token string">"rb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">b"\x7fELF"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"不是 ELF 文件"</span><span class="token punctuation">)</span>
+            exit<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>chmod<span class="token punctuation">(</span><span class="token string">"/dev/shm/executable"</span><span class="token punctuation">,</span> <span class="token number">0o555</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> STAGE <span class="token operator">==</span> <span class="token string">"1"</span><span class="token punctuation">:</span>
+        output <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>run<span class="token punctuation">(</span>
+            <span class="token punctuation">[</span><span class="token string">"/dev/shm/executable"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            stdin<span class="token operator">=</span>subprocess<span class="token punctuation">.</span>DEVNULL<span class="token punctuation">,</span>
+            stdout<span class="token operator">=</span>subprocess<span class="token punctuation">.</span>PIPE<span class="token punctuation">,</span>
+            stderr<span class="token operator">=</span>subprocess<span class="token punctuation">.</span>PIPE<span class="token punctuation">,</span>
+            user<span class="token operator">=</span><span class="token string">"nobody"</span><span class="token punctuation">,</span>
+            group<span class="token operator">=</span><span class="token string">"nogroup"</span><span class="token punctuation">,</span>
+            env<span class="token operator">=</span><span class="token punctuation">&#123;</span>
+                <span class="token string">"LD_PRELOAD"</span><span class="token punctuation">:</span> <span class="token string">"/stage1.so"</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>大概看了一遍stage1.so，发现和io相关的操作和io不相关但是能间接读flag的函数都被hook了，要么是return一个fake flag要么是 return 0，想了各种的方法，后面突然联想到这些io的操作本质上不就是系统调用吗，那我用内联汇编，去syscall，模拟这些读的操作不就好了</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="type">ssize_t</span> nread;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用系统调用打开文件</span></span><br><span class="line">    <span class="keyword">asm</span>(<span class="string">&quot;syscall&quot;</span></span><br><span class="line">        : <span class="string">&quot;=a&quot;</span> (fd)</span><br><span class="line">        : <span class="string">&quot;0&quot;</span>(SYS_open), <span class="string">&quot;D&quot;</span>(<span class="string">&quot;./flag&quot;</span>), <span class="string">&quot;S&quot;</span>(O_RDONLY)</span><br><span class="line">        : <span class="string">&quot;rcx&quot;</span>, <span class="string">&quot;r11&quot;</span>, <span class="string">&quot;memory&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> EXIT_FAILURE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用系统调用读取文件内容</span></span><br><span class="line">    <span class="keyword">asm</span>(<span class="string">&quot;syscall&quot;</span></span><br><span class="line">        : <span class="string">&quot;=a&quot;</span> (nread)</span><br><span class="line">        : <span class="string">&quot;0&quot;</span>(SYS_read), <span class="string">&quot;D&quot;</span>(fd), <span class="string">&quot;S&quot;</span>(buf), <span class="string">&quot;d&quot;</span>(<span class="keyword">sizeof</span>(buf))</span><br><span class="line">        : <span class="string">&quot;rcx&quot;</span>, <span class="string">&quot;r11&quot;</span>, <span class="string">&quot;memory&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nread == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;read&quot;</span>);</span><br><span class="line">        <span class="keyword">asm</span>(<span class="string">&quot;syscall&quot;</span></span><br><span class="line">            :</span><br><span class="line">        : <span class="string">&quot;a&quot;</span>(SYS_close), <span class="string">&quot;D&quot;</span>(fd)</span><br><span class="line">            : <span class="string">&quot;rcx&quot;</span>, <span class="string">&quot;r11&quot;</span>, <span class="string">&quot;memory&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> EXIT_FAILURE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出文件内容</span></span><br><span class="line">    fwrite(buf, <span class="number">1</span>, nread, <span class="built_in">stdout</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用系统调用关闭文件</span></span><br><span class="line">    <span class="keyword">asm</span>(<span class="string">&quot;syscall&quot;</span></span><br><span class="line">        :</span><br><span class="line">    : <span class="string">&quot;a&quot;</span>(SYS_close), <span class="string">&quot;D&quot;</span>(fd)</span><br><span class="line">        : <span class="string">&quot;rcx&quot;</span>, <span class="string">&quot;r11&quot;</span>, <span class="string">&quot;memory&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/syscall.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>
+    <span class="token class-name">ssize_t</span> nread<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 使用系统调用打开文件</span>
+    <span class="token keyword">asm</span><span class="token punctuation">(</span><span class="token string">"syscall"</span>
+        <span class="token operator">:</span> <span class="token string">"=a"</span> <span class="token punctuation">(</span>fd<span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token string">"0"</span><span class="token punctuation">(</span>SYS_open<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">(</span><span class="token string">"./flag"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"S"</span><span class="token punctuation">(</span>O_RDONLY<span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token string">"rcx"</span><span class="token punctuation">,</span> <span class="token string">"r11"</span><span class="token punctuation">,</span> <span class="token string">"memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"open"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> EXIT_FAILURE<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 使用系统调用读取文件内容</span>
+    <span class="token keyword">asm</span><span class="token punctuation">(</span><span class="token string">"syscall"</span>
+        <span class="token operator">:</span> <span class="token string">"=a"</span> <span class="token punctuation">(</span>nread<span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token string">"0"</span><span class="token punctuation">(</span>SYS_read<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"S"</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token string">"rcx"</span><span class="token punctuation">,</span> <span class="token string">"r11"</span><span class="token punctuation">,</span> <span class="token string">"memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>nread <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"read"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">asm</span><span class="token punctuation">(</span><span class="token string">"syscall"</span>
+            <span class="token operator">:</span>
+        <span class="token operator">:</span> <span class="token string">"a"</span><span class="token punctuation">(</span>SYS_close<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span>
+            <span class="token operator">:</span> <span class="token string">"rcx"</span><span class="token punctuation">,</span> <span class="token string">"r11"</span><span class="token punctuation">,</span> <span class="token string">"memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> EXIT_FAILURE<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 输出文件内容</span>
+    <span class="token function">fwrite</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> nread<span class="token punctuation">,</span> <span class="token constant">stdout</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 使用系统调用关闭文件</span>
+    <span class="token keyword">asm</span><span class="token punctuation">(</span><span class="token string">"syscall"</span>
+        <span class="token operator">:</span>
+    <span class="token operator">:</span> <span class="token string">"a"</span><span class="token punctuation">(</span>SYS_close<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token string">"rcx"</span><span class="token punctuation">,</span> <span class="token string">"r11"</span><span class="token punctuation">,</span> <span class="token string">"memory"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> EXIT_SUCCESS<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>得到flag</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;nande_ld_preload_yattano_a46091dfa1&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">flag&#123;nande_ld_preload_yattano_a46091dfa1&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 
 <h2 id="惜字如金"><a href="#惜字如金" class="headerlink" title="惜字如金"></a>惜字如金</h2><p>咱是用枚举的方法，枚举一遍</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">from itertools import product</span><br><span class="line"></span><br><span class="line"># Constants</span><br><span class="line">ROW1 = &quot;nymeh1niwemflcir&#125;echaet&quot;</span><br><span class="line">ROW2 = &quot;a3g7&#125;kidgojernoetlsup?h&quot;</span><br><span class="line">ROW3 = &quot;ulw!f5soadrhwnrsnstnoeq&quot;</span><br><span class="line">ROW4 = &quot;ct&#123;l-findiehaai&#123;oveatas&quot;</span><br><span class="line">ROW5 = &quot;ty9kxborszstguyd?!blm-p&quot;</span><br><span class="line">VOWEL = &#123;&#x27;a&#x27;, &#x27;e&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;u&#x27;&#125;</span><br><span class="line">CONSONANT = &#123;&#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;f&#x27;, &#x27;g&#x27;, &#x27;h&#x27;, &#x27;j&#x27;, &#x27;k&#x27;, &#x27;l&#x27;, &#x27;m&#x27;, &#x27;n&#x27;, &#x27;p&#x27;, &#x27;q&#x27;, &#x27;r&#x27;, &#x27;s&#x27;, &#x27;t&#x27;, &#x27;v&#x27;, &#x27;w&#x27;, &#x27;x&#x27;, &#x27;y&#x27;, &#x27;z&#x27;, &#x27;!&#x27;, &#x27;?&#x27;, &#x27;-&#x27;, &#x27;&#123;&#x27;, &#x27;&#125;&#x27;&#125;</span><br><span class="line">TABLE = [53, 41, 85, 109, 75, 1, 33, 48, 77, 90, 17, 118, 36, 25, 13, 89, 90, 3, 63, 25, 31, 77, 27, 60, 3, 118, 24, 62, 54, 61, 25, 63, 77, 36, 5, 32, 60, 67, 113, 28]</span><br><span class="line"></span><br><span class="line">def add_variance(ori_str):</span><br><span class="line">    variances = set()</span><br><span class="line">    for i, c in enumerate(ori_str):</span><br><span class="line">        if c in CONSONANT:</span><br><span class="line">            variances.add(ori_str[:i+1] + &#x27;e&#x27; + ori_str[i+1:])</span><br><span class="line">            variances.add(ori_str[:i+1] + c + ori_str[i+1:])</span><br><span class="line">    return list(variances)</span><br><span class="line"></span><br><span class="line">def rev_get_str(str):</span><br><span class="line">    return &#x27;&#x27;.join(str[TABLE[i] % len(str)] for i in range(len(TABLE)))</span><br><span class="line"></span><br><span class="line">def is_format(str):</span><br><span class="line">    return str.startswith(&quot;flag&#123;&quot;) and str.endswith(&#x27;&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">rows_variances = [add_variance(ROW1), add_variance(ROW2), add_variance(ROW3), add_variance(ROW4), add_variance(ROW5)]</span><br><span class="line"></span><br><span class="line">count = 0</span><br><span class="line">answers = set()</span><br><span class="line">for variances in product(*rows_variances):</span><br><span class="line">    s = &#x27;&#x27;.join(variances)</span><br><span class="line">    rev = rev_get_str(s)</span><br><span class="line">    if is_format(rev) and rev not in answers:</span><br><span class="line">        answers.add(rev)</span><br><span class="line">        print(rev)</span><br><span class="line">        count += 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(count)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">from itertools import product
+
+# Constants
+ROW1 &#x3D; &quot;nymeh1niwemflcir&#125;echaet&quot;
+ROW2 &#x3D; &quot;a3g7&#125;kidgojernoetlsup?h&quot;
+ROW3 &#x3D; &quot;ulw!f5soadrhwnrsnstnoeq&quot;
+ROW4 &#x3D; &quot;ct&#123;l-findiehaai&#123;oveatas&quot;
+ROW5 &#x3D; &quot;ty9kxborszstguyd?!blm-p&quot;
+VOWEL &#x3D; &#123;&#39;a&#39;, &#39;e&#39;, &#39;i&#39;, &#39;o&#39;, &#39;u&#39;&#125;
+CONSONANT &#x3D; &#123;&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;!&#39;, &#39;?&#39;, &#39;-&#39;, &#39;&#123;&#39;, &#39;&#125;&#39;&#125;
+TABLE &#x3D; [53, 41, 85, 109, 75, 1, 33, 48, 77, 90, 17, 118, 36, 25, 13, 89, 90, 3, 63, 25, 31, 77, 27, 60, 3, 118, 24, 62, 54, 61, 25, 63, 77, 36, 5, 32, 60, 67, 113, 28]
+
+def add_variance(ori_str):
+    variances &#x3D; set()
+    for i, c in enumerate(ori_str):
+        if c in CONSONANT:
+            variances.add(ori_str[:i+1] + &#39;e&#39; + ori_str[i+1:])
+            variances.add(ori_str[:i+1] + c + ori_str[i+1:])
+    return list(variances)
+
+def rev_get_str(str):
+    return &#39;&#39;.join(str[TABLE[i] % len(str)] for i in range(len(TABLE)))
+
+def is_format(str):
+    return str.startswith(&quot;flag&#123;&quot;) and str.endswith(&#39;&#125;&#39;)
+
+rows_variances &#x3D; [add_variance(ROW1), add_variance(ROW2), add_variance(ROW3), add_variance(ROW4), add_variance(ROW5)]
+
+count &#x3D; 0
+answers &#x3D; set()
+for variances in product(*rows_variances):
+    s &#x3D; &#39;&#39;.join(variances)
+    rev &#x3D; rev_get_str(s)
+    if is_format(rev) and rev not in answers:
+        answers.add(rev)
+        print(rev)
+        count +&#x3D; 1
 
 
-    </article>
-    <!-- license -->
+print(count)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
     
-        <div class="license-wrapper">
-            <p>Author：<a href="https://nyyyddddn.github.io">nyyyddddn</a>
-            <p>Link：<a href="https://nyyyddddn.github.io/2023/12/28/hackergame2023/">https://nyyyddddn.github.io/2023/12/28/hackergame2023/</a>
-            <p>Publish date：<a href="https://nyyyddddn.github.io/2023/12/28/hackergame2023/">December 28th 2023, 8:26:02 pm</a>
-            <p>Update date：<a href="https://nyyyddddn.github.io/2023/12/28/hackergame2023/">January 13th 2024, 11:12:35 pm</a>
-            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
-        </div>
     
-    <!-- paginator -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2024/01/02/cbctf/" title="cbctf">
-                    <div class="nextTitle">cbctf</div>
-                </a>
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href="/2023/12/28/GeekChallenge2023/" title="GeekChallenge2023">
-                    <div class="prevTitle">GeekChallenge2023</div>
-                </a>
-            
-        </li>
+    <a href="/2024/01/02/cbctf/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/12/28/GeekChallenge2023/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-12-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ctf-writeup/">ctf writeup<span>51</span></a></li>
     </ul>
-    <!-- comment -->
-    
-        <div class="post-comment">
-            <!-- 来必力 City 版安装代码 -->
+	</div>
+		
 
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
-            
+		
 
-            
+	</div>
+	
+		
 
-            
+</div><!-- row -->
 
-            <!-- utteranc评论 -->
-
-
-            <!-- partial('_partial/comment/changyan') -->
-            <!--PC版-->
-
-
-            
-            
-
-            
-
-        </div>
-    
-    <!-- timeliness note -->
-    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
-    <!-- Mathjax -->
-    
-</main>
-
-                <!-- profile -->
-                
-            </div>
-            <footer class="footer footer-unloaded">
-    <!-- social  -->
-    
-        <div class="social">
-            
-    
-        
-            
-                <a href="mailto:1959759892@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/nyyyddddn" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-
-        </div>
-    
-    <!-- powered by Hexo  -->
-    <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
-    </div>
-    <!-- website approve for Chinese user -->
-    
-    <!-- 不蒜子  -->
-    
-        <div class="busuanzi-container">
-            
-             
-                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
-            
-        </div>
-    	
-</footer>
-
-        </div>
-        <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
+<!--
+ -->
 
 
 
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-    top:50vh;
-
->
-                <div class="toc-catalog">
-                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-                </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hackergame-%E5%90%AF%E5%8A%A8"><span class="toc-number">1.</span> <span class="toc-text">Hackergame 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%B7%B1%E6%9B%B4%E6%9A%97"><span class="toc-number">2.</span> <span class="toc-text">更深更暗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8C%AB%E5%92%AA%E5%B0%8F%E6%B5%8B"><span class="toc-number">3.</span> <span class="toc-text">猫咪小测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%9B%E5%8D%9A%E4%BA%95%E5%AD%97%E6%A3%8B"><span class="toc-number">4.</span> <span class="toc-text">赛博井字棋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%A7%94%E4%BC%9A%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text">组委会模拟器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%AB"><span class="toc-number">6.</span> <span class="toc-text">虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E9%9B%86%E9%82%AE%E5%86%8C-%E5%B7%AE%E4%B8%80%E4%B8%AA"><span class="toc-number">7.</span> <span class="toc-text">HTTP 集邮册[差一个]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Git"><span class="toc-number">8.</span> <span class="toc-text">Git? Git!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-for-Everyone"><span class="toc-number">9.</span> <span class="toc-text">Docker for Everyone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON-%E2%8A%82-YAML"><span class="toc-number">10.</span> <span class="toc-text">JSON ⊂ YAML?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%B6%E5%A5%B6%E7%9A%84%E7%9D%A1%E5%89%8D-flag-%E6%95%85%E4%BA%8B"><span class="toc-number">11.</span> <span class="toc-text">奶奶的睡前 flag 故事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%AA%90-%E9%AB%98%E9%A2%91%E7%8E%87%E6%98%9F%E7%90%83"><span class="toc-number">12.</span> <span class="toc-text">🪐 高频率星球</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%AA%90-%E4%BD%8E%E5%B8%A6%E5%AE%BD%E6%98%9F%E7%90%83-%E5%B7%AE%E4%B8%80%E4%B8%AA"><span class="toc-number">13.</span> <span class="toc-text">🪐 低带宽星球[差一个]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%AA%90-%E6%B5%81%E5%BC%8F%E6%98%9F%E7%90%83"><span class="toc-number">14.</span> <span class="toc-text">🪐 流式星球</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%AA%90-%E5%B0%8F%E5%9E%8B%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%98%9F%E7%90%83"><span class="toc-number">15.</span> <span class="toc-text">🪐 小型大语言模型星球</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%89%93%E5%BC%80-flag-%F0%9F%98%A1-%E5%B7%AE%E4%B8%80%E4%B8%AA"><span class="toc-number">16.</span> <span class="toc-text">为什么要打开 &#x2F;flag 😡[差一个]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LD-PRELOAD"><span class="toc-number">16.1.</span> <span class="toc-text">LD_PRELOAD</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%9C%E5%AD%97%E5%A6%82%E9%87%91"><span class="toc-number">17.</span> <span class="toc-text">惜字如金</span></a></li></ol>
-            </div>
-        
-        <!-- sidebar -->
-        <div class="sidebar sidebar-hide">
-    <ul class="sidebar-tabs sidebar-tabs-active-0">
-        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
-        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
-        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
-    </ul>
-    <div class="sidebar-content sidebar-content-show-archive">
-        <div class="sidebar-panel-archives">
-    <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    <div class="total-and-search">
-        <div class="total-archive">
-        Total : 64
-        </div>
-        <!-- search  -->
-        
-    </div>
-    
-    <div class="post-archive">
-    
-        
-            
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/29</span>
-            <a class="archive-post-title" href="/2025/04/29/hackergame2024%E5%A4%8D%E7%8E%B0/">hackergame2024复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/09</span>
-            <a class="archive-post-title" href="/2025/04/09/Squ1rrelCTF/">Squ1rrelCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/KnightCTF/">KnightCTF</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/23</span>
-            <a class="archive-post-title" href="/2024/10/23/geekgame2024/">geekgame2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/07</span>
-            <a class="archive-post-title" href="/2024/09/07/byuctf-iot/">byuctf_iot</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/02</span>
-            <a class="archive-post-title" href="/2024/09/02/gdbjail/">gdbjail</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/2024/08/01/ImaginaryCTF/">ImaginaryCTF</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/22</span>
-            <a class="archive-post-title" href="/2024/07/22/dasctf2024-summer-challenge/">dasctf2024_summer_challenge</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/30</span>
-            <a class="archive-post-title" href="/2024/06/30/d3ctf-pwnshell%E5%A4%8D%E7%8E%B0/">d3ctf_pwnshell复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/04</span>
-            <a class="archive-post-title" href="/2024/06/04/litctf2024-pwn/">litctf2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/27</span>
-            <a class="archive-post-title" href="/2024/05/27/DragonKnightCTF-pwn/">DragonKnightCTF_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/22</span>
-            <a class="archive-post-title" href="/2024/05/22/ciscn-pwn/">ciscn_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/15</span>
-            <a class="archive-post-title" href="/2024/05/15/hnctf-pwn/">hnctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/14</span>
-            <a class="archive-post-title" href="/2024/05/14/miniL2024-pwn/">miniL2024_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/hznuctf/">hznuctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/24</span>
-            <a class="archive-post-title" href="/2024/04/24/geekcon/">geekcon</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/15</span>
-            <a class="archive-post-title" href="/2024/03/15/CyberApocalypse-2024-Hacker-Royale-wp/">CyberApocalypse_2024_Hacker_Royale_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/27</span>
-            <a class="archive-post-title" href="/2024/02/27/hgame2024week3-wp/">hgame2024week3_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/hgame2024week2-pwn-wp/">hgame2024week2_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/11</span>
-            <a class="archive-post-title" href="/2024/02/11/0xl4ugh-pwn/">0xl4ugh_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/07</span>
-            <a class="archive-post-title" href="/2024/02/07/hgame2024week1-wp/">hgame2024week1_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/06</span>
-            <a class="archive-post-title" href="/2024/02/06/beginctf2024-wp/">beginctf2024_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/02</span>
-            <a class="archive-post-title" href="/2024/01/02/cbctf/">cbctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/GeekChallenge2023/">GeekChallenge2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/hackergame2023/">Hackergame2023</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/29</span>
-            <a class="archive-post-title" href="/2023/11/29/isctf/">isctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/05</span>
-            <a class="archive-post-title" href="/2023/11/05/newstar-week2/">newstar_week2</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">10/21</span>
-            <a class="archive-post-title" href="/2023/10/21/0xgame/">0xgame</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/26</span>
-            <a class="archive-post-title" href="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/">exp本地不通远程通的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cdn%E7%BB%95%E8%BF%87%E5%A4%A7%E5%85%A8tips%E6%80%9D%E8%B7%AF/">cdn绕过大全tips思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/cnss2023/">cnss2023</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2023/09/18/hello-world/">Hello World</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2025 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span>
-            <a class="archive-post-title" href="/2025/05/03/rust%E5%85%A5%E9%97%A8-%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86/">rust入门_数据所有权与生命周期管理</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/27</span>
-            <a class="archive-post-title" href="/2025/01/27/x3ctf/">x3ctf</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2024 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/04</span>
-            <a class="archive-post-title" href="/2024/09/04/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn/">羊城杯2024pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/nss3rd%E5%87%BA%E9%A2%98-Iterator-Trap%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/">nss3rd出题_Iterator_Trap解题思路</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/srctf-pwn%E5%87%BA%E9%A2%98/">srctf_pwn出题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/31</span>
-            <a class="archive-post-title" href="/2024/08/31/xyctf/">xyctf</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/25</span>
-            <a class="archive-post-title" href="/2024/08/25/%E7%BE%8A%E5%9F%8E%E6%9D%AF2023%E9%83%A8%E5%88%86%E9%A2%98%E7%9B%AE%E5%A4%8D%E7%8E%B0/">羊城杯2023部分题目复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/22</span>
-            <a class="archive-post-title" href="/2024/08/22/%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A81/">奇奇怪怪格式化字符串漏洞的利用1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2024/08/08/tfcctf2024/">tfcctf2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span>
-            <a class="archive-post-title" href="/2024/07/15/wkctf-pwn/">wkctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/25</span>
-            <a class="archive-post-title" href="/2024/06/25/xctf-ggbord%E5%A4%8D%E7%8E%B0/">xctf_ggbord复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">06/19</span>
-            <a class="archive-post-title" href="/2024/06/19/vsctf-pwn/">vsctf_pwn</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/30</span>
-            <a class="archive-post-title" href="/2024/05/30/xctf-BuggyAllocator%E5%A4%8D%E7%8E%B0/">xctf_BuggyAllocator复现</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">05/23</span>
-            <a class="archive-post-title" href="/2024/05/23/xv6-and-unix-utilities/">xv6_and_unix_utilities</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">04/28</span>
-            <a class="archive-post-title" href="/2024/04/28/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9Bpwn%E6%96%B9%E5%90%91wp/">中国海洋大学信息安全竞赛pwn方向wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/31</span>
-            <a class="archive-post-title" href="/2024/03/31/%E5%B0%9D%E8%AF%95%E7%BC%96%E8%AF%91kernel%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">尝试编译kernel和文件系统</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/27</span>
-            <a class="archive-post-title" href="/2024/03/27/nkctf-wp/">nkctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/10</span>
-            <a class="archive-post-title" href="/2024/03/10/pearlctf-wp/">pearlctf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">03/04</span>
-            <a class="archive-post-title" href="/2024/03/04/osu-gaming-CTF-2024/">osu!gaming_CTF_2024</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/25</span>
-            <a class="archive-post-title" href="/2024/02/25/sictfr3-pwn-wp/">sictfr3_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span>
-            <a class="archive-post-title" href="/2024/02/14/nssr18-wp/">nssr18_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/31</span>
-            <a class="archive-post-title" href="/2024/01/31/rw%E4%BD%93%E9%AA%8C%E8%B5%9Bwp/">rw体验赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/26</span>
-            <a class="archive-post-title" href="/2024/01/26/nssctfr16-wp/">nssctfr16_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span>
-            <a class="archive-post-title" href="/2024/01/24/%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9Bwp/">春秋杯冬季赛wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/19</span>
-            <a class="archive-post-title" href="/2024/01/19/pwnable-tw/">pwnable.tw</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/18</span>
-            <a class="archive-post-title" href="/2024/01/18/uoftctf-pwn-wp/">uoftctf_pwn_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/04</span>
-            <a class="archive-post-title" href="/2024/01/04/pwnable-kr/">pwnable.kr</a>
-        </li>
-    
-        
-            
-            
-                
-                </ul>
-            
-            <div class="archive-year"> 2023 </div>
-            <ul class="year-list">
-            
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/moectf-wp/">moectf_wp</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/28</span>
-            <a class="archive-post-title" href="/2023/12/28/newstar2023-week1/">newstar2023_week1</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/">php弱类型</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/python3-venv%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8-%E8%A7%A3%E5%86%B3%E5%8C%85%E7%AE%A1%E7%90%86%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%B7%B7%E4%B9%B1%E7%9A%84%E9%97%AE%E9%A2%98/">python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">09/18</span>
-            <a class="archive-post-title" href="/2023/09/18/sictf2023r2/">sictf2023</a>
-        </li>
-    
-    </div>
-</div>
-
-        <div class="sidebar-panel-tags">
-    <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="ctf writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf writeup
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="misc">
-                <span class="iconfont-archer">&#xe606;</span>
-                misc
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="os">
-                <span class="iconfont-archer">&#xe606;</span>
-                os
-            </span>
-        
-    </div>
-    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
-    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
-        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
-    </div> 
-    <div class="sidebar-tags-list"></div>
-</div>
-
-        <div class="sidebar-panel-categories">
-    <div class="sidebar-categories-name">
-    
-    </div>
-    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
-    <div class="sidebar-categories-list"></div>
-</div>
-
-    </div>
-</div>
-
-        <!-- site-meta -->
-        <script>
-    var siteMetaRoot = "/"
-    if (siteMetaRoot === "undefined") {
-        siteMetaRoot = '/'
-    }
-    var siteMeta = {
-        url: "https://nyyyddddn.github.io",
-        root: siteMetaRoot,
-        author: "nyyyddddn"
-    }
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-        <!-- import experimental options here -->
-        <!-- Custom Font -->
 
 
-        <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
-        <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
-        <!-- algolia -->
-        
-        <!-- busuanzi -->
-        
-            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
-        <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
-        <!-- mermaid -->
-        
-    </body>
-</html>
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
