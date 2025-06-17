@@ -126,122 +126,6 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/09/18/php弱类型/" >php弱类型</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="php弱类型"><a href="#php弱类型" class="headerlink" title="php弱类型:"></a>php弱类型:</h2><p>&#x3D;&#x3D;&#x3D; 在进行比较的时候，会先判断两种字符串的类型是否相等，再比较值是否相等<br>&#x3D;&#x3D; 在进行比较的时候，会先将字符串类型转化成相同，再比较值<br>如果比较一个数字和字符串或者比较涉及到数字内容的字符串，则字符串会被转换成数值并且比较按照数值来进行</p>
-<p>$a&#x3D;”123”;@$b&#x3D;123;<br>a&#x3D;&#x3D;b; TRUE<br>a&#x3D;&#x3D;&#x3D;b; FALSE<br>0&#x3D;&#x3D;’ ‘; TRUE<br>‘1111’&#x3D;&#x3D;TRUE; TRUE<br>‘0’&#x3D;&#x3D;’false’; false<br>‘0’&#x3D;&#x3D;false;true<br>0x01&#x3D;1; FLASE<br>0x01&#x3D;TRUE; TRUE<br>[0]&#x3D;[NULL]; TRUE</p>
-<p>NULL&#x3D;FALSE; TRUE<br>0e123465&#x3D;&#x3D;0e5555555; TRUE (0e绕过)</p>
-<h3 id="案例1-md5弱比较"><a href="#案例1-md5弱比较" class="headerlink" title="案例1 md5弱比较"></a>案例1 md5弱比较</h3><pre class="line-numbers language-php" data-language="php"><code class="language-php">方法<span class="token number">1</span> <span class="token number">0</span>e绕过<span class="token punctuation">(</span><span class="token number">0</span>e 科学计数法<span class="token punctuation">)</span>
-方法<span class="token number">2</span> md5处理数组的时候会返回<span class="token constant">null</span>的值，可以传递两个数组进去使得<span class="token constant">null</span><span class="token operator">==</span><span class="token constant">null</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
-<span class="token function">ini_set</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"display_error"</span><span class="token punctuation">,</span><span class="token constant boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'param1'</span><span class="token punctuation">]</span><span class="token operator">!=</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'param2'</span><span class="token punctuation">]</span><span class="token operator">&amp;&amp;</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string double-quoted-string">"param1"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'param2'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token keyword">echo</span> <span class="token string double-quoted-string">"fail"</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-php" data-language="php"><code class="language-php">param1<span class="token operator">=</span><span class="token constant">QNKCDZO</span><span class="token operator">&amp;</span>param2<span class="token operator">=</span><span class="token number">240610708</span> <span class="token comment">//0e绕过 success</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="案例2-sha1弱类型"><a href="#案例2-sha1弱类型" class="headerlink" title="案例2 sha1弱类型"></a>案例2 sha1弱类型</h3><pre class="line-numbers language-php" data-language="php"><code class="language-php">方法<span class="token number">1</span> <span class="token number">0</span>e绕过<span class="token punctuation">(</span><span class="token number">0</span>e 科学计数法<span class="token punctuation">)</span>
-方法<span class="token number">2</span> sha1处理数组的时候会返回<span class="token constant">null</span>的值，可以传递两个数组进去使得<span class="token constant">null</span><span class="token operator">==</span><span class="token constant">null</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-	
-	</div>
-  <a type="button" href="/2023/09/18/php弱类型/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/09/18/python3-venv虚拟环境使用-解决包管理版本控制混乱的问题/" >python3-venv虚拟环境使用-解决包管理版本控制混乱的问题</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-none"><code class="language-none">sudo apt install python3-venv<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="创建虚拟环境"><a href="#创建虚拟环境" class="headerlink" title="创建虚拟环境"></a>创建虚拟环境</h2><pre class="line-numbers language-none"><code class="language-none">python3 -m venv test_env<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>会自动在用户目录创建一个test _env的虚拟环境目录</p>
-<h2 id="开启-使用虚拟环境"><a href="#开启-使用虚拟环境" class="headerlink" title="开启&amp;使用虚拟环境"></a>开启&amp;使用虚拟环境</h2><pre class="line-numbers language-none"><code class="language-none">source ~&#x2F;test_env&#x2F;bin&#x2F;activate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>开启虚拟环境后pip install安装的包会自动存放在&#x2F;test_env&#x2F;lib&#x2F;pythonx.x&#x2F;site-packages目录下面</p>
-<h2 id="关闭虚拟环境"><a href="#关闭虚拟环境" class="headerlink" title="关闭虚拟环境"></a>关闭虚拟环境</h2><pre class="line-numbers language-none"><code class="language-none">deactivate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-	
-	</div>
-  <a type="button" href="/2023/09/18/python3-venv虚拟环境使用-解决包管理版本控制混乱的问题/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/09/18/cdn绕过大全tips思路/" >cdn绕过大全tips思路</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>[toc]</p>
-<h1 id="cdn绕过技巧tips"><a href="#cdn绕过技巧tips" class="headerlink" title="cdn绕过技巧tips"></a>cdn绕过技巧tips</h1><h2 id="cdn判断方式-超级ping多地ping"><a href="#cdn判断方式-超级ping多地ping" class="headerlink" title="cdn判断方式: 超级ping多地ping"></a>cdn判断方式: 超级ping多地ping</h2><h2 id="1配置不安全-超级ping-多地ping-冷门地区国家ping"><a href="#1配置不安全-超级ping-多地ping-冷门地区国家ping" class="headerlink" title="1配置不安全 | 超级ping&amp;多地ping&amp;冷门地区国家ping"></a>1配置不安全 | 超级ping&amp;多地ping&amp;冷门地区国家ping</h2><p>以阿里云cdn为例子，在配置cdn的面板上有这几个选项</p>
-<p><img src="https://img2022.cnblogs.com/blog/2326528/202207/2326528-20220725181804062-391843182.png" alt="image"></p>
-<p>在加速区域中，有全部加速区域，仅中国内地，全球（不包括中国内地）</p>
-<p>一般搞运维的人员在配置各种服务的时候，都会根据实际需求来配置，因为额外的可能要钱，可能其他cdn厂商加速的地区越多收的钱越多，比如说公司业务范围只在国内的会配置仅中国内地，业务在国外的可能会配置 全球(不包含中国内地)，当然这个不是非常绝对的，只是大多数情况下。</p>
-<p>这时候只要使用全球ping超级ping之类的，国外发起在请求就能很简单绕过</p>
-<p>如果配置了全部加速区域的话，这时候需要从冷门的地区下手，像一些网络不发达的地区比如非洲啊之类的，大概率情况下厂商都不会在这些地方配置节点。</p>
-	
-	</div>
-  <a type="button" href="/2023/09/18/cdn绕过大全tips思路/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2023/09/18/hello-world/" >Hello World</a>
 		</h3>
 		</div>
@@ -317,11 +201,13 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/ctf/">ctf<span>52</span></a></li>
+			<li><a href="/categories/ctf/">ctf<span>51</span></a></li>
 		
-			<li><a href="/categories/misc/">misc<span>9</span></a></li>
+			<li><a href="/categories/dev/">dev<span>1</span></a></li>
 		
-			<li><a href="/categories/os/">os<span>2</span></a></li>
+			<li><a href="/categories/misc/">misc<span>7</span></a></li>
+		
+			<li><a href="/categories/os/">os<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -332,11 +218,13 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/dev/">dev<span>2</span></a></li>
+			<li><a href="/tags/dev-rust/">dev rust<span>1</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>6</span></a></li>
 		
 			<li><a href="/tags/ctf-writeup/">ctf writeup<span>52</span></a></li>
 		
-			<li><a href="/tags/misc/">misc<span>9</span></a></li>
+			<li><a href="/tags/dev/">dev<span>1</span></a></li>
 		
 		 
 		</ul>
