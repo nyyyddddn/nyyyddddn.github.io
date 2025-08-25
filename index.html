@@ -126,6 +126,52 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/08/25/nssctf4th_pwn/" >nkctf_wp</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-08-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="PWN"><a href="#PWN" class="headerlink" title="PWN"></a>PWN</h1><h2 id="fmt"><a href="#fmt" class="headerlink" title="fmt"></a>fmt</h2><p>保护全开，只有一次利用机会的栈上格式化字符串漏洞</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> __int64 __fastcall <span class="token function">vuln</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>a1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">char</span> s<span class="token punctuation">[</span><span class="token number">136</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-90h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v3<span class="token punctuation">;</span> <span class="token comment">// [rsp+98h] [rbp-8h]</span>
+
+  v3 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">memset</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0x80uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">read</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> s<span class="token punctuation">,</span> <span class="token number">0x80uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> v3 <span class="token operator">-</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在开启了pie+aslr的情况下，只有一次格式化字符串机会那很难做到劫持控制流。至少要有两次利用机会，一次用于泄露和libc相关的地址，一次用于往某个地方写写某些数据用来劫持控制流。</p>
+<p>但可惜只有一次机会。那肯定得找一种泄露完地址后，能回到main或者是vuln再次打一次格式化字符串的方法，这类方法总是涉及到格式化字符串写数据的原语，且由于aslr和pie的影响，那找到一种爆破次数少，容易直接打通的方法还是比较困难的。</p>
+<p>联想到非栈上格式化字符串的利用方法，发现可以找一个和返回地址相近，除了低位一个字节完全相同的指针，还有一个指向该指针的双重指针，然后通过双重指针修改另一个指针的低位使另一个指针能修改返回地址的低位来实现泄露完地址后跳回vuln或者main这些近地址上，但是在只有一次格式化字符串利用机会的情况下，需要同时做到通过双重指针修改单指针低位，和利用单指针写返回地址两个事情，glibc的printf在处理 %n$p这种包含position的表达式的时候会对所有的%n$p这类的表达式预处理，将数据拷贝到args_value中，利用单指针写回操作的时候访问到的单指针实际上是 第一次双指针操作前的缓存，可以通过这篇文章的方法去绕过printf position的预处理</p>
+<p><a target="_blank" rel="noopener" href="https://blog.wjhwjhn.com/posts/af55bf3/#%E5%A4%9A%E6%AC%A1-printf-%E5%88%A9%E7%94%A8">https://blog.wjhwjhn.com/posts/af55bf3/#%E5%A4%9A%E6%AC%A1-printf-%E5%88%A9%E7%94%A8</a></p>
+<p>解决这个问题后，劫持printf的返回地址低位来实现多次格式化字符串，往bss上写rop链最后栈迁移过去就好了</p>
+<p>exp</p>
+	
+	</div>
+  <a type="button" href="/2025/08/25/nssctf4th_pwn/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2025/06/18/SmileyCTF/" >SmileyCTF</a>
 		</h3>
 		</div>
@@ -193,62 +239,6 @@ ld -o exploit exploit.o<span aria-hidden="true" class="line-numbers-rows"><span>
 	
 	</div>
   <a type="button" href="/2025/06/18/SmileyCTF/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" >rust入门_数据所有权与生命周期管理</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-05-03  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="所有权"><a href="#所有权" class="headerlink" title="所有权"></a>所有权</h2><p>rust的数据类型分为两种，一种是实现了copy trait的数据类型如i32 u32，一种是没有实现copy trait的数据类型，如String，在进行变量间的赋值操作时，实现了copy trait类型的数据类型会将数据复制一份过去。而没有实现copy trait的数据类型则会将数据的所有权转移，先前对数据进行引用的符号的生命周期就结束了</p>
-<p>e.g.</p>
-<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">let</span> x<span class="token punctuation">:</span> <span class="token keyword">i32</span> <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
-    <span class="token keyword">let</span> y <span class="token operator">=</span> x<span class="token punctuation">;</span>
-    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"x = &#123;&#125;, y = &#123;&#125;"</span><span class="token punctuation">,</span> x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">let</span> s1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">let</span> s2 <span class="token operator">=</span> s1<span class="token punctuation">;</span>
-    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span> s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p>rust的引用类型可分为可变引用和不可变引用，可以理解为编译期间进行严格生命周期及检查的”智能指针”，不可变引用对于数据只能做读的行为，可变引用可以做写的行为。使用引用可以在不转移所有权的情况下对对象进行读写操作。</p>
-<p>使用方法 e.g</p>
-<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">let</span> <span class="token keyword">mut</span> value <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
-	<span class="token comment">// 不可变引用</span>
-    <span class="token keyword">let</span> r1 <span class="token operator">=</span> <span class="token operator">&amp;</span>value<span class="token punctuation">;</span>
-    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span> r1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// 可变引用</span>
-    <span class="token keyword">let</span> r2 <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> value<span class="token punctuation">;</span>
-    <span class="token operator">*</span>r2 <span class="token operator">+=</span> <span class="token number">5</span><span class="token punctuation">;</span>
-    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>可变引用在进行写行为时需要显式解引用，这里相对c的指针来说有些差别</p>
-<p>可变引用和不可变引用有严格的使用规定，同一作用域下 同一对象不能拥有两个可变引用，同一作用域下对于同一对象不能同时存在可变引用和不可变引用，通过对引用的使用进行限制来避免数据竞争。但这只是官方文档的说法，可以同一作用域下同时存在可变引用和不可变引用，以及多个可变引用，程序也可以编译成功，关键在于存在的情况下是否有使用可变引用，使用了就会编译错误。 </p>
-	
-	</div>
-  <a type="button" href="/2025/05/03/rust入门-数据所有权与生命周期管理/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -1044,15 +1034,11 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/ctf/">ctf<span>56</span></a></li>
+			<li><a href="/categories/ctf/">ctf<span>57</span></a></li>
 		
 			<li><a href="/categories/gdb/">gdb<span>1</span></a></li>
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/categories/oslab/">oslab<span>1</span></a></li>
-		
-			<li><a href="/categories/rust/">rust<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -1063,48 +1049,48 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/xv6/">xv6<span>1</span></a></li>
+			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
 		
 			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
 		
-			<li><a href="/tags/oslab/">oslab<span>1</span></a></li>
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
 		
 			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
 		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/dev/">dev<span>1</span></a></li>
-		
-			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
-		
 			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
 		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/fmt/">fmt<span>6</span></a></li>
-		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
 		
 			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
+			<li><a href="/tags/tls/">tls<span>1</span></a></li>
 		
 			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
 		
-		   <li><a href="/tags">...<span>26</span></a></li>
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>22</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1117,11 +1103,11 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
+        <a href="/2025/08/25/nssctf4th_pwn/" ><i class="fa fa-file-o"></i>nkctf_wp</a>
       </li>
     
       <li>
-        <a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" ><i class="fa fa-file-o"></i>rust入门_数据所有权与生命周期管理</a>
+        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
       </li>
     
       <li>

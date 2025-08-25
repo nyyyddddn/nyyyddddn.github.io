@@ -126,78 +126,6 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/12/28/hackergame2023/" >Hackergame2023</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-12-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="Hackergame-启动"><a href="#Hackergame-启动" class="headerlink" title="Hackergame 启动"></a>Hackergame 启动</h2><p>Hackergame启动！发现校验相似度是在前端校验的，然后通过url传参相似度，传递个100过去就拿到flag了</p>
-<h2 id="更深更暗"><a href="#更深更暗" class="headerlink" title="更深更暗"></a>更深更暗</h2><p>在main.js里有一段生成flag的代码，在控制台中调用就好了</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getFlag</span><span class="token punctuation">(</span><span class="token parameter">token</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// Generate the flag based on user's token</span>
-    <span class="token keyword">let</span> hash <span class="token operator">=</span> CryptoJS<span class="token punctuation">.</span><span class="token constant">SHA256</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">dEEper_@nd_d@rKer_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">flag&#123;T1t@n_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>hash<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&#125;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getFlag</span><span class="token punctuation">(</span><span class="token parameter">token</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// Generate the flag based on user's token</span>
-        <span class="token keyword">let</span> hash <span class="token operator">=</span> CryptoJS<span class="token punctuation">.</span><span class="token constant">SHA256</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">dEEper_@nd_d@rKer_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">flag&#123;T1t@n_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>hash<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&#125;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token function">getFlag</span><span class="token punctuation">(</span>localStorage<span class="token punctuation">.</span>token<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="猫咪小测"><a href="#猫咪小测" class="headerlink" title="猫咪小测"></a>猫咪小测</h2><pre class="line-numbers language-none"><code class="language-none">
-1. 想要借阅世界图书出版公司出版的《A Classical Introduction To Modern Number Theory 2nd ed.》，应当前往中国科学技术大学西区图书馆的哪一层？（30 分）
-12
-暴力破解
-
-2. 今年 arXiv 网站的天体物理版块上有人发表了一篇关于「可观测宇宙中的鸡的密度上限」的论文，请问论文中作者计算出的鸡密度函数的上限为 10 的多少次方每立方秒差距？（30 分）
-23
-
-https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2303.17626
-
-
-3. 为了支持 TCP BBR 拥塞控制算法，在编译 Linux 内核时应该配置好哪一条内核选项？
-CONFIG_TCP_CONG_BBR
-
-https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;bbr&#x2F;blob&#x2F;master&#x2F;Documentation&#x2F;bbr-quick-start.md
-
-
-4. 🥒🥒🥒：「我……从没觉得写类型标注有意思过」。在一篇论文中，作者给出了能够让 Python 的类型检查器 MyPY mypy 陷入死循环的代码，并证明 Python 的类型检查和停机问题一样困难。请问这篇论文发表在今年的哪个学术会议上？（20 分）
-提示：会议的大写英文简称，比如 ISCA、CCS、ICML。
-
-ECOOP
-https:&#x2F;&#x2F;drops.dagstuhl.de&#x2F;opus&#x2F;volltexte&#x2F;2023&#x2F;18237&#x2F;pdf&#x2F;LIPIcs-ECOOP-2023-44.pdf
-
-
-好耶学会怎么搜索论文了,Google hacker语法，萃取关键词，然后按时间筛选缩小范围<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<img src="/2023/12/28/hackergame2023/1698678184780.png" class>
-
-<img src="/2023/12/28/hackergame2023/1698678163552.png" class>
-	
-	</div>
-  <a type="button" href="/2023/12/28/hackergame2023/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2023/12/28/GeekChallenge2023/" >GeekChallenge2023</a>
 		</h3>
 		</div>
@@ -825,6 +753,40 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 </div>
 
 		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/09/18/hello-world/" >Hello World</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-09-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+	
+	</div>
+  <a type="button" href="/2023/09/18/hello-world/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
 
 		</div>
 
@@ -840,7 +802,7 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/7/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+          <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
         
 
   
@@ -872,15 +834,11 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/ctf/">ctf<span>56</span></a></li>
+			<li><a href="/categories/ctf/">ctf<span>57</span></a></li>
 		
 			<li><a href="/categories/gdb/">gdb<span>1</span></a></li>
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/categories/oslab/">oslab<span>1</span></a></li>
-		
-			<li><a href="/categories/rust/">rust<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -891,48 +849,48 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/fmt/">fmt<span>6</span></a></li>
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
 		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
 		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>56</span></a></li>
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
 		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/xv6/">xv6<span>1</span></a></li>
-		
-			<li><a href="/tags/iot/">iot<span>1</span></a></li>
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
 		
 			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
 		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>13</span></a></li>
-		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
-		
-			<li><a href="/tags/oslab/">oslab<span>1</span></a></li>
-		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
-		
 			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
-			<li><a href="/tags/dev/">dev<span>1</span></a></li>
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+		
+			<li><a href="/tags/iot/">iot<span>1</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+		
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>26</span></a></li>
+		   <li><a href="/tags">...<span>22</span></a></li>
 		 
 		</ul>
 	</div>
@@ -945,11 +903,11 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
+        <a href="/2025/08/25/nssctf4th_pwn/" ><i class="fa fa-file-o"></i>nkctf_wp</a>
       </li>
     
       <li>
-        <a href="/2025/05/03/rust入门-数据所有权与生命周期管理/" ><i class="fa fa-file-o"></i>rust入门_数据所有权与生命周期管理</a>
+        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
       </li>
     
       <li>
