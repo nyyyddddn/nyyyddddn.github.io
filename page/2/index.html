@@ -126,6 +126,66 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/09/02/gdbjail/" >gdbjail</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-09-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/gdbjail">https://github.com/nyyyddddn/ctf/tree/main/gdbjail</a></p>
+<p>最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。</p>
+<p>没用过没装插件的gdb，不装插件挺难用的</p>
+<h1 id="gdbjail1"><a href="#gdbjail1" class="headerlink" title="gdbjail1"></a>gdbjail1</h1><p>run.sh</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+
+gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>gdbinit</p>
+<pre class="line-numbers language-none"><code class="language-none">source &#x2F;home&#x2F;user&#x2F;main.py<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>main.py</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> gdb
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"file /bin/cat"</span><span class="token punctuation">)</span>
+    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"break read"</span><span class="token punctuation">)</span>
+    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"run"</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            command <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"(gdb) "</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"break"</span><span class="token punctuation">)</span> <span class="token keyword">or</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"set"</span><span class="token punctuation">)</span> <span class="token keyword">or</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"continue"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">try</span><span class="token punctuation">:</span>
+                    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>command<span class="token punctuation">)</span>
+                <span class="token keyword">except</span> gdb<span class="token punctuation">.</span>error <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+                    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Error executing command '</span><span class="token interpolation"><span class="token punctuation">&#123;</span>command<span class="token punctuation">&#125;</span></span><span class="token string">': </span><span class="token interpolation"><span class="token punctuation">&#123;</span>e<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Only 'break', 'set', and 'continue' commands are allowed."</span><span class="token punctuation">)</span>
+        <span class="token keyword">except</span><span class="token punctuation">:</span>
+            <span class="token keyword">pass</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+	
+	</div>
+  <a type="button" href="/2024/09/02/gdbjail/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/08/31/nss3rd出题-Iterator-Trap解题思路/" >nss3rd出题_Iterator_Trap解题思路</a>
 		</h3>
 		</div>
@@ -1649,54 +1709,6 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/06/30/d3ctf-pwnshell复现/" >d3ctf_pwnshell复现</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-30  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="pwnshell-复现-php-pwn"><a href="#pwnshell-复现-php-pwn" class="headerlink" title="pwnshell 复现 (php pwn)"></a>pwnshell 复现 (php pwn)</h2><h3 id="如何调试？"><a href="#如何调试？" class="headerlink" title="如何调试？"></a>如何调试？</h3><p>php pwn该如何调试？在docker中装一个gdbserver，用gdbserver起一个程序，在exp中用能触发io中断的php函数打”断点”，之后用gdb连上去后在vuln.so里打个断点就好了</p>
-<p>能触发io中断的函数，比如说fgetc</p>
-<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
-<span class="token variable">$char</span> <span class="token operator">=</span> <span class="token function">fgetc</span><span class="token punctuation">(</span><span class="token constant">STDIN</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">echo</span> <span class="token string double-quoted-string">"You entered: <span class="token interpolation"><span class="token variable">$char</span></span>\n"</span><span class="token punctuation">;</span>
-<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在pwnshell这个题目中php配置文件里禁用了fgetc这个函数，修改php.ini中的disable_functions，把fgetc删掉就可以使用这个函数了</p>
-<h3 id="调试相关的命令"><a href="#调试相关的命令" class="headerlink" title="调试相关的命令"></a>调试相关的命令</h3><h4 id="安装gdbserver"><a href="#安装gdbserver" class="headerlink" title="安装gdbserver"></a>安装gdbserver</h4><p>只需要在dockerfile里面加上安装的参数，之后构建镜像就好了</p>
-<pre class="line-numbers language-none"><code class="language-none">FROM php:8.3-apache
-
-RUN DEBIAN_FRONTEND&#x3D;noninteractive
-RUN apt-get update &amp;&amp; apt-get install -y vim gdbserver
-
-COPY .&#x2F;stuff&#x2F;php.ini &#x2F;usr&#x2F;local&#x2F;etc&#x2F;php
-COPY .&#x2F;stuff&#x2F;vuln.so &#x2F;usr&#x2F;local&#x2F;lib&#x2F;php&#x2F;extensions&#x2F;no-debug-non-zts-20230831
-COPY .&#x2F;stuff&#x2F;readflag &#x2F;
-COPY .&#x2F;flag.txt &#x2F;flag.txt
-COPY .&#x2F;stuff&#x2F;index.php &#x2F;var&#x2F;www&#x2F;html
-RUN chmod 400 &#x2F;flag.txt
-RUN chmod u+sx &#x2F;readflag
-RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-	
-	</div>
-  <a type="button" href="/2024/06/30/d3ctf-pwnshell复现/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1750,6 +1762,8 @@ RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="lin
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
+			<li><a href="/categories/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+		
 		</ul>
 	</div>
 
@@ -1759,48 +1773,48 @@ RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="lin
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
-		
 			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
-		
-			<li><a href="/tags/iot/">iot<span>1</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>13</span></a></li>
-		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
-		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
-		
-			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
-			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
-		
 			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
-		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
 		
 			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
 		
+			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
 		
-		   <li><a href="/tags">...<span>22</span></a></li>
+			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+		
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
+		
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+		
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
+		
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/tls/">tls<span>1</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>24</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1811,6 +1825,10 @@ RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="lin
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/09/15/rust1/" ><i class="fa fa-file-o"></i>rust语法基础1</a>
+      </li>
     
       <li>
         <a href="/2025/08/25/nssctf4th_pwn/" ><i class="fa fa-file-o"></i>nssctf4th_pwn</a>
@@ -1826,10 +1844,6 @@ RUN chmod -R 777 &#x2F;var&#x2F;www&#x2F;html<span aria-hidden="true" class="lin
     
       <li>
         <a href="/2025/04/09/Squ1rrelCTF/" ><i class="fa fa-file-o"></i>Squ1rrelCTF</a>
-      </li>
-    
-      <li>
-        <a href="/2025/01/27/x3ctf/" ><i class="fa fa-file-o"></i>x3ctf</a>
       </li>
     
   </ul>

@@ -1,0 +1,936 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>rust语法基础1 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="cargo basiccargo new objname 创建项目
+cargo run 运行项目
+cargo install –force –path .  安装 .目录下的项目，将编译好的二进制文件拷贝到~&amp;#x2F;.cargo&amp;#x2F;bin中
+变量绑定Rust 中，使用关键字 let 声明变量。
+let x = 5;
+
+在 Rust 中，变量默认是不可改变的（immutable），当变量不可变时，一旦值被绑定到一个名称上，这个值就不能被改变，这样的设计有助于防止意外的数据修改和并发问题。若
+要使得变量可变，需要在声明时使用 mut 关键字。
+let mut x = 5;
+x = 10;"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="rust语法基础1"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> rust语法基础1</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="cargo-basic"><a href="#cargo-basic" class="headerlink" title="cargo basic"></a>cargo basic</h2><p>cargo new objname 创建项目</p>
+<p>cargo run 运行项目</p>
+<p>cargo install –force –path .  安装 .目录下的项目，将编译好的二进制文件拷贝到~&#x2F;.cargo&#x2F;bin中</p>
+<h2 id="变量绑定"><a href="#变量绑定" class="headerlink" title="变量绑定"></a>变量绑定</h2><p>Rust 中，使用关键字 let 声明变量。</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在 Rust 中，变量默认是不可改变的（immutable），当变量不可变时，一旦值被绑定到一个名称上，这个值就不能被改变，这样的设计有助于防止意外的数据修改和并发问题。若</p>
+<p>要使得变量可变，需要在声明时使用 mut 关键字。</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>Rust 中常量总是不可变，声明常量使用 const 关键字而不是 let。</p>
+<p>常量只能被声明为常量表达式，而不可以是其他任何只能在程序运行时计算出的值。</p>
+<p>常量定义时候需要指定类型</p>
+<p>const xx:i32 &#x3D; 15;</p>
+<h2 id="标量类型"><a href="#标量类型" class="headerlink" title="标量类型"></a>标量类型</h2><p>• 有符号整数（signed integers）：i8、i16、i32、i64、i128 和 isize（指针宽度）</p>
+<p>• 无符号整数（unsigned integers）： u8、u16、u32、u64、u128 和 usize（指针宽度）</p>
+<p>• 浮点数（floating point）： f32、f64</p>
+<p>• char（字符）：单个 Unicode 字符，如 ‘a’，’α’ 和 ‘∞’（每个都是 4 字节）</p>
+<p>• bool（布尔型）：只能是 true 或 false</p>
+<p><font style="color:#DF2A3F;">• 单元类型（unit type）：()。其唯一可能的值就是 () 这个空元组</font></p>
+<h2 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h2><h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>数组的类型定义为 [元素类型；元素数量] 在初始化时可以对每个元素都做一遍初始化[1,2,3,4,5],也可以用[值;数量]来做批量的初始化</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> array<span class="token punctuation">:</span><span class="token punctuation">[</span><span class="token keyword">i32</span><span class="token punctuation">;</span><span class="token number">5</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">;</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>数组的操作</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust">array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token comment">//访问元素</span>
+array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">//写数据 注意必须是通过mut关键字创建的数组才支持写数据</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a><font style="color:#000000;">元组</font></h3><p>let tup:(i32,i32,i32) &#x3D; (1,2,3);</p>
+<p>元组的成员是可以修改的，通过tup.0 tup.1 点+成员下标来访存</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> tup<span class="token punctuation">:</span><span class="token punctuation">(</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+tup<span class="token number">.0</span> <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"is &#123;&#125;"</span><span class="token punctuation">,</span>tup<span class="token number">.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="使用模式匹配解构元组"><a href="#使用模式匹配解构元组" class="headerlink" title="使用模式匹配解构元组"></a>使用模式匹配解构元组</h3><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> tup<span class="token punctuation">:</span><span class="token punctuation">(</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 元组的定义</span>
+tup<span class="token number">.0</span> <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token comment">// 访问 读写元组的元素，通过 元组名.idx去访问</span>
+<span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"is &#123;&#125;"</span><span class="token punctuation">,</span>tup<span class="token number">.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">)</span> <span class="token operator">=</span> tup<span class="token punctuation">;</span> <span class="token comment">//模式匹配可以解构元组的值，将元组的值分配到几个变量上</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h2><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">function_name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> return_tpye<span class="token punctuation">&#123;</span>
+do_someting
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="if表达式"><a href="#if表达式" class="headerlink" title="if表达式"></a>if表达式</h2><p>if不需要写括号</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">if</span> a <span class="token operator">></span> b <span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>if是一个表达式还可以有返回值 用于变量绑定语句</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> if_a <span class="token operator">=</span> <span class="token keyword">if</span> <span class="token number">1</span><span class="token operator">></span> <span class="token number">0</span> <span class="token punctuation">&#123;</span><span class="token number">100</span><span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span><span class="token number">10</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>if_a<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="loop循环"><a href="#loop循环" class="headerlink" title="loop循环"></a>loop循环</h2><p>loop 关键字告诉 Rust 一遍又一遍地执行一段代码直到你明确要求停止。</p>
+<p>可以通过continue跳过单次循环，可以通过break退出循环</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> i <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token keyword">loop</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        i <span class="token operator">=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> i <span class="token operator">&lt;</span> <span class="token number">1</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>loop表达式有返回值就像if一样</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> i <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token keyword">loop</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        i <span class="token operator">=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> i <span class="token operator">&lt;</span> <span class="token number">1</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">break</span> <span class="token number">100</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="循环标签"><a href="#循环标签" class="headerlink" title="循环标签"></a>循环标签</h3><p>loop可以存在循环标签，可以通过break和continue跳转到某个标签中，一般用于多层loop的情况</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token lifetime-annotation symbol">'loop1</span> <span class="token punctuation">:</span> <span class="token keyword">loop</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"loop1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token lifetime-annotation symbol">'loop2</span> <span class="token punctuation">:</span> <span class="token keyword">loop</span> <span class="token punctuation">&#123;</span>
+            <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"loop2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span> <span class="token lifetime-annotation symbol">'loop1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在loop关键字前使用 ‘循环标签名字 : 这样的表达式就可以给循环打标签，在break中需要 ‘循环标签名来实现跳转到某个loop循环标签中</p>
+<h2 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h2><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> i <span class="token operator">&lt;</span> <span class="token number">10</span> <span class="token punctuation">&#123;</span>
+        i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"i is&#123;&#125;"</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>while循环循环条件那没有括号，没有返回值0</p>
+<h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><p>for循环似乎主要用于遍历迭代器，实现了可迭代trait的对象就可以用for去迭代？</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">1</span><span class="token punctuation">..</span><span class="token number">5</span><span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>迭代数组</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> test_array<span class="token punctuation">:</span><span class="token punctuation">[</span><span class="token keyword">i32</span><span class="token punctuation">;</span><span class="token number">10</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">;</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> test_array <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="所有权-ownership"><a href="#所有权-ownership" class="headerlink" title="所有权(ownership)"></a>所有权(<em>ownership</em>)</h2><p>定义: </p>
+<p>Rust 中的每一个值都有一个所有者（owner）</p>
+<p>值在任一时刻有且只有一个所有者</p>
+<p>当所有者（变量）离开作用域，这个值将被丢弃</p>
+<p>如果某个对象实现了copy trait 在进行变量绑定操作时候会直接复制对象的值过去，而不是会转移所有权</p>
+<p>所有权机制就是为了保证在某一段时间内，某个值只有一个所有者，为了避免数据竞争</p>
+<p>这个表达式的行为是 将123绑定到符号x，然后再次绑定到y中，由于值在任意时刻只有一个所有者，x会被丢弃</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> y <span class="token operator">=</span> x<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="变量隐藏"><a href="#变量隐藏" class="headerlink" title="变量隐藏"></a>变量隐藏</h2><p>这个样例中 第一个变量被第二个 隐藏（Shadowing） 了</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> x <span class="token operator">=</span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x in the
+    inner scope is: &#123;x&#125;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"The value of x is: &#123;x&#125;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h2 id="函数传参会转移所有权"><a href="#函数传参会转移所有权" class="headerlink" title="函数传参会转移所有权"></a>函数传参会转移所有权</h2><p>s作为参数传递到 test函数时，所有权被转移到test中</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">test</span><span class="token punctuation">(</span>a<span class="token punctuation">:</span><span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> a<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">test</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="函数返回值也会转移所有权"><a href="#函数返回值也会转移所有权" class="headerlink" title="函数返回值也会转移所有权"></a>函数返回值也会转移所有权</h2><h2 id="引用和借用"><a href="#引用和借用" class="headerlink" title="引用和借用"></a>引用和借用</h2><p>引用（reference）像一个指针，因为它是一个地址，我们可以由此访问储存于该地址的属于其他变量的数据。 与指针不同，引用确保指向某个特定类型的有效值，我们将创建一个引用的行为称为 借用（borrowing）。</p>
+<p>传递引用并不会转移所有权</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">test</span><span class="token punctuation">(</span>a<span class="token punctuation">:</span><span class="token operator">&amp;</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">test</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="可变引用"><a href="#可变引用" class="headerlink" title="可变引用"></a>可变引用</h2><p>可变引用可以在引用的基础上传递一个可以读写数据的”指针”,而不转移数据的所有权</p>
+<p>同一作用域下可以存在多个对于同一对象的不可变引用，但是不能存在多个对于同一对象可变引用，不然可能会产生数据竞争，也不能同时存在对于同一对象的可变引用和不可变引用</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">test</span><span class="token punctuation">(</span>a<span class="token punctuation">:</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    a<span class="token punctuation">.</span><span class="token function">push_str</span><span class="token punctuation">(</span><span class="token string">"AAAAAAA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> s  <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">test</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h2><p>String类型支持两种创建方式</p>
+<p>通过String::from创建 通过”aaa”.to_string() 字符串字面量类型转换创建</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> s1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"tests1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> s2 <span class="token operator">=</span> <span class="token string">"tests2"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="slice类型"><a href="#slice类型" class="headerlink" title="slice类型"></a>slice类型</h2><p>slice可以创建一个针对某个集合的一段不可变引用，它并没有获取这段数据的所有权</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> slice <span class="token operator">=</span> <span class="token operator">&amp;</span>a<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    
+
+    <span class="token keyword">let</span> <span class="token keyword">str</span> <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"test_str1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> str2 <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>str2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="struct结构体"><a href="#struct结构体" class="headerlink" title="struct结构体"></a>struct结构体</h2><p>struct的创建方式是 struct 结构体名然后在花括号里面定义结构体有的字段</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">struct</span> <span class="token type-definition class-name">test_struct</span> <span class="token punctuation">&#123;</span>
+    a<span class="token punctuation">:</span> <span class="token keyword">i32</span>
+    b<span class="token punctuation">:</span> <span class="token keyword">i64</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>结构体实例创建，访问字段</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">struct</span> <span class="token type-definition class-name">User</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Username</span><span class="token punctuation">:</span><span class="token class-name">String</span><span class="token punctuation">,</span>
+    <span class="token class-name">Password</span><span class="token punctuation">:</span><span class="token class-name">String</span>
+<span class="token punctuation">&#125;</span>
+
+
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> <span class="token class-name">User1</span> <span class="token operator">=</span> <span class="token class-name">User</span><span class="token punctuation">&#123;</span>
+        <span class="token class-name">Username</span> <span class="token punctuation">:</span> <span class="token string">"User1"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Password</span> <span class="token punctuation">:</span> <span class="token string">"123456"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+
+    <span class="token class-name">User1</span><span class="token punctuation">.</span><span class="token class-name">Username</span> <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"User2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span><span class="token class-name">User1</span><span class="token punctuation">.</span><span class="token class-name">Username</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="元组结构体"><a href="#元组结构体" class="headerlink" title="元组结构体"></a>元组结构体</h2><p>元组结构体也是一种能将不同数据绑定在一起的一个复合类型，和结构体的区别是元组结构体的成员没有一个具体的字段名</p>
+<p>元组结构体的创建  struct 元组结构体名 然后在圆括号中定义数据成员</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">struct</span> <span class="token type-definition class-name">Color</span><span class="token punctuation">(</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">,</span><span class="token keyword">i32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> black <span class="token operator">=</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>black<span class="token number">.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    black<span class="token number">.0</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span>black<span class="token number">.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="rustlings-Exercise"><a href="#rustlings-Exercise" class="headerlink" title="rustlings Exercise"></a>rustlings Exercise</h2><p><del>variables §3.1</del></p>
+<p><del>functions §3.3</del></p>
+<p><del>if §3.5</del></p>
+<p><del>primitive_types §3.2, §4.3</del></p>
+<p><del>vecs §8.1</del></p>
+<p><del>move_semantics §4.1, §4.2</del></p>
+<p>structs §5.1, §5.3</p>
+<p>strings §8.2</p>
+<h3 id="struct1"><a href="#struct1" class="headerlink" title="struct1"></a>struct1</h3><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// structs1.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Address all the TODOs to make the tests pass!</span>
+<span class="token comment">//</span>
+<span class="token comment">// Execute `rustlings hint structs1` or use the `hint` watch subcommand for a</span>
+<span class="token comment">// hint.</span>
+
+<span class="token comment">// I AM NOT DONE</span>
+
+<span class="token keyword">struct</span> <span class="token type-definition class-name">ColorClassicStruct</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// TODO: Something goes here</span>
+    red<span class="token punctuation">:</span><span class="token keyword">u8</span><span class="token punctuation">,</span>
+    green<span class="token punctuation">:</span><span class="token keyword">u8</span><span class="token punctuation">,</span>
+    blue<span class="token punctuation">:</span><span class="token keyword">u8</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">struct</span> <span class="token type-definition class-name">ColorTupleStruct</span><span class="token punctuation">(</span><span class="token comment">/* TODO: Something goes here */</span><span class="token keyword">u8</span><span class="token punctuation">,</span><span class="token keyword">u8</span><span class="token punctuation">,</span><span class="token keyword">u8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[derive(Debug)]</span>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">UnitLikeStruct</span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[cfg(test)]</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">tests</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">use</span> <span class="token keyword">super</span><span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">classic_c_structs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// TODO: Instantiate a classic c struct!</span>
+        <span class="token comment">// let green =</span>
+
+        <span class="token keyword">let</span> green<span class="token punctuation">:</span><span class="token class-name">ColorClassicStruct</span> <span class="token operator">=</span> <span class="token class-name">ColorClassicStruct</span><span class="token punctuation">&#123;</span>
+            red<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>
+            green<span class="token punctuation">:</span><span class="token number">255</span><span class="token punctuation">,</span>
+            blue<span class="token punctuation">:</span><span class="token number">0</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token punctuation">.</span>red<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token punctuation">.</span>green<span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token punctuation">.</span>blue<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">tuple_structs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// TODO: Instantiate a tuple struct!</span>
+        <span class="token comment">// let green =</span>
+        <span class="token keyword">let</span> green <span class="token operator">=</span> <span class="token class-name">ColorTupleStruct</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token number">.0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token number">.1</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>green<span class="token number">.2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">unit_structs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// TODO: Instantiate a unit-like struct!</span>
+        <span class="token comment">// let unit_like_struct =</span>
+        <span class="token keyword">let</span> unit_like_struct <span class="token operator">=</span> <span class="token class-name">UnitLikeStruct</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> message <span class="token operator">=</span> <span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"&#123;:?&#125;s are fun!"</span><span class="token punctuation">,</span> unit_like_struct<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> <span class="token string">"UnitLikeStructs are fun!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="struct2"><a href="#struct2" class="headerlink" title="struct2"></a>struct2</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">// structs2.rs
+//
+// Address all the TODOs to <span class="token function">make</span> the tests pass<span class="token operator">!</span>
+//
+// Execute <span class="token variable"><span class="token variable">`</span>rustlings hint structs2<span class="token variable">`</span></span> or use the <span class="token variable"><span class="token variable">`</span>hint<span class="token variable">`</span></span> <span class="token function">watch</span> subcommand <span class="token keyword">for</span> a
+// hint.
+
+<span class="token comment">#[derive(Debug)]</span>
+struct Order <span class="token punctuation">&#123;</span>
+    name: String,
+    year: u32,
+    made_by_phone: bool,
+    made_by_mobile: bool,
+    made_by_email: bool,
+    item_number: u32,
+    count: u32,
+<span class="token punctuation">&#125;</span>
+
+fn create_order_template<span class="token punctuation">(</span><span class="token punctuation">)</span> -<span class="token operator">></span> Order <span class="token punctuation">&#123;</span>
+    Order <span class="token punctuation">&#123;</span>
+        name: String::from<span class="token punctuation">(</span><span class="token string">"Bob"</span><span class="token punctuation">)</span>,
+        year: <span class="token number">2019</span>,
+        made_by_phone: false,
+        made_by_mobile: false,
+        made_by_email: true,
+        item_number: <span class="token number">123</span>,
+        count: <span class="token number">0</span>,
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">#[cfg(test)]</span>
+mod tests <span class="token punctuation">&#123;</span>
+    use super::*<span class="token punctuation">;</span>
+
+    <span class="token comment">#[test]</span>
+    fn <span class="token function-name function">your_order</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token builtin class-name">let</span> order_template <span class="token operator">=</span> create_order_template<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        // TODO: Create your own order using the update syntax and template above<span class="token operator">!</span>
+        // <span class="token builtin class-name">let</span> your_order <span class="token operator">=</span>
+
+        <span class="token builtin class-name">let</span> mut your_order <span class="token operator">=</span> Order <span class="token punctuation">&#123;</span>
+            name <span class="token builtin class-name">:</span> String::from<span class="token punctuation">(</span><span class="token string">"Hacker in Rust"</span><span class="token punctuation">)</span>,
+            year <span class="token builtin class-name">:</span> <span class="token number">2019</span>,
+            made_by_phone <span class="token builtin class-name">:</span> false,
+            made_by_mobile <span class="token builtin class-name">:</span> false,
+            made_by_email <span class="token builtin class-name">:</span> true,
+            item_number <span class="token builtin class-name">:</span> <span class="token number">123</span>,
+            count <span class="token builtin class-name">:</span> <span class="token number">1</span>
+
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.name, <span class="token string">"Hacker in Rust"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.year, order_template.year<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.made_by_phone, order_template.made_by_phone<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.made_by_mobile, order_template.made_by_mobile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.made_by_email, order_template.made_by_email<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.item_number, order_template.item_number<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        assert_eq<span class="token operator">!</span><span class="token punctuation">(</span>your_order.count, <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="struct3"><a href="#struct3" class="headerlink" title="struct3"></a>struct3</h3><p><a target="_blank" rel="noopener" href="https://kaisery.github.io/trpl-zh-cn/ch05-03-method-syntax.html">https://kaisery.github.io/trpl-zh-cn/ch05-03-method-syntax.html</a></p>
+<p>结构体方法定义</p>
+<p>结构体方法类似于函数，也是使用fn xxname来定义，不同的地方是他们第一个参数总是 &amp;self 或者 &amp;mut self 用于代表该方法的实例</p>
+<p>为某个结构体添加结构体方法通过 impl语法块实现</p>
+<p>impl struct_name {</p>
+<p>fn xxfunc(&amp;self or &amp;mut self){</p>
+<p>dosometing</p>
+<p>}</p>
+<p>}</p>
+<p>e.g.</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">struct Rectangle <span class="token punctuation">&#123;</span>
+    width:u32,
+    height:u32
+<span class="token punctuation">&#125;</span>
+
+impl Rectangle <span class="token punctuation">&#123;</span>
+    fn area<span class="token punctuation">(</span><span class="token operator">&amp;</span>self<span class="token punctuation">)</span> -<span class="token operator">></span> u32 <span class="token punctuation">&#123;</span>
+        self.width * self.height
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// structs3.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Structs contain data, but can also have logic. In this exercise we have</span>
+<span class="token comment">// defined the Package struct and we want to test some logic attached to it.</span>
+<span class="token comment">// Make the code compile and the tests pass!</span>
+<span class="token comment">//</span>
+<span class="token comment">// Execute `rustlings hint structs3` or use the `hint` watch subcommand for a</span>
+<span class="token comment">// hint.</span>
+
+<span class="token comment">// I AM NOT DONE</span>
+
+<span class="token attribute attr-name">#[derive(Debug)]</span>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">Package</span> <span class="token punctuation">&#123;</span>
+    sender_country<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+    recipient_country<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+    weight_in_grams<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">impl</span> <span class="token class-name">Package</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>sender_country<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span> recipient_country<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span> weight_in_grams<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Package</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> weight_in_grams <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token punctuation">&#123;</span>
+            <span class="token macro property">panic!</span><span class="token punctuation">(</span><span class="token string">"Can not ship a weightless package."</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Package</span> <span class="token punctuation">&#123;</span>
+                sender_country<span class="token punctuation">,</span>
+                recipient_country<span class="token punctuation">,</span>
+                weight_in_grams<span class="token punctuation">,</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// fn is_international(&amp;self) -> ??? &#123;</span>
+    <span class="token comment">//     // Something goes here...</span>
+    <span class="token comment">// &#125;</span>
+
+    <span class="token keyword">fn</span> <span class="token function-definition function">is_international</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">bool</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>sender_country <span class="token operator">==</span> <span class="token string">"Canada"</span><span class="token punctuation">&#123;</span>
+            <span class="token boolean">false</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span><span class="token punctuation">&#123;</span>
+            <span class="token boolean">true</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// fn get_fees(&amp;self, cents_per_gram: i32) -> ??? &#123;</span>
+    <span class="token comment">//     // Something goes here...</span>
+    <span class="token comment">// &#125;</span>
+
+    <span class="token keyword">fn</span> <span class="token function-definition function">get_fees</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> cents_per_gram<span class="token punctuation">:</span> <span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">i32</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>weight_in_grams <span class="token operator">*</span> cents_per_gram
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token attribute attr-name">#[cfg(test)]</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">tests</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">use</span> <span class="token keyword">super</span><span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token attribute attr-name">#[should_panic]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">fail_creating_weightless_package</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> sender_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Spain"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> recipient_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Austria"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Package</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>sender_country<span class="token punctuation">,</span> recipient_country<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2210</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">create_international_package</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> sender_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Spain"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> recipient_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Russia"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> package <span class="token operator">=</span> <span class="token class-name">Package</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>sender_country<span class="token punctuation">,</span> recipient_country<span class="token punctuation">,</span> <span class="token number">1200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token macro property">assert!</span><span class="token punctuation">(</span>package<span class="token punctuation">.</span><span class="token function">is_international</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">create_local_package</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> sender_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Canada"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> recipient_country <span class="token operator">=</span> sender_country<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> package <span class="token operator">=</span> <span class="token class-name">Package</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>sender_country<span class="token punctuation">,</span> recipient_country<span class="token punctuation">,</span> <span class="token number">1200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token macro property">assert!</span><span class="token punctuation">(</span><span class="token operator">!</span>package<span class="token punctuation">.</span><span class="token function">is_international</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">calculate_transport_fees</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> sender_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Spain"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> recipient_country <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Spain"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> cents_per_gram <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> package <span class="token operator">=</span> <span class="token class-name">Package</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>sender_country<span class="token punctuation">,</span> recipient_country<span class="token punctuation">,</span> <span class="token number">1500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>package<span class="token punctuation">.</span><span class="token function">get_fees</span><span class="token punctuation">(</span>cents_per_gram<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">4500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>package<span class="token punctuation">.</span><span class="token function">get_fees</span><span class="token punctuation">(</span>cents_per_gram <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h3 id="String1"><a href="#String1" class="headerlink" title="String1"></a>String1</h3><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// strings1.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Make me compile without changing the function signature!</span>
+<span class="token comment">//</span>
+<span class="token comment">// Execute `rustlings hint strings1` or use the `hint` watch subcommand for a</span>
+<span class="token comment">// hint.</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> answer <span class="token operator">=</span> <span class="token function">current_favorite_color</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"My current favorite color is &#123;&#125;"</span><span class="token punctuation">,</span> answer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">current_favorite_color</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"blue"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="String2"><a href="#String2" class="headerlink" title="String2"></a>String2</h3><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// strings2.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Make me compile without changing the function signature!</span>
+<span class="token comment">//</span>
+<span class="token comment">// Execute `rustlings hint strings2` or use the `hint` watch subcommand for a</span>
+<span class="token comment">// hint.</span>
+
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> word <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"green"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Try not changing this line :)</span>
+    <span class="token keyword">if</span> <span class="token function">is_a_color_word</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>word<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"That is a color word I know!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"That is not a color word I know."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">is_a_color_word</span><span class="token punctuation">(</span>attempt<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">bool</span> <span class="token punctuation">&#123;</span>
+    attempt <span class="token operator">==</span> <span class="token string">"green"</span> <span class="token operator">||</span> attempt <span class="token operator">==</span> <span class="token string">"blue"</span> <span class="token operator">||</span> attempt <span class="token operator">==</span> <span class="token string">"red"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="String3"><a href="#String3" class="headerlink" title="String3"></a>String3</h3><pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// strings3.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Execute `rustlings hint strings3` or use the `hint` watch subcommand for a</span>
+<span class="token comment">// hint.</span>
+
+<span class="token comment">// I AM NOT DONE</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">trim_me</span><span class="token punctuation">(</span>input<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// TODO: Remove whitespace from both ends of a string!</span>
+    input<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">compose_me</span><span class="token punctuation">(</span>input<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// TODO: Add " world!" to the string! There's multiple ways to do this!</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> result <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span><span class="token function">push_str</span><span class="token punctuation">(</span><span class="token string">" world!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">replace_me</span><span class="token punctuation">(</span>input<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// TODO: Replace "cars" in the string with "balloons"!</span>
+    <span class="token keyword">let</span> result <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"cars"</span><span class="token punctuation">,</span> <span class="token string">"balloons"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result
+<span class="token punctuation">&#125;</span>
+
+<span class="token attribute attr-name">#[cfg(test)]</span>
+<span class="token keyword">mod</span> <span class="token module-declaration namespace">tests</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">use</span> <span class="token keyword">super</span><span class="token punctuation">::</span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">trim_a_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">trim_me</span><span class="token punctuation">(</span><span class="token string">"Hello!     "</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Hello!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">trim_me</span><span class="token punctuation">(</span><span class="token string">"  What's up!"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"What's up!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">trim_me</span><span class="token punctuation">(</span><span class="token string">"   Hola!  "</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Hola!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">compose_a_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">compose_me</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Hello world!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">compose_me</span><span class="token punctuation">(</span><span class="token string">"Goodbye"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Goodbye world!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">replace_a_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">replace_me</span><span class="token punctuation">(</span><span class="token string">"I think cars are cool"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"I think balloons are cool"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token function">replace_me</span><span class="token punctuation">(</span><span class="token string">"I love to look at cars"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"I love to look at balloons"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>String4</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token comment">// strings4.rs</span>
+<span class="token comment">//</span>
+<span class="token comment">// Ok, here are a bunch of values-- some are `String`s, some are `&amp;str`s. Your</span>
+<span class="token comment">// task is to call one of these two functions on each value depending on what</span>
+<span class="token comment">// you think each value is. That is, add either `string_slice` or `string`</span>
+<span class="token comment">// before the parentheses on each line. If you're right, it will compile!</span>
+<span class="token comment">//</span>
+<span class="token comment">// No hints this time!</span>
+
+<span class="token comment">// I AM NOT DONE</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">string_slice</span><span class="token punctuation">(</span>arg<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">string</span><span class="token punctuation">(</span>arg<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">string_slice</span><span class="token punctuation">(</span><span class="token string">"blue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"red"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"hi"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"rust is fun!"</span><span class="token punctuation">.</span><span class="token function">to_owned</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string_slice</span><span class="token punctuation">(</span><span class="token string">"nice weather"</span><span class="token punctuation">.</span><span class="token function">into</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token macro property">format!</span><span class="token punctuation">(</span><span class="token string">"Interpolation &#123;&#125;"</span><span class="token punctuation">,</span> <span class="token string">"Station"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string_slice</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string_slice</span><span class="token punctuation">(</span><span class="token string">"  hello there "</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"Happy Monday!"</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">"Mon"</span><span class="token punctuation">,</span> <span class="token string">"Tues"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"mY sHiFt KeY iS sTiCkY"</span><span class="token punctuation">.</span><span class="token function">to_lowercase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/08/25/nssctf4th_pwn/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-09-15 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/rust/">rust<span>1</span></a></li> <li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#cargo-basic"><span class="toc-article-text">cargo basic</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%98%E9%87%8F%E7%BB%91%E5%AE%9A"><span class="toc-article-text">变量绑定</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B8%B8%E9%87%8F"><span class="toc-article-text">常量</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A0%87%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">标量类型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">复合类型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-article-text">数组</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%83%E7%BB%84"><span class="toc-article-text">元组</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E8%A7%A3%E6%9E%84%E5%85%83%E7%BB%84"><span class="toc-article-text">使用模式匹配解构元组</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="toc-article-text">函数定义</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#if%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-article-text">if表达式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#loop%E5%BE%AA%E7%8E%AF"><span class="toc-article-text">loop循环</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BE%AA%E7%8E%AF%E6%A0%87%E7%AD%BE"><span class="toc-article-text">循环标签</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#while%E5%BE%AA%E7%8E%AF"><span class="toc-article-text">while循环</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#for%E5%BE%AA%E7%8E%AF"><span class="toc-article-text">for循环</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%80%E6%9C%89%E6%9D%83-ownership"><span class="toc-article-text">所有权(ownership)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%98%E9%87%8F%E9%9A%90%E8%97%8F"><span class="toc-article-text">变量隐藏</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%87%BD%E6%95%B0%E4%BC%A0%E5%8F%82%E4%BC%9A%E8%BD%AC%E7%A7%BB%E6%89%80%E6%9C%89%E6%9D%83"><span class="toc-article-text">函数传参会转移所有权</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC%E4%B9%9F%E4%BC%9A%E8%BD%AC%E7%A7%BB%E6%89%80%E6%9C%89%E6%9D%83"><span class="toc-article-text">函数返回值也会转移所有权</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%95%E7%94%A8%E5%92%8C%E5%80%9F%E7%94%A8"><span class="toc-article-text">引用和借用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8"><span class="toc-article-text">可变引用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">String类型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#slice%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">slice类型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#struct%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-article-text">struct结构体</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%83%E7%BB%84%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-article-text">元组结构体</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#rustlings-Exercise"><span class="toc-article-text">rustlings Exercise</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#struct1"><span class="toc-article-text">struct1</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#struct2"><span class="toc-article-text">struct2</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#struct3"><span class="toc-article-text">struct3</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#String1"><span class="toc-article-text">String1</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#String2"><span class="toc-article-text">String2</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#String3"><span class="toc-article-text">String3</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

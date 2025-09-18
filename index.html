@@ -126,6 +126,42 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/09/15/rust1/" >rust语法基础1</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-09-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="cargo-basic"><a href="#cargo-basic" class="headerlink" title="cargo basic"></a>cargo basic</h2><p>cargo new objname 创建项目</p>
+<p>cargo run 运行项目</p>
+<p>cargo install –force –path .  安装 .目录下的项目，将编译好的二进制文件拷贝到~&#x2F;.cargo&#x2F;bin中</p>
+<h2 id="变量绑定"><a href="#变量绑定" class="headerlink" title="变量绑定"></a>变量绑定</h2><p>Rust 中，使用关键字 let 声明变量。</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在 Rust 中，变量默认是不可改变的（immutable），当变量不可变时，一旦值被绑定到一个名称上，这个值就不能被改变，这样的设计有助于防止意外的数据修改和并发问题。若</p>
+<p>要使得变量可变，需要在声明时使用 mut 关键字。</p>
+<pre class="line-numbers language-rust" data-language="rust"><code class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+	
+	</div>
+  <a type="button" href="/2025/09/15/rust1/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2025/08/25/nssctf4th_pwn/" >nssctf4th_pwn</a>
 		</h3>
 		</div>
@@ -927,66 +963,6 @@ LABEL_74<span class="token punctuation">:</span>
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/09/02/gdbjail/" >gdbjail</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-09-02  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/gdbjail">https://github.com/nyyyddddn/ctf/tree/main/gdbjail</a></p>
-<p>最近在ImaginaryCTF看到两个关于gdbjail的题目，觉得挺有意思的，远程提供了一个受限的gdb调试环境，限制交互的时候使用的命令，目的是利用限制的命令去实现getshell，或者是将flag读出来。</p>
-<p>没用过没装插件的gdb，不装插件挺难用的</p>
-<h1 id="gdbjail1"><a href="#gdbjail1" class="headerlink" title="gdbjail1"></a>gdbjail1</h1><p>run.sh</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
-
-gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>gdbinit</p>
-<pre class="line-numbers language-none"><code class="language-none">source &#x2F;home&#x2F;user&#x2F;main.py<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>main.py</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> gdb
-
-<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"file /bin/cat"</span><span class="token punctuation">)</span>
-    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"break read"</span><span class="token punctuation">)</span>
-    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"run"</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-        <span class="token keyword">try</span><span class="token punctuation">:</span>
-            command <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"(gdb) "</span><span class="token punctuation">)</span>
-            <span class="token keyword">if</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"break"</span><span class="token punctuation">)</span> <span class="token keyword">or</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"set"</span><span class="token punctuation">)</span> <span class="token keyword">or</span> command<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"continue"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-                <span class="token keyword">try</span><span class="token punctuation">:</span>
-                    gdb<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>command<span class="token punctuation">)</span>
-                <span class="token keyword">except</span> gdb<span class="token punctuation">.</span>error <span class="token keyword">as</span> e<span class="token punctuation">:</span>
-                    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Error executing command '</span><span class="token interpolation"><span class="token punctuation">&#123;</span>command<span class="token punctuation">&#125;</span></span><span class="token string">': </span><span class="token interpolation"><span class="token punctuation">&#123;</span>e<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
-            <span class="token keyword">else</span><span class="token punctuation">:</span>
-                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Only 'break', 'set', and 'continue' commands are allowed."</span><span class="token punctuation">)</span>
-        <span class="token keyword">except</span><span class="token punctuation">:</span>
-            <span class="token keyword">pass</span>
-
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-	
-	</div>
-  <a type="button" href="/2024/09/02/gdbjail/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1040,6 +1016,8 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
+			<li><a href="/categories/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+		
 		</ul>
 	</div>
 
@@ -1051,46 +1029,46 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 		
 			<li><a href="/tags/iot/">iot<span>1</span></a></li>
 		
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
+		
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+		
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+		
 			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
-		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>13</span></a></li>
 		
 			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
 		
 			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
-		
-			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
-		
-			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
-		
-			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
-		
-			<li><a href="/tags/tls/">tls<span>1</span></a></li>
-		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
 			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
 		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
 		
-			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
+		
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
+		
+			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>22</span></a></li>
+		   <li><a href="/tags">...<span>24</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1101,6 +1079,10 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/09/15/rust1/" ><i class="fa fa-file-o"></i>rust语法基础1</a>
+      </li>
     
       <li>
         <a href="/2025/08/25/nssctf4th_pwn/" ><i class="fa fa-file-o"></i>nssctf4th_pwn</a>
@@ -1116,10 +1098,6 @@ gdb <span class="token parameter variable">-x</span> /home/user/gdbinit<span ari
     
       <li>
         <a href="/2025/04/09/Squ1rrelCTF/" ><i class="fa fa-file-o"></i>Squ1rrelCTF</a>
-      </li>
-    
-      <li>
-        <a href="/2025/01/27/x3ctf/" ><i class="fa fa-file-o"></i>x3ctf</a>
       </li>
     
   </ul>
