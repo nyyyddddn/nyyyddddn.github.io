@@ -126,6 +126,97 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/01/04/pwnable-kr/" >pwnable.kr</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-01-04  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h2><p>程序逻辑是这样的， 从fd里读数据，如果数据为LETMEWIN就会输出flag。那可以让fd &#x3D; 0 (标准输入)，让read去read我的输入，然后再输入LETMEWIN </p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+<span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">32</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> envp<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>argc<span class="token operator">&lt;</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"pass argv[1] a number\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">int</span> fd <span class="token operator">=</span> <span class="token function">atoi</span><span class="token punctuation">(</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x1234</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        len <span class="token operator">=</span> <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">strcmp</span><span class="token punctuation">(</span><span class="token string">"LETMEWIN\n"</span><span class="token punctuation">,</span> buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"good job :)\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/cat flag"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"learn about Linux file IO\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">.&#x2F;fd 4660
+LETMEWIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="collision"><a href="#collision" class="headerlink" title="collision"></a>collision</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> hashcode <span class="token operator">=</span> <span class="token number">0x21DD09EC</span><span class="token punctuation">;</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">check_password</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> p<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span><span class="token operator">*</span> ip <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">*</span><span class="token punctuation">)</span>p<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> res<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span><span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                res <span class="token operator">+=</span> ip<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>argc<span class="token operator">&lt;</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"usage : %s [passcode]\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strlen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"passcode length should be 20 bytes\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span>hashcode <span class="token operator">==</span> <span class="token function">check_password</span><span class="token punctuation">(</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/cat flag"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>
+                <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"wrong passcode.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>代码逻辑是 读总共20个字节的数据，分五次读，一次读4个字节，累加后如果为0x21DD09EC 就会输出flag，得按字节码输入，如果直接输入数字的话，一个数字会占一个字节(ascii)，那怎么加都加不到0x21dd09ec的，可以用python和 linux下的 &#96;&#96;来解决键入字节码的问题</p>
+<p>exp:</p>
+<pre class="line-numbers language-none"><code class="language-none">.&#x2F;col &#96;python -c &#39;print &quot;\xc9\xce\xc5\x06\xc9\xce\xc5\x06\xc9\xce\xc5\x06\xc9\xce\xc5\x06\xc8\xce\xc5\x06&quot;&#39;&#96;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="bof"><a href="#bof" class="headerlink" title="bof"></a>bof</h2>
+	
+	</div>
+  <a type="button" href="/2024/01/04/pwnable-kr/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/01/02/cbctf/" >cbctf</a>
 		</h3>
 		</div>
@@ -790,65 +881,6 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/09/18/sictf2023r2/" >sictf2023</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202"><a href="#附件-https-github-com-nyyyddddn-ctf-tree-main-Sictf2023-20-23Round-202" class="headerlink" title="附件 https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202"></a>附件 <a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202">https://github.com/nyyyddddn/ctf/tree/main/Sictf2023%20%23Round%202</a></h3><h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="签到-PYC"><a href="#签到-PYC" class="headerlink" title="[签到]PYC"></a>[签到]PYC</h2><p>电脑上的pycdc出问题了，就找个在线的</p>
-<p><a target="_blank" rel="noopener" href="https://www.lddgo.net/string/pyc-compile-decompile">https://www.lddgo.net/string/pyc-compile-decompile</a></p>
-<p>print(‘SICTF{07e278e7-9d66-4d90-88fc-8bd61e490616}’)</p>
-<h2 id="Myobject"><a href="#Myobject" class="headerlink" title="Myobject"></a>Myobject</h2><p>rc4加解密，写个脚本</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">rc4</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> plaintext<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    S <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    j <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
-        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span>  <span class="token comment"># Swap values</span>
-    i <span class="token operator">=</span> <span class="token number">0</span>
-    j <span class="token operator">=</span> <span class="token number">0</span>
-    output <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-    <span class="token keyword">for</span> byte <span class="token keyword">in</span> plaintext<span class="token punctuation">:</span>
-        i <span class="token operator">=</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
-        j <span class="token operator">=</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span>
-        S<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> S<span class="token punctuation">[</span>i<span class="token punctuation">]</span>  
-        K <span class="token operator">=</span> S<span class="token punctuation">[</span><span class="token punctuation">(</span>S<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> S<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">256</span><span class="token punctuation">]</span>
-        output<span class="token punctuation">.</span>append<span class="token punctuation">(</span>byte <span class="token operator">^</span> K<span class="token punctuation">)</span>
-
-    <span class="token keyword">return</span> output
-key <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">ord</span><span class="token punctuation">(</span>char<span class="token punctuation">)</span> <span class="token keyword">for</span> char <span class="token keyword">in</span> <span class="token string">"SIFLAG"</span><span class="token punctuation">]</span>
-v18_bytes <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0x47CF225A0ED32730</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'little'</span><span class="token punctuation">)</span>
-ciphertext_v19 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">71</span><span class="token punctuation">,</span> <span class="token number">107</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">229</span><span class="token punctuation">,</span> <span class="token number">141</span><span class="token punctuation">,</span> <span class="token number">83</span><span class="token punctuation">,</span> <span class="token number">186</span><span class="token punctuation">,</span> <span class="token number">153</span><span class="token punctuation">,</span> <span class="token number">195</span><span class="token punctuation">,</span> <span class="token number">133</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span>
-v20_bytes <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0x9F88FE10771C0107</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'little'</span><span class="token punctuation">)</span>
-
-full_ciphertext_27 <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>v18_bytes<span class="token punctuation">)</span> <span class="token operator">+</span> ciphertext_v19 <span class="token operator">+</span> <span class="token builtin">list</span><span class="token punctuation">(</span>v20_bytes<span class="token punctuation">)</span>
-
-decrypted_full_combined <span class="token operator">=</span> rc4<span class="token punctuation">(</span>key<span class="token punctuation">,</span> full_ciphertext_27<span class="token punctuation">)</span>
-decrypted_full_combined_string <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token builtin">chr</span><span class="token punctuation">(</span>byte<span class="token punctuation">)</span> <span class="token keyword">for</span> byte <span class="token keyword">in</span> decrypted_full_combined<span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>decrypted_full_combined_string<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>SICTF{wow_you_get_the_flag}</p>
-	
-	</div>
-  <a type="button" href="/2023/09/18/sictf2023r2/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -902,7 +934,7 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
-			<li><a href="/categories/ysyx/">ysyx<span>1</span></a></li>
+			<li><a href="/categories/ysyx/">ysyx<span>2</span></a></li>
 		
 			<li><a href="/categories/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
 		
@@ -915,45 +947,45 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+		
 			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
 		
 			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
 		
-			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
-		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
-		
-			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
-			<li><a href="/tags/数电/">数电<span>1</span></a></li>
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
 		
-			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
 		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
+		
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
 		
 			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
 		
-			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
+		
+			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/ysyx/">ysyx<span>2</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+		
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/tls/">tls<span>1</span></a></li>
 		
-			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
-		
 			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/ysyx/">ysyx<span>1</span></a></li>
-		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>26</span></a></li>
@@ -969,6 +1001,10 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2025/10/04/ysyx-f4计算机系统的状态机模型/" ><i class="fa fa-file-o"></i>ysyx_f4计算机系统的状态机模型</a>
+      </li>
+    
+      <li>
         <a href="/2025/10/03/ysyx-f3数电基础/" ><i class="fa fa-file-o"></i>ysyx_f3数电基础</a>
       </li>
     
@@ -982,10 +1018,6 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
     
       <li>
         <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
-      </li>
-    
-      <li>
-        <a href="/2025/04/29/hackergame2024复现/" ><i class="fa fa-file-o"></i>hackergame2024复现</a>
       </li>
     
   </ul>

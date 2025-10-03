@@ -1,0 +1,576 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>ysyx_f4计算机系统的状态机模型 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="数列求和
+
+PC r0 r1 r2 r3
+(0, 0, 0, 0, 0)   # 初始状态
+(1, 10, 0, 0, 0)  # 执行PC为0的指令后, r0更新为10, PC更新为下一条指令的位置
+(2, 10, 0, 0, 0)  # 执行PC为1的指令后, r1更新为0, PC更新为下一条指令的位置
+(3, 10, 0, 0, 0)  # 执行PC为2的指令后, r2更新为0, PC更新为下一条指令的位置
+(4, 10, 0, 0, 1)  # 执行PC为3的指令后, r3更新为1, PC更新为下一条指令的位置
+(5, 10, 1, 0, 1)  # 执行PC为4的指令后, r1更新为r1+r3, PC更新为下一条指令的位置
+(6, 10, 1, 1, 1)  # 执行PC为5的指令后, r2更新为r2+r1, PC更新为下一条指令的位置
+(4, 10, 1, 1, 1)  # 执行PC为6的指令后, 因r1不等于r0, 故PC更新为4
+(5, 10, 2, 1, 1)  # 执行PC为4的指令后, r1更新为r1+r3, PC更新为下一条指令的位置
+
+
+(6, 10, 2, 3, 1)
+(4, 10, 2, 3, 1)
+(5, 10, 3, 3, 1)
+(6, 10, 3, 6, 1)
+
+(4, 10, 3, 6, 1)
+(5, 10, 4, 6, 1)
+(6, 10, 4, 10, 1)
+
+(4, 10, 4, 10, 1)
+(5, 10, 5, 10, 1)
+(6, 10, 5, 15, 1)
+
+(4, 10, 5, 15, 1)
+(5, 10, 6, 15, 1)
+(6, 10, 6, 21, 1)
+
+(4, 10, 6, 21, 1)
+(5, 10, 7, 21, 1)
+(6, 10, 7, 28, 1)
+
+(4, 10, 7, 28, 1)
+(5, 10, 8, 28, 1)
+(6, 10, 8, 36, 1)
+
+(4, 10, 8, 36, 1)
+(5, 10, 9, 36, 1)
+(6, 10, 9, 45, 1)
+
+
+(4, 10, 9, 45, 1)
+(5, 10, 10, 45, 1)
+(6, 10, 10, 55, 1)
+
+(7, 10, 10, 55, 1)
+(7, 10, 10, 55, 1)
+(7, 10, 10, 55, 1)
+...
+
+执行到最后 处理器处于一个死循环，不断执行指令七的状态，数列求和的结果存在r2。r0用来存储循环次数，r1用于计数，r2用于存放数列求和的结果，r3用于存放计数时的步进。
+计算10以内奇数之和
+
+li r0,11 #0
+li r1,1 #1
+li r2,0 #2
+li r3,2 #3
+add r2,r2,r1 #4
+add r1,r1,r3 #5
+bner0 r1,4 #6
+bner0 r3,7 #7
+
+验证
+PC r0 r1 r2 r3
+(0, 0, 0, 0, 0)
+(1, 11, 0, 0, 0)
+(2, 11, 1, 0, 0)
+(3, 11, 1, 0, 0)
+
+(4, 11, 1, 0, 2)
+(5, 11, 1, 1, 2)
+(6, 11, 3, 1, 2)
+
+(4, 11, 3, 1, 2)
+(5, 11, 3, 4, 2)
+(6, 11, 5, 4, 2)
+
+(4, 11, 5, 4, 2)
+(5, 11, 5, 9, 2)
+(6, 11, 7, 9, 2)
+
+(4, 11, 7, 9, 2)
+(5, 11, 7, 16, 2)
+(6, 11, 9, 16, 2)
+
+(4, 11, 9, 16, 2)
+(5, 11, 9, 25, 2)
+(6, 11, 11, 25, 2)
+
+(7, 11, 11, 25, 2)
+(7, 11, 11, 25, 2)
+(7, 11, 11, 25, 2)
+...
+
+指令集架构的状态机模型"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ysyx_f4计算机系统的状态机模型"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> ysyx_f4计算机系统的状态机模型</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="数列求和"><a href="#数列求和" class="headerlink" title="数列求和"></a>数列求和</h2><img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759507823518-72a596c9-f06f-4553-bd43-bb52f5c35c38.png" class="">
+
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">PC r0 r1 r2 r3
+(0, 0, 0, 0, 0)   # 初始状态
+(1, 10, 0, 0, 0)  # 执行PC为0的指令后, r0更新为10, PC更新为下一条指令的位置
+(2, 10, 0, 0, 0)  # 执行PC为1的指令后, r1更新为0, PC更新为下一条指令的位置
+(3, 10, 0, 0, 0)  # 执行PC为2的指令后, r2更新为0, PC更新为下一条指令的位置
+(4, 10, 0, 0, 1)  # 执行PC为3的指令后, r3更新为1, PC更新为下一条指令的位置
+(5, 10, 1, 0, 1)  # 执行PC为4的指令后, r1更新为r1+r3, PC更新为下一条指令的位置
+(6, 10, 1, 1, 1)  # 执行PC为5的指令后, r2更新为r2+r1, PC更新为下一条指令的位置
+(4, 10, 1, 1, 1)  # 执行PC为6的指令后, 因r1不等于r0, 故PC更新为4
+(5, 10, 2, 1, 1)  # 执行PC为4的指令后, r1更新为r1+r3, PC更新为下一条指令的位置
+
+
+(6, 10, 2, 3, 1)
+(4, 10, 2, 3, 1)
+(5, 10, 3, 3, 1)
+(6, 10, 3, 6, 1)
+
+(4, 10, 3, 6, 1)
+(5, 10, 4, 6, 1)
+(6, 10, 4, 10, 1)
+
+(4, 10, 4, 10, 1)
+(5, 10, 5, 10, 1)
+(6, 10, 5, 15, 1)
+
+(4, 10, 5, 15, 1)
+(5, 10, 6, 15, 1)
+(6, 10, 6, 21, 1)
+
+(4, 10, 6, 21, 1)
+(5, 10, 7, 21, 1)
+(6, 10, 7, 28, 1)
+
+(4, 10, 7, 28, 1)
+(5, 10, 8, 28, 1)
+(6, 10, 8, 36, 1)
+
+(4, 10, 8, 36, 1)
+(5, 10, 9, 36, 1)
+(6, 10, 9, 45, 1)
+
+
+(4, 10, 9, 45, 1)
+(5, 10, 10, 45, 1)
+(6, 10, 10, 55, 1)
+
+(7, 10, 10, 55, 1)
+(7, 10, 10, 55, 1)
+(7, 10, 10, 55, 1)
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行到最后 处理器处于一个死循环，不断执行指令七的状态，数列求和的结果存在r2。r0用来存储循环次数，r1用于计数，r2用于存放数列求和的结果，r3用于存放计数时的步进。</p>
+<h2 id="计算10以内奇数之和"><a href="#计算10以内奇数之和" class="headerlink" title="计算10以内奇数之和"></a>计算10以内奇数之和</h2><img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759509167073-2ffa238b-4b70-438b-9fe8-7ce72fbdf1a1.png" class="">
+
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">li r0,11 #0
+li r1,1 #1
+li r2,0 #2
+li r3,2 #3
+add r2,r2,r1 #4
+add r1,r1,r3 #5
+bner0 r1,4 #6
+bner0 r3,7 #7<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>验证</p>
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">PC r0 r1 r2 r3
+(0, 0, 0, 0, 0)
+(1, 11, 0, 0, 0)
+(2, 11, 1, 0, 0)
+(3, 11, 1, 0, 0)
+
+(4, 11, 1, 0, 2)
+(5, 11, 1, 1, 2)
+(6, 11, 3, 1, 2)
+
+(4, 11, 3, 1, 2)
+(5, 11, 3, 4, 2)
+(6, 11, 5, 4, 2)
+
+(4, 11, 5, 4, 2)
+(5, 11, 5, 9, 2)
+(6, 11, 7, 9, 2)
+
+(4, 11, 7, 9, 2)
+(5, 11, 7, 16, 2)
+(6, 11, 9, 16, 2)
+
+(4, 11, 9, 16, 2)
+(5, 11, 9, 25, 2)
+(6, 11, 11, 25, 2)
+
+(7, 11, 11, 25, 2)
+(7, 11, 11, 25, 2)
+(7, 11, 11, 25, 2)
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="指令集架构的状态机模型"><a href="#指令集架构的状态机模型" class="headerlink" title="指令集架构的状态机模型"></a>指令集架构的状态机模型</h2><p>状态机的定义</p>
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759510311526-b6bd3253-7866-4155-80fe-e670acc6f380.png" class="">
+
+<p>状态集合是指isa中定义的存储器件所有可能的状态</p>
+<p>激励事件集合是指 状态和状态之间的转换因什么而发生，这些事件的集合</p>
+<p>状态转移规则 则是指从某种状态到某种状态之间具体做了什么事情</p>
+<p>在ISA中，寄存器和内存就是存储状态的器件，激励事件是执行指令，状态转移规则是指指令的语义</p>
+<p>sisa的状态机模型为</p>
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759510792438-945c7bd8-237a-4013-9b67-628488b186e9.png" class="">
+
+
+
+<h2 id="状态机视角下的C数列求和程序"><a href="#状态机视角下的C数列求和程序" class="headerlink" title="状态机视角下的C数列求和程序"></a>状态机视角下的C数列求和程序</h2><img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759510994953-15e72cdd-0600-46f9-9940-6cd28bf24dd5.png" class="">
+
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">PC sum i
+(2, ?, ?)    # 初始状态
+(3, 0, ?)    # 执行PC为2的语句后, sum更新为0, PC更新为下一条语句的位置
+(5, 0, 1)    # 执行PC为3的语句后, i更新为1, PC更新为下一条语句的位置(第4行无有效操作, 跳过)
+(6, 1, 1)    # 执行PC为5的语句后, sum更新为sum + i, PC更新为下一条语句的位置
+(7, 1, 2)    # 执行PC为6的语句后, i更新为i + 1, PC更新为下一条语句的位置
+(5, 1, 2)    # 执行PC为7的语句后, 由于循环条件i &lt;= 10成立, 因此重新进入循环体
+
+
+(6, 3, 2)
+(7, 3, 3)
+
+
+(5, 3, 3)
+(6, 6, 3)
+(7, 6, 4)
+
+(5, 6, 4)
+(6, 10, 4)
+(7, 10, 5)
+
+(5, 10, 5)
+(6, 15, 5)
+(7, 15, 6)
+
+(5, 15, 6)
+(6, 21, 6)
+(7, 21, 7)
+
+(5, 21, 7)
+(6, 28, 7)
+(7, 28, 8)
+
+(5, 28, 8)
+(6, 36, 8)
+(7, 36, 9)
+
+(5, 36, 9)
+(6, 45, 9)
+(7, 45, 10)
+
+(5, 45, 10)
+(6, 55, 10)
+(7, 55, 11)
+
+exit
+，，，，
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="从状态机视角理解数列求和电路的工作过程"><a href="#从状态机视角理解数列求和电路的工作过程" class="headerlink" title="从状态机视角理解数列求和电路的工作过程"></a>从状态机视角理解数列求和电路的工作过程</h2><img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759520522541-719dbb96-2486-4e40-a4d8-e4887c88b4af.png" class="">
+
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759520278504-1e454f74-4efb-44df-8594-cbe24a322cbe.png" class="">
+
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759520308097-3d4ed9cc-f7db-4343-bccd-3b900f5d1aa0.png" class="">
+
+<p>工作过程</p>
+<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">counter_register_4bit sum_register_8bit
+0 0
+1 1
+2 3
+3 6
+4 10
+5 15
+6 21
+7 28
+8 36
+9 45
+10 55<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h2 id="结合数列求和的例子理解编译器的工作"><a href="#结合数列求和的例子理解编译器的工作" class="headerlink" title="结合数列求和的例子理解编译器的工作"></a>结合数列求和的例子理解编译器的工作</h2><img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759521737565-7f33e460-6e3c-4c2d-a999-5d01898b0dfa.png" class="">
+
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759521799723-f8ffea89-b080-4566-8987-7de392da0792.png" class="">
+
+<p>编译器本质上是将 状态集合{PC,V} 以及 状态转移规则集合{语句的语义} 翻译成等价的{PC,R,M}以及{指令的语义}，将c语言中对数据的操作以及程序的控制流翻译成对应的ISA中的指令序列和等价的pc状态转移规则，将c语言中的进程的数据翻译成对应ISA中的寄存器或者是内存</p>
+<p>状态机视角下ISA和数字电路的关系</p>
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759522272873-7ff5563f-0db3-47cc-a092-93a9be543828.png" class="">
+
+<img src="/2025/10/04/ysyx-f4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B/1759522643612-25e70053-4a5c-436b-ab26-c03693e4b7a6.png" class="">
+
+<p>状态机模型中的状态集通过时序逻辑电路中的存储部件存储，然后对isa中对数据进行操作的指令，也就是状态机种的状态转移规则定义 则是通过组合路基电路去实现</p>
+<p>所以如果要根据ISA设计一颗处理器的话，首先要实现ISA中定义的寄存器，内存，然后再实现ISA中定义的对寄存器和内存操作的组合逻辑电路。然后通过编译器将软件编译成对应ISA的指令序列，将指令序列放到cpu中执行。</p>
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/10/03/ysyx-f3数电基础/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-10-04 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/ysyx/">ysyx<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ysyx/">ysyx<span>2</span></a></li> <li><a href="/tags/数电/">数电<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C"><span class="toc-article-text">数列求和</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%A1%E7%AE%9710%E4%BB%A5%E5%86%85%E5%A5%87%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="toc-article-text">计算10以内奇数之和</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">指令集架构的状态机模型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84C%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C%E7%A8%8B%E5%BA%8F"><span class="toc-article-text">状态机视角下的C数列求和程序</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%8E%E7%8A%B6%E6%80%81%E6%9C%BA%E8%A7%86%E8%A7%92%E7%90%86%E8%A7%A3%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C%E7%94%B5%E8%B7%AF%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="toc-article-text">从状态机视角理解数列求和电路的工作过程</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BB%93%E5%90%88%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C%E7%9A%84%E4%BE%8B%E5%AD%90%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="toc-article-text">结合数列求和的例子理解编译器的工作</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
