@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>图灵完备1 | nyyyddddn</title>
+  <meta name="author" content="nyyyddddn">
+  
+  <meta name="description" content="德摩根定理
+
+非门(与非门构建非门)与非门可以当非门用，将两个引脚连输入
+与非门的真值表是 1110，所以只需要将单端的输入连上与非门的两个引脚，输入 00 与 输入 11 所对应的结果是 1 与 0，效果和非门相同
+
+
+
+
+或门(与非门构建非门)德摩根定理，在某个电路输入那串上非门，那输入序列顺序就会置反，使得真值表水平翻转，在某个电路输出那串上一个非门，输出信息的二进制位会置反
+
+
+用之前与非门构建非门的思路来替代非门，三个与非门构建一个或门"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="图灵完备1"/>
+  <meta property="og:site_name" content="nyyyddddn"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="nyyyddddn" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">nyyyddddn</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/catergories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 图灵完备1</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="德摩根定理"><a href="#德摩根定理" class="headerlink" title="德摩根定理"></a>德摩根定理</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758730660846-052f46e9-3bb0-4a70-8dd8-39bb2de323c7.png" class="">
+
+<h2 id="非门-与非门构建非门"><a href="#非门-与非门构建非门" class="headerlink" title="非门(与非门构建非门)"></a>非门(与非门构建非门)</h2><p>与非门可以当非门用，将两个引脚连输入</p>
+<p>与非门的真值表是 1110，所以只需要将单端的输入连上与非门的两个引脚，输入 00 与 输入 11 所对应的结果是 1 与 0，效果和非门相同</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758729421229-67e78924-6033-4b91-afd9-2a604dabf69b.png" class="">
+
+
+
+<h2 id="或门-与非门构建非门"><a href="#或门-与非门构建非门" class="headerlink" title="或门(与非门构建非门)"></a>或门(与非门构建非门)</h2><p>德摩根定理，在某个电路输入那串上非门，那输入序列顺序就会置反，使得真值表水平翻转，在某个电路输出那串上一个非门，输出信息的二进制位会置反</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758729528967-a9ce2a20-785c-4878-8b46-e3734260c59e.png" class="">
+
+<p>用之前与非门构建非门的思路来替代非门，三个与非门构建一个或门</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758729712671-2c90066c-7174-47c8-8356-e54630ac8b5c.png" class="">
+
+
+
+
+
+<h2 id="或非门-与非门构建或非门"><a href="#或非门-与非门构建或非门" class="headerlink" title="或非门(与非门构建或非门)"></a>或非门(与非门构建或非门)</h2><p>与非门的真值表是 1110 或非门的真值表是 1000，通过德摩根定理在输入那串上一个非门使得真值表水平翻转变成0111，之后在输出那串上非门来实现四与非门构建或非门</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758730148938-f34463b0-a2ea-412d-9af1-b5286097f0f0.png" class="">
+
+
+
+<h2 id="与门-与非门构建与门"><a href="#与门-与非门构建与门" class="headerlink" title="与门(与非门构建与门)"></a>与门(与非门构建与门)</h2><p>将与非门的输出置反得到与门</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758730422455-fabb7ca2-2c5c-4eee-9183-4b8f681ddba2.png" class="">
+
+<h2 id="高电平"><a href="#高电平" class="headerlink" title="高电平"></a>高电平</h2><p>A or NOT(A) &#x3D; 1</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758730772985-c84e7f1e-37ff-4db1-b0c4-ba371fc76129.png" class="">
+
+
+
+<h2 id="第二刻"><a href="#第二刻" class="headerlink" title="第二刻"></a>第二刻</h2><p>只有一个最小项</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758730870657-2899790e-a83c-464a-9653-aca47f903dcb.png" class="">
+
+
+
+<h2 id="异或门"><a href="#异或门" class="headerlink" title="异或门"></a>异或门</h2><p>四与非门构建异或门</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758731471813-549b9fd7-5665-4e8a-b83c-1d7a75eddfb6.png" class="">
+
+
+
+
+
+<h2 id="三输入或门"><a href="#三输入或门" class="headerlink" title="三输入或门"></a>三输入或门</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758733726730-bf77f9fc-2ee1-4939-a99a-e905d689504f.png" class="">
+
+
+
+
+
+<h2 id="三输入与门"><a href="#三输入与门" class="headerlink" title="三输入与门"></a>三输入与门</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758733770276-6406666c-8451-4262-b18a-9ddb9144b36d.png" class="">
+
+
+
+<h2 id="同或门"><a href="#同或门" class="headerlink" title="同或门"></a>同或门</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758733922578-ebc158d6-6f6b-481d-809d-8cfea1c492ba.png" class="">
+
+<h2 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758734056268-16fa08ce-2784-40d7-8532-c5f7bec7a2f0.png" class="">
+
+
+
+<h2 id="延迟线"><a href="#延迟线" class="headerlink" title="延迟线"></a>延迟线</h2><p>延迟线可以将输出延迟一刻输出</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758734120620-953ea5d0-56f5-4483-861a-605a98d4a009.png" class="">
+
+
+
+<h2 id="奇偶不变"><a href="#奇偶不变" class="headerlink" title="奇偶不变"></a>奇偶不变</h2><p>NOR 或非门本质上是一个带控制端的非门，当控制端为0时和非门等价，当控制端为1时，恒等输出0，通过延迟线将上一时刻的输入当做控制端就可以实现一个奇偶时刻输出相反的器件</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1758734408773-ecb7c3df-079c-4cab-a1b5-5cae7dd66a51.png" class="">
+
+
+
+<h2 id="一位取反器"><a href="#一位取反器" class="headerlink" title="一位取反器"></a>一位取反器</h2><p>异或0不变，异或1置反输入的二进制位，所以异或可以实现一位的取反器</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759577351859-2c1996a6-90f2-4387-8a60-ef0cfd6541a1.png" class="">
+
+
+
+<h2 id="奇数个信号"><a href="#奇数个信号" class="headerlink" title="奇数个信号"></a>奇数个信号</h2><p>只要满足输入1 2或者是输入 3 4中高电平的数量为奇数个那总体就是奇数个信号</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759577749383-f90e2927-1ebb-4138-a287-1dc5b480dfbe.png" class="">
+
+
+
+
+
+
+
+<h2 id="成对的麻烦"><a href="#成对的麻烦" class="headerlink" title="成对的麻烦"></a>成对的麻烦</h2><p>当高电平数量大于等于2时候输出为1</p>
+<p>通过二元与运算涵盖所有的二元组序列，只要其中一个子运算结果为真，一共3+2+1个子序列，那高电平的数量一定大于等于二</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759578177580-2ec89a24-a7da-4eef-a67c-8370e004acdc.png" class="">
+
+
+
+
+
+
+
+<h2 id="信号计数"><a href="#信号计数" class="headerlink" title="信号计数"></a>信号计数</h2><p>二输入与门可以用来判断 输入高电平数量是否是偶数，异或门可以用来判断输入高电平数量是否是奇数</p>
+<p>判断输入高电平数量是否为1 小计需要三个异或门 A XOR B XOR C XOR</p>
+<p>判断输入高电平数量是否为2 有两种情况 一种是A B 或者 C D其中一组都为高电平，另一种是 A C 或者 A D  或者B C  或者 B D其中一组为高电平，前者用逻辑运算概括也就是 AB + CD ，后者只需要用异或就能概述 A XOR B + C XOR D</p>
+<p>判断输入高电平数量是否为3 有两种情况 一种是 AB为真 C或D其中一个为真，另一种情况是 A或B为真，CD为真</p>
+<p>所以 (A XOR B + CD) + (AB + C XOR D)</p>
+<p>4就简单了 只需要用一个四输入的与门就可以判断。</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759582990250-0c8ed6de-0532-4c5e-92fa-c7125b7464df.png" class="">
+
+
+
+<h2 id="半加器"><a href="#半加器" class="headerlink" title="半加器"></a>半加器</h2><p>半加器是一种二输入二输出的器件，输入两个二进制数，输出进行加法后的结果和一个进位标志</p>
+<p>当两个二进制数都为1时才会产生进位，所以进位的判断可以通过与门来判断，加法后的结果可以通过异或来计算，异或本质上是一个模2加法 A XOR B &#x3D; (A + B) MOD 2s</p>
+<p>半加器本质上是奇偶数判断问题，当高电平数量为奇数时 sum为1，当高电平数量为偶数时，进位标志位一</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759583657421-33c451c3-d201-4fdb-8c95-3fac181b3e8d.png" class="">
+
+
+
+<h2 id="全加器"><a href="#全加器" class="headerlink" title="全加器"></a>全加器</h2><p>全加器本质上也是奇数和 输入高电平数量是否大于等于2这两个问题</p>
+<p>当高电平数量为奇数时 sum &#x3D; 1 ，通过三个xor来判断是否是奇数</p>
+<p>大于等于2的判断只需要用与运算涵盖所有数量为2的唯一组合，之后满足其中一个条件那数量一定是大于等于2</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759584683334-c7b31ee0-bf1e-489c-aec5-8e31145b7a48.png" class="">
+
+
+
+<h2 id="加倍"><a href="#加倍" class="headerlink" title="加倍"></a>加倍</h2><p>将分线器的端口按照左移一位的逻辑接入到另一个分线器的端口就可以实现翻倍</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759584782263-b86af2f2-5187-458c-89c4-95b6ebf8c454.png" class="">
+
+
+
+<h2 id="1位开关"><a href="#1位开关" class="headerlink" title="1位开关"></a>1位开关</h2><p>从行为逻辑上来说1位开关和与门没有任何区别，当两个输入为 00 01 10时开关，有两组输入开关会保持断开的状态，有一组输入开关保持打开但是输出的是低电平信号，所以和与门差不多，将多组开关状态是互斥的1位开关并联和非门的行为相似</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759585386076-ed14d68e-a7f3-4c73-beec-a9919b9526d5.png" class="">
+
+<p>NOT(A)B + ANOT(B)</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759585355850-dbbedd9c-57b2-4dba-a882-9b4d96557dc4.png" class="">
+
+
+
+<h2 id="8位加法器"><a href="#8位加法器" class="headerlink" title="8位加法器"></a>8位加法器</h2><p>行波进位加法器，通过八个全加器构建八位加法器，每个全加器产生的进位输出作为一个数据位传递给下一个全加器进行三位数加法运算来实现八位的加法</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759586110035-4aa56f44-9442-471f-b6c6-4638f3fdd619.png" class="">
+
+
+
+<h2 id="8位非"><a href="#8位非" class="headerlink" title="8位非"></a>8位非</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759586278206-07372f39-baa0-4b2b-9e3d-2c7e309fb0ec.png" class="">
+
+<h2 id="8位或"><a href="#8位或" class="headerlink" title="8位或"></a>8位或</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759586477364-b273d094-ce86-4a97-bdcf-aed16b24353b.png" class="">
+
+
+
+<h2 id="数据选择器"><a href="#数据选择器" class="headerlink" title="数据选择器"></a>数据选择器</h2><p>二选一选择器工作原理 NOT(S)A + SB，只需要通过分线器和集线器对八个比特位套用二选一选择器就行</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759587117752-f022be7f-9032-453f-bb97-761e8382c882.png" class="">
+
+
+
+<h2 id="相反数"><a href="#相反数" class="headerlink" title="相反数"></a>相反数</h2><p>补码中正负数转换就是取反+1</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759601932050-3ce5351d-44fc-467d-9158-9eacd9cc9a2b.png" class="">
+
+
+
+
+
+<h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>通过非门来实现类似于二选一选择器的功能来控制八位开关的打开和关闭去实现 数据的”复制” 本质上就是一个选择器来实现开关信号的互斥</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759602965062-7e0a44c8-d14a-4159-a217-8f178cd6182d.png" class="">
+
+
+
+<h2 id="优雅存储"><a href="#优雅存储" class="headerlink" title="优雅存储"></a>优雅存储</h2><p>如果将延迟线的首尾连接就可以实现以后存储一位的功能，比交叉配对反相器效率还高（<br>通过二选一选择器来实现一个控制器，当控制信号为写入信号时就通过mux的切换来实现往存储器件里写入1位数据</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759603987421-dd86b100-f9a2-43db-8a86-90892f4b5287.png" class="">
+
+<h2 id="存储一字节"><a href="#存储一字节" class="headerlink" title="存储一字节"></a>存储一字节</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759604624059-5e395189-cde8-408b-8c8d-66d5ede38927.png" class="">
+
+<h2 id="1位解码器"><a href="#1位解码器" class="headerlink" title="1位解码器"></a>1位解码器</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759604703972-1de40ea6-a3f1-437b-bb1a-5a94527223a3.png" class="">
+
+<h2 id="3位解码器"><a href="#3位解码器" class="headerlink" title="3位解码器"></a>3位解码器</h2><img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759605383033-560d8f1f-e4be-48d4-a92a-b77d9bfd6779.png" class="">
+
+<h2 id="逻辑引擎"><a href="#逻辑引擎" class="headerlink" title="逻辑引擎"></a>逻辑引擎</h2><p>通过三位译码器生成四组使能信号来分别表示四种逻辑运算，之后将这四组使能信号分别作为四个八位开关的控制端输入，八位的逻辑门只有或门和非门，可以通过德摩根定律来搓出与门和与非门</p>
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759608697316-c82a84e4-c605-4d6c-80fe-1befbeaeac4e.png" class="">
+
+<img src="/2025/10/05/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%871/1759608687433-f98cc330-289e-4173-b866-bff89ffb5cfd.png" class="">
+
+
+	  <div class="article-footer-copyright">
+	Ciallo～(∠・ω< )⌒★
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/10/04/ysyx-f4计算机系统的状态机模型/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-10-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/ysyx/">ysyx<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ysyx/">ysyx<span>3</span></a></li> <li><a href="/tags/数电/">数电<span>3</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BE%B7%E6%91%A9%E6%A0%B9%E5%AE%9A%E7%90%86"><span class="toc-article-text">德摩根定理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9D%9E%E9%97%A8-%E4%B8%8E%E9%9D%9E%E9%97%A8%E6%9E%84%E5%BB%BA%E9%9D%9E%E9%97%A8"><span class="toc-article-text">非门(与非门构建非门)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%97%A8-%E4%B8%8E%E9%9D%9E%E9%97%A8%E6%9E%84%E5%BB%BA%E9%9D%9E%E9%97%A8"><span class="toc-article-text">或门(与非门构建非门)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%9D%9E%E9%97%A8-%E4%B8%8E%E9%9D%9E%E9%97%A8%E6%9E%84%E5%BB%BA%E6%88%96%E9%9D%9E%E9%97%A8"><span class="toc-article-text">或非门(与非门构建或非门)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8E%E9%97%A8-%E4%B8%8E%E9%9D%9E%E9%97%A8%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%97%A8"><span class="toc-article-text">与门(与非门构建与门)</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%AB%98%E7%94%B5%E5%B9%B3"><span class="toc-article-text">高电平</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E4%BA%8C%E5%88%BB"><span class="toc-article-text">第二刻</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%82%E6%88%96%E9%97%A8"><span class="toc-article-text">异或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E8%BE%93%E5%85%A5%E6%88%96%E9%97%A8"><span class="toc-article-text">三输入或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E8%BE%93%E5%85%A5%E4%B8%8E%E9%97%A8"><span class="toc-article-text">三输入与门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8C%E6%88%96%E9%97%A8"><span class="toc-article-text">同或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="toc-article-text">循环依赖</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BB%B6%E8%BF%9F%E7%BA%BF"><span class="toc-article-text">延迟线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A5%87%E5%81%B6%E4%B8%8D%E5%8F%98"><span class="toc-article-text">奇偶不变</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E4%BD%8D%E5%8F%96%E5%8F%8D%E5%99%A8"><span class="toc-article-text">一位取反器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A5%87%E6%95%B0%E4%B8%AA%E4%BF%A1%E5%8F%B7"><span class="toc-article-text">奇数个信号</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%90%E5%AF%B9%E7%9A%84%E9%BA%BB%E7%83%A6"><span class="toc-article-text">成对的麻烦</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BF%A1%E5%8F%B7%E8%AE%A1%E6%95%B0"><span class="toc-article-text">信号计数</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%8A%E5%8A%A0%E5%99%A8"><span class="toc-article-text">半加器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%A8%E5%8A%A0%E5%99%A8"><span class="toc-article-text">全加器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8A%A0%E5%80%8D"><span class="toc-article-text">加倍</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1%E4%BD%8D%E5%BC%80%E5%85%B3"><span class="toc-article-text">1位开关</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8%E4%BD%8D%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="toc-article-text">8位加法器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8%E4%BD%8D%E9%9D%9E"><span class="toc-article-text">8位非</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8%E4%BD%8D%E6%88%96"><span class="toc-article-text">8位或</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%95%B0%E6%8D%AE%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-article-text">数据选择器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%9B%B8%E5%8F%8D%E6%95%B0"><span class="toc-article-text">相反数</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-article-text">总线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BC%98%E9%9B%85%E5%AD%98%E5%82%A8"><span class="toc-article-text">优雅存储</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AD%98%E5%82%A8%E4%B8%80%E5%AD%97%E8%8A%82"><span class="toc-article-text">存储一字节</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1%E4%BD%8D%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="toc-article-text">1位解码器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3%E4%BD%8D%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="toc-article-text">3位解码器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%80%BB%E8%BE%91%E5%BC%95%E6%93%8E"><span class="toc-article-text">逻辑引擎</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 nyyyddddn's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

